@@ -1,0 +1,34 @@
+.title {
+    /* background-color:royalblue; */
+    background-color:#c1502e;
+    font-family: 'Varela Round', sans-serif;
+}
+
+button {
+    font-family: 'Varela Round', sans-serif;
+}
+
+.subtitulo {
+    font-family: 'Varela Round', sans-serif;
+    font-size: large;
+}
+
+.foot {
+    font-family: 'Varela Round', sans-serif;
+    color: lightgrey;
+}
+
+.inputbox {
+    width: 520px;
+    height: 390px;
+    padding: 10px;
+    color:cornsilk;
+    background-color: #1b2631;
+    font-family: Consolas, monaco, monospace;
+    border-color: gray;
+}
+
+hr {
+    border-width: 0.13em;
+    border-color: gray;
+}
