@@ -15,23 +15,21 @@
   <button type="button" class="btn btn-dark rounded-0">Reporte AST</button>
 </div>
 
-<div class="container pt-3">
+<div class="container pt-2">
 
-  <form #iForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
-    <div class="row pb-3">
+  <form #iForm="ngForm" class="mb-4" (ngSubmit)="onSubmit()" novalidate>
+    <div class="row mb-5 fila">
       <div class="col-lg-6 col-sm-12">
         <p class="my-0 text-white subtitulo">Editor</p>
-        <textarea id="entrada" class="inputbox" name="entrada" [(ngModel)]="entrada"></textarea>
+        <ngx-monaco-editor id="entrada" name="entrada" class="codebox" [options]="EditorOptions" [(ngModel)]="entrada"></ngx-monaco-editor>
       </div>
       <div class="col-lg-6 col-sm-12">
-        <div class="codebox">
           <p class="my-0 text-white subtitulo">Consola</p>
-          <textarea id="salida" class="inputbox" name="salida" [value]="salida"></textarea>
-        </div>
+          <ngx-monaco-editor id="salida" name="salida" class="codebox" [options]="ConsoleOptions" [(ngModel)]="salida"></ngx-monaco-editor>
       </div>
     </div>
 
-    <div class="row text-center mt-3 mb-4">
+    <div class="row text-center">
       <div class="col-12">
         <button type="submit" class="btn btn-outline-light btn-lg">COMPILAR</button>
       </div>

@@ -286,6 +286,534 @@ function concatAll() {
 
 /***/ }),
 
+/***/ "0LvA":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/@materia-ui/ngx-monaco-editor/__ivy_ngcc__/fesm2015/materia-ui-ngx-monaco-editor.js ***!
+  \**********************************************************************************************************/
+/*! exports provided: MONACO_PATH, MonacoDiffEditorComponent, MonacoEditorComponent, MonacoEditorLoaderDirective, MonacoEditorLoaderService, MonacoEditorModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MONACO_PATH", function() { return MONACO_PATH; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MonacoDiffEditorComponent", function() { return MonacoDiffEditorComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MonacoEditorComponent", function() { return MonacoEditorComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MonacoEditorLoaderDirective", function() { return MonacoEditorLoaderDirective; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MonacoEditorLoaderService", function() { return MonacoEditorLoaderService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MonacoEditorModule", function() { return MonacoEditorModule; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "pf5f");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "qCKp");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
+
+
+
+
+
+
+/// <reference path="monaco.d.ts" />
+
+
+const _c0 = ["editor"];
+const _c1 = ["diffEditor"];
+const _c2 = ".monaco-editor[_ngcontent-%COMP%] {\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n\n}\n.editor-container[_ngcontent-%COMP%] {\n\toverflow: hidden;\n\tposition: relative;\n\tdisplay: table;\n\twidth: 100%;\n  height: 100%;\n  min-width: 0;\n}";
+const MONACO_PATH = 'MONACO_PATH';
+
+let MonacoEditorLoaderService = class MonacoEditorLoaderService {
+    constructor(ngZone, monacoPathConfig) {
+        this.ngZone = ngZone;
+        this.monacoPathConfig = monacoPathConfig;
+        this.isMonacoLoaded$ = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](false);
+        this._monacoPath = 'assets/monaco-editor/min/vs';
+        if (window.monacoEditorAlreadyInitialized) {
+            ngZone.run(() => this.isMonacoLoaded$.next(true));
+            return;
+        }
+        window.monacoEditorAlreadyInitialized = true;
+        if (this.monacoPathConfig) {
+            this.monacoPath = this.monacoPathConfig;
+        }
+        this.loadMonaco();
+    }
+    set monacoPath(value) {
+        if (value) {
+            this._monacoPath = value;
+        }
+    }
+    loadMonaco() {
+        const onGotAmdLoader = () => {
+            let vsPath = this._monacoPath;
+            window.amdRequire = window.require;
+            const isElectron = !!this.nodeRequire;
+            if (isElectron) {
+                // Restore node require in window
+                window.require = this.nodeRequire;
+                const path = window.require('path');
+                vsPath = path.resolve(window.__dirname, this._monacoPath);
+            }
+            window.amdRequire.config({ paths: { vs: vsPath } });
+            // Load monaco
+            window.amdRequire(['vs/editor/editor.main'], () => {
+                this.ngZone.run(() => this.isMonacoLoaded$.next(true));
+            });
+        };
+        // Check if AMD loader already available
+        const isAmdLoaderAvailable = !!window.amdRequire;
+        if (isAmdLoaderAvailable) {
+            return onGotAmdLoader();
+        }
+        const isElectron = !!window.require;
+        if (isElectron) {
+            this.addElectronFixScripts();
+            this.nodeRequire = window.require;
+        }
+        const loaderScript = document.createElement('script');
+        loaderScript.type = 'text/javascript';
+        loaderScript.src = `${this._monacoPath}/loader.js`;
+        loaderScript.addEventListener('load', onGotAmdLoader);
+        document.body.appendChild(loaderScript);
+    }
+    addElectronFixScripts() {
+        const electronFixScript = document.createElement('script');
+        // workaround monaco-css not understanding the environment
+        const inlineScript = document.createTextNode('self.module = undefined;');
+        // workaround monaco-typescript not understanding the environment
+        const inlineScript2 = document.createTextNode('self.process.browser = true;');
+        electronFixScript.appendChild(inlineScript);
+        electronFixScript.appendChild(inlineScript2);
+        document.body.appendChild(electronFixScript);
+    }
+};
+MonacoEditorLoaderService.ɵfac = function MonacoEditorLoaderService_Factory(t) { return new (t || MonacoEditorLoaderService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](MONACO_PATH, 8)); };
+MonacoEditorLoaderService.ctorParameters = () => [
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"] },
+    { type: String, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Optional"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [MONACO_PATH,] }] }
+];
+MonacoEditorLoaderService.ɵprov = Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"])({ factory: function MonacoEditorLoaderService_Factory() { return new MonacoEditorLoaderService(Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"])(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"]), Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"])("MONACO_PATH", 8)); }, token: MonacoEditorLoaderService, providedIn: "root" });
+MonacoEditorLoaderService = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([ Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__param"])(1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Optional"])()), Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__param"])(1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(MONACO_PATH)),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"], String])
+], MonacoEditorLoaderService);
+
+let MonacoEditorLoaderDirective = class MonacoEditorLoaderDirective {
+    constructor(templateRef, viewContainer, monacoEditorLoaderService) {
+        this.templateRef = templateRef;
+        this.viewContainer = viewContainer;
+        this.monacoEditorLoaderService = monacoEditorLoaderService;
+        this.isMonacoLoaded$ = this.monacoEditorLoaderService.isMonacoLoaded$.asObservable();
+        this.destroyed$ = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
+    }
+    ngOnInit() {
+        this.isMonacoLoaded$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(this.destroyed$)).subscribe((loaded) => {
+            if (!loaded) {
+                return this.viewContainer.clear();
+            }
+            this.viewContainer.createEmbeddedView(this.templateRef);
+        });
+    }
+    ngOnDestroy() {
+        this.destroyed$.next();
+        this.destroyed$.complete();
+    }
+};
+MonacoEditorLoaderDirective.ɵfac = function MonacoEditorLoaderDirective_Factory(t) { return new (t || MonacoEditorLoaderDirective)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["TemplateRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewContainerRef"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](MonacoEditorLoaderService)); };
+MonacoEditorLoaderDirective.ɵdir = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineDirective"]({ type: MonacoEditorLoaderDirective, selectors: [["", "ngxLoadMonacoEditor", ""]] });
+MonacoEditorLoaderDirective.ctorParameters = () => [
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["TemplateRef"] },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewContainerRef"] },
+    { type: MonacoEditorLoaderService }
+];
+MonacoEditorLoaderDirective = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([ Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_1__["TemplateRef"],
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewContainerRef"],
+        MonacoEditorLoaderService])
+], MonacoEditorLoaderDirective);
+
+var MonacoEditorComponent_1;
+let MonacoEditorComponent = MonacoEditorComponent_1 = class MonacoEditorComponent {
+    constructor(monacoLoader) {
+        this.monacoLoader = monacoLoader;
+        this.init = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.propagateChange = (_) => { };
+    }
+    get model() {
+        return this.editor && this.editor.getModel();
+    }
+    get modelMarkers() {
+        return this.model && monaco.editor.getModelMarkers({
+            resource: this.model.uri
+        });
+    }
+    ngOnInit() {
+        this.monacoLoader.isMonacoLoaded$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(isLoaded => isLoaded), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1)).subscribe(() => {
+            this.initEditor();
+        });
+    }
+    ngOnChanges(changes) {
+        if (this.editor && changes.options && !changes.options.firstChange) {
+            const _a = changes.options.currentValue, { language: toLanguage, theme: toTheme } = _a, options = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__rest"])(_a, ["language", "theme"]);
+            const { language: fromLanguage, theme: fromTheme } = changes.options.previousValue;
+            if (fromLanguage !== toLanguage) {
+                monaco.editor.setModelLanguage(this.editor.getModel(), this.options && this.options.language ? this.options.language : 'text');
+            }
+            if (fromTheme !== toTheme) {
+                monaco.editor.setTheme(toTheme);
+            }
+            this.editor.updateOptions(options);
+        }
+        if (this.editor && changes.uri) {
+            const toUri = changes.uri.currentValue;
+            const fromUri = changes.uri.previousValue;
+            if (fromUri && !toUri || !fromUri && toUri || toUri && fromUri && toUri.path !== fromUri.path) {
+                const value = this.editor.getValue();
+                if (this.modelUriInstance) {
+                    this.modelUriInstance.dispose();
+                }
+                let existingModel;
+                if (toUri) {
+                    existingModel = monaco.editor.getModels().find((model) => model.uri.path === toUri.path);
+                }
+                this.modelUriInstance = existingModel ? existingModel : monaco.editor.createModel(value, this.options.language || 'text', this.uri);
+                this.editor.setModel(this.modelUriInstance);
+            }
+        }
+    }
+    writeValue(value) {
+        this.value = value;
+        if (this.editor && value) {
+            this.editor.setValue(value);
+        }
+        else if (this.editor) {
+            this.editor.setValue('');
+        }
+    }
+    registerOnChange(fn) {
+        this.propagateChange = fn;
+    }
+    registerOnTouched(fn) {
+        this.onTouched = fn;
+    }
+    validate() {
+        return !this.parsedError ? null : {
+            monaco: {
+                value: this.parsedError.split('|'),
+            }
+        };
+    }
+    registerOnValidatorChange(fn) {
+        this.onErrorStatusChange = fn;
+    }
+    initEditor() {
+        const options = {
+            value: [this.value].join('\n'),
+            language: 'text',
+            automaticLayout: true,
+            scrollBeyondLastLine: false,
+            theme: 'vc'
+        };
+        this.editor = monaco.editor.create(this.editorContent.nativeElement, this.options ? Object.assign(Object.assign({}, options), this.options) : options);
+        this.registerEditorListeners();
+        this.init.emit(this.editor);
+    }
+    registerEditorListeners() {
+        this.editor.onDidChangeModelContent(() => {
+            this.propagateChange(this.editor.getValue());
+        });
+        this.editor.onDidChangeModelDecorations(() => {
+            const currentParsedError = this.modelMarkers.map(({ message }) => message).join('|');
+            const hasValidationStatusChanged = this.parsedError !== currentParsedError;
+            if (hasValidationStatusChanged) {
+                this.parsedError = currentParsedError;
+                this.onErrorStatusChange();
+            }
+        });
+        this.editor.onDidBlurEditorText(() => {
+            this.onTouched();
+        });
+    }
+    ngOnDestroy() {
+        if (this.editor) {
+            this.editor.dispose();
+        }
+    }
+};
+MonacoEditorComponent.ɵfac = function MonacoEditorComponent_Factory(t) { return new (t || MonacoEditorComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](MonacoEditorLoaderService)); };
+MonacoEditorComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: MonacoEditorComponent, selectors: [["ngx-monaco-editor"]], viewQuery: function MonacoEditorComponent_Query(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵviewQuery"](_c0, 3);
+    } if (rf & 2) {
+        let _t;
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.editorContent = _t.first);
+    } }, inputs: { options: "options", uri: "uri" }, outputs: { init: "init" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵProvidersFeature"]([
+            {
+                provide: _angular_forms__WEBPACK_IMPORTED_MODULE_4__["NG_VALUE_ACCESSOR"],
+                useExisting: Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["forwardRef"])(() => MonacoEditorComponent_1),
+                multi: true
+            },
+            {
+                provide: _angular_forms__WEBPACK_IMPORTED_MODULE_4__["NG_VALIDATORS"],
+                useExisting: Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["forwardRef"])(() => MonacoEditorComponent_1),
+                multi: true
+            }
+        ]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵNgOnChangesFeature"]], decls: 4, vars: 0, consts: [["fxFlex", "", 1, "editor-container"], ["container", ""], [1, "monaco-editor"], ["editor", ""]], template: function MonacoEditorComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0, 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](2, "div", 2, 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    } }, styles: [_c2], changeDetection: 0 });
+MonacoEditorComponent.ctorParameters = () => [
+    { type: MonacoEditorLoaderService }
+];
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)
+], MonacoEditorComponent.prototype, "options", void 0);
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)
+], MonacoEditorComponent.prototype, "uri", void 0);
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+], MonacoEditorComponent.prototype, "init", void 0);
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('editor', { static: true }),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"])
+], MonacoEditorComponent.prototype, "editorContent", void 0);
+MonacoEditorComponent = MonacoEditorComponent_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([ Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [MonacoEditorLoaderService])
+], MonacoEditorComponent);
+
+let MonacoDiffEditorComponent = class MonacoDiffEditorComponent {
+    constructor(monacoLoader) {
+        this.monacoLoader = monacoLoader;
+        this.init = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+    }
+    ngOnInit() {
+        this.container = this.editorContent.nativeElement;
+        this.monacoLoader.isMonacoLoaded$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(isLoaded => isLoaded), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["take"])(1)).subscribe(() => {
+            this.initMonaco();
+        });
+    }
+    ngOnChanges(changes) {
+        if (this.editor && ((changes.code && !changes.code.firstChange) || (changes.modified && !changes.modified.firstChange))) {
+            const modified = monaco.editor.createModel(this.modified);
+            const original = monaco.editor.createModel(this.original);
+            this.editor.setModel({
+                original,
+                modified
+            });
+        }
+        if (this.editor &&
+            changes.options &&
+            !changes.options.firstChange) {
+            if (changes.options.previousValue.theme !== changes.options.currentValue.theme) {
+                monaco.editor.setTheme(changes.options.currentValue.theme);
+            }
+            this.editor.updateOptions(changes.options.currentValue);
+        }
+    }
+    initMonaco() {
+        let opts = {
+            readOnly: true,
+            automaticLayout: true,
+            theme: 'vc'
+        };
+        if (this.options) {
+            opts = Object.assign({}, opts, this.options);
+        }
+        this.editor = monaco.editor.createDiffEditor(this.container, opts);
+        const original = monaco.editor.createModel(this.original);
+        const modified = monaco.editor.createModel(this.modified);
+        this.editor.setModel({
+            original,
+            modified
+        });
+        this.editor.layout();
+        this.init.emit(this.editor);
+    }
+    ngOnDestroy() {
+        if (this.editor) {
+            this.editor.dispose();
+        }
+    }
+};
+MonacoDiffEditorComponent.ɵfac = function MonacoDiffEditorComponent_Factory(t) { return new (t || MonacoDiffEditorComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](MonacoEditorLoaderService)); };
+MonacoDiffEditorComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: MonacoDiffEditorComponent, selectors: [["ngx-monaco-diff-editor"]], viewQuery: function MonacoDiffEditorComponent_Query(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵviewQuery"](_c1, 3);
+    } if (rf & 2) {
+        let _t;
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.editorContent = _t.first);
+    } }, inputs: { original: "original", modified: "modified", options: "options" }, outputs: { init: "init" }, features: [_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵNgOnChangesFeature"]], decls: 4, vars: 0, consts: [["fxFlex", "", 1, "editor-container"], ["container", ""], [1, "monaco-editor"], ["diffEditor", ""]], template: function MonacoDiffEditorComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0, 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](2, "div", 2, 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    } }, styles: [_c2], changeDetection: 0 });
+MonacoDiffEditorComponent.ctorParameters = () => [
+    { type: MonacoEditorLoaderService }
+];
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+], MonacoDiffEditorComponent.prototype, "original", void 0);
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", String)
+], MonacoDiffEditorComponent.prototype, "modified", void 0);
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", Object)
+], MonacoDiffEditorComponent.prototype, "options", void 0);
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
+], MonacoDiffEditorComponent.prototype, "init", void 0);
+Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('diffEditor', { static: true }),
+    Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["ElementRef"])
+], MonacoDiffEditorComponent.prototype, "editorContent", void 0);
+MonacoDiffEditorComponent = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"])([ Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"])("design:paramtypes", [MonacoEditorLoaderService])
+], MonacoDiffEditorComponent);
+
+let MonacoEditorModule = class MonacoEditorModule {
+};
+MonacoEditorModule.ɵfac = function MonacoEditorModule_Factory(t) { return new (t || MonacoEditorModule)(); };
+MonacoEditorModule.ɵmod = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineNgModule"]({ type: MonacoEditorModule });
+MonacoEditorModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector"]({ imports: [[]] });
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](MonacoEditorLoaderService, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"],
+        args: [{ providedIn: 'root' }]
+    }], function () { return [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgZone"] }, { type: String, decorators: [{
+                type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Optional"]
+            }, {
+                type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"],
+                args: [MONACO_PATH]
+            }] }]; }, null); })();
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](MonacoEditorLoaderDirective, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Directive"],
+        args: [{ selector: '[ngxLoadMonacoEditor]' }]
+    }], function () { return [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["TemplateRef"] }, { type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewContainerRef"] }, { type: MonacoEditorLoaderService }]; }, null); })();
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](MonacoEditorComponent, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
+        args: [{
+                selector: 'ngx-monaco-editor',
+                template: `<div #container class="editor-container" fxFlex>
+		<div
+			#editor
+			class="monaco-editor"
+		></div>
+</div>`,
+                changeDetection: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectionStrategy"].OnPush,
+                providers: [
+                    {
+                        provide: _angular_forms__WEBPACK_IMPORTED_MODULE_4__["NG_VALUE_ACCESSOR"],
+                        useExisting: Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["forwardRef"])(() => MonacoEditorComponent_1),
+                        multi: true
+                    },
+                    {
+                        provide: _angular_forms__WEBPACK_IMPORTED_MODULE_4__["NG_VALIDATORS"],
+                        useExisting: Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["forwardRef"])(() => MonacoEditorComponent_1),
+                        multi: true
+                    }
+                ],
+                styles: [`
+.monaco-editor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+}
+.editor-container {
+	overflow: hidden;
+	position: relative;
+	display: table;
+	width: 100%;
+  height: 100%;
+  min-width: 0;
+}`]
+            }]
+    }], function () { return [{ type: MonacoEditorLoaderService }]; }, { init: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"]
+        }], options: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+        }], uri: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+        }], editorContent: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"],
+            args: ['editor', { static: true }]
+        }] }); })();
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](MonacoDiffEditorComponent, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
+        args: [{
+                selector: 'ngx-monaco-diff-editor',
+                template: `<div #container class="editor-container" fxFlex>
+		<div
+			#diffEditor
+			class="monaco-editor"
+		></div>
+</div>`,
+                changeDetection: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectionStrategy"].OnPush,
+                styles: [`
+.monaco-editor {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+}
+.editor-container {
+	overflow: hidden;
+	position: relative;
+	display: table;
+	width: 100%;
+  height: 100%;
+  min-width: 0;
+}`]
+            }]
+    }], function () { return [{ type: MonacoEditorLoaderService }]; }, { init: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"]
+        }], original: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+        }], modified: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+        }], options: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"]
+        }], editorContent: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"],
+            args: ['diffEditor', { static: true }]
+        }] }); })();
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵsetNgModuleScope"](MonacoEditorModule, { declarations: [MonacoEditorLoaderDirective, MonacoEditorComponent, MonacoDiffEditorComponent], exports: [MonacoEditorLoaderDirective, MonacoEditorComponent, MonacoDiffEditorComponent] }); })();
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](MonacoEditorModule, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"],
+        args: [{
+                imports: [],
+                declarations: [
+                    MonacoEditorLoaderDirective,
+                    MonacoEditorComponent,
+                    MonacoDiffEditorComponent
+                ],
+                exports: [
+                    MonacoEditorLoaderDirective,
+                    MonacoEditorComponent,
+                    MonacoDiffEditorComponent
+                ],
+                entryComponents: [MonacoEditorComponent, MonacoDiffEditorComponent]
+            }]
+    }], null, null); })();
+
+/*
+ * Public API Surface of materia-monaco-editor-lib
+ */
+
+/**
+ * Generated bundle index. Do not edit.
+ */
+
+
+
+//# sourceMappingURL=materia-ui-ngx-monaco-editor.js.map
+
+/***/ }),
+
 /***/ "0Pi8":
 /*!******************************************************************!*\
   !*** ./node_modules/rxjs/_esm2015/internal/operators/endWith.js ***!
@@ -57719,6 +58247,260 @@ class WindowSubscriber extends _OuterSubscriber__WEBPACK_IMPORTED_MODULE_1__["Ou
     }
 }
 //# sourceMappingURL=windowWhen.js.map
+
+/***/ }),
+
+/***/ "pf5f":
+/*!************************************************************************************!*\
+  !*** ./node_modules/@materia-ui/ngx-monaco-editor/node_modules/tslib/tslib.es6.js ***!
+  \************************************************************************************/
+/*! exports provided: __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __createBinding, __exportStar, __values, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__extends", function() { return __extends; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__assign", function() { return __assign; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__rest", function() { return __rest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__decorate", function() { return __decorate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__param", function() { return __param; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__metadata", function() { return __metadata; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__awaiter", function() { return __awaiter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__generator", function() { return __generator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__createBinding", function() { return __createBinding; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__exportStar", function() { return __exportStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__values", function() { return __values; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__read", function() { return __read; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spread", function() { return __spread; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__spreadArrays", function() { return __spreadArrays; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__await", function() { return __await; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncGenerator", function() { return __asyncGenerator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncDelegator", function() { return __asyncDelegator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__asyncValues", function() { return __asyncValues; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__makeTemplateObject", function() { return __makeTemplateObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importStar", function() { return __importStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__importDefault", function() { return __importDefault; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldGet", function() { return __classPrivateFieldGet; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__classPrivateFieldSet", function() { return __classPrivateFieldSet; });
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function __createBinding(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}
+
+function __exportStar(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result.default = mod;
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+}
+
 
 /***/ }),
 

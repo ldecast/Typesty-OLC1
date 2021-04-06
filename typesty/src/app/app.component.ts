@@ -9,6 +9,28 @@ import { AppService } from './app.service';
 export class AppComponent {
   constructor(private appService: AppService) { }
 
+  EditorOptions = {
+    theme: "vs-dark",
+    automaticLayout: true,
+    scrollBeyondLastLine: false,
+    fontSize: 16,
+    minimap: {
+      enabled: true
+    },
+    language: 'javascript'
+  }
+
+  ConsoleOptions = {
+    theme: "vs-dark",
+    automaticLayout: true,
+    scrollBeyondLastLine: false,
+    fontSize: 16,
+    minimap: {
+      enabled: true
+    },
+    language: ''
+  }
+
   title = 'typesty';
   entrada: string = '';
   salida: string = '';
@@ -37,7 +59,7 @@ export class AppComponent {
     var f = document.createElement('a');
     f.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.entrada));
     console.log(this.fname);
-    f.setAttribute('download', this.fname ? this.fname.replace("C:\\fakepath\\","") : 'newFile.ty');
+    f.setAttribute('download', this.fname ? this.fname.replace("C:\\fakepath\\", "") : 'newFile.ty');
 
     if (document.createEvent) {
       var event = document.createEvent('MouseEvents');

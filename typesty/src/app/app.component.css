@@ -1,5 +1,4 @@
 .title {
-    /* background-color:royalblue; */
     background-color:#c1502e;
     font-family: 'Varela Round', sans-serif;
 }
@@ -18,14 +17,13 @@ button {
     color: lightgrey;
 }
 
-.inputbox {
-    width: 520px;
-    height: 390px;
-    padding: 10px;
-    color:cornsilk;
-    background-color: #1b2631;
-    font-family: Consolas, monaco, monospace;
-    border-color: gray;
+.codebox {
+    width: 500px;
+    height: 420px;
+}
+
+.fila {
+    height: 420px;
 }
 
 hr {
