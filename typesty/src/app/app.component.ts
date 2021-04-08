@@ -51,7 +51,10 @@ export class AppComponent {
         console.log('Data received!', data);
         this.salida = data.output;
       },
-      error => console.log('There was an error :(', error)
+      error => {
+        console.log('There was an error :(', error);
+        this.salida = error.error.message;
+      }
     );
   }
 

@@ -87,12 +87,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import {
-//   MonacoEditorComponent,
-//   MonacoEditorConstructionOptions,
-//   MonacoEditorLoaderService,
-//   MonacoStandaloneCodeEditor
-// } from '@materia-ui/ngx-monaco-editor';
 class AppComponent {
     constructor(appService) {
         this.appService = appService;
@@ -132,7 +126,10 @@ class AppComponent {
         this.appService.compile(x).subscribe(data => {
             console.log('Data received!', data);
             this.salida = data.output;
-        }, error => console.log('There was an error :(', error));
+        }, error => {
+            console.log('There was an error :(', error);
+            this.salida = error.error.message;
+        });
     }
     saveFile() {
         var f = document.createElement('a');
