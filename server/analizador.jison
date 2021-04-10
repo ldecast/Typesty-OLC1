@@ -1,45 +1,87 @@
 /* lexical grammar */
 %lex
+
+%options case-insensitive
+
 %%
 
-\s+                   /* skip whitespace */
-[0-9]+("."[0-9]+)?\b  return 'NUMBER'
-"clase"               return 'clase'
-"decimal"             return 'decimal'
-"cadena"              return 'cadena'
-"bandera"             return 'bandera'
-"true"                return 'true'
-"false"               return 'false'
-"cout"               return 'cout'
-"while"               return 'while'
+\s+                   				// Whitespace
+"\/\/".*							// EndOfLineComment
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]	// MultiLineComment
 
+"clase"               	return 'prclase'
+"double"             	return 'prdouble'
+"int"             		return 'printeger'
+"boolean"              	return 'prboolean'
+"char"             		return 'prchar'
+"string"				return 'prstring'
+"list"					return 'prlist'
+"new"					return 'prnew'
+"add"					return 'pradd'
 
-"||"                   return 'or'
-"&&"                   return 'and'
-"=="                   return 'igualigual'
-"!="                   return 'diferente'
-"<="                   return 'menorigual'
-">="                   return 'mayorigual'
-">"                   return 'mayor'
-"<"                   return 'menor'
-","                   return 'coma'
-";"                   return 'ptcoma'
-"{"                   return 'llaveA'
-"}"                   return 'llaveC'
-"*"                   return 'multi'
-"/"                   return 'div'
-"-"                   return 'menos'
-"+"                   return 'suma'
-"^"                   return 'exponente'
-"!"                   return 'not'
-"%"                   return 'modulo'
-"("                   return 'parA'
-")"                   return 'parC'
-"PI"                  return 'PI'
-"E"                   return 'E'
+"if"					return 'prif'
+"else"					return 'prelse'
+"switch"				return 'prswitch'
+"case"					return 'prcase'
+"break"					return 'prbreak'
+"while"               	return 'prwhile'
+"for"					return 'prfor'
+"do"					return 'prdo'
+"default"				return 'prdefault'
+"continue"				return 'prcontinue'
+"return"				return 'prreturn'
+"void"					return 'prvoid'
+"++"					return 'incremento'
+"--"					return 'decremento'
 
-([a-zA-Z])([a-zA-Z0-9_])* return 'identificador'
-["\""]([^"\""])*["\""] return 'string'
+"print"					return 'prprint'
+"toLower"				return 'prtoLower'
+"toUpper"				return 'prtoUpper'
+"length"				return 'prlength'
+"truncate"				return 'prtruncate'
+"round"					return 'prround'
+"typeof"				return 'prtypeof'
+"toString"				return 'prtoString'
+"toCharArray"			return 'prtoCharArray'
+"exec"					return 'prexec'
+
+"true"                	return 'true'
+"false"               	return 'false'
+
+"||"                   	return 'or'
+"&&"                   	return 'and'
+"!"                   	return 'not'
+"="						return 'igual'
+"=="                   	return 'igualigual'
+"!="                   	return 'diferente'
+"<="                   	return 'menorigual'
+">="					return 'mayorigual'
+">"                   	return 'mayor'
+"<"                   	return 'menor'
+","                   	return 'coma'
+";"                   	return 'ptcoma'
+"."						return 'punto'
+":"						return 'dospuntos'
+"{"                   	return 'labre'
+"}"                   	return 'lcierra'
+"*"                   	return 'multi'
+"/"                   	return 'div'
+"-"                   	return 'menos'
+"+"                   	return 'suma'
+"^"                   	return 'exponente'
+"%"                   	return 'modulo'
+"("                   	return 'pabre'
+")"                   	return 'pcierra'
+"?"						return 'interrogacion'
+"["						return 'cabre'
+"]"						return 'ccierra'
+
+"\\n"|"\\\\"|"\\\""|"\\“"|"\\”"|"\\t"|"\\'" return 'especiales'
+([a-zA-Z])([a-zA-Z0-9_])* return 'id'
+['].?[']				return 'caracter'
+["\""]([^"\""])*["\""] 	return 'cadena'
+[0-9]+("."[0-9]+)?\b	return 'doble'
+[0-9]+					return 'entero'
 
 <<EOF>>               return 'EOF'
 .                     return 'INVALID'
@@ -59,17 +101,202 @@
 %right 'not'
 %left 'igualigual' 'diferente' 'menor' 'menorigual' 'mayor' 'mayorigual'
 %left 'suma' 'menos'
-%left 'multi' 'div' 'modulo' 
+%left 'multi' 'div' 'modulo'
 %left 'exponente'
-
 %left umenos
 
-%start INICIO
+%start ini
 
 %% /* language grammar */
 
-INICIO: clase identificador llaveA string llaveC EOF{return $4;}
+ini: ENTRADA EOF {return $1;}
 ;
+
+ENTRADA: ENTRADA FUNCIONBODY
+		| ENTRADA METODOBODY
+		| ENTRADA LLAMADA ptcoma
+		| FUNCIONBODY
+		| METODOBODY
+		| EXECBODY //solo deberia venir un exec
+		| LLAMADA ptcoma
+;
+
+FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
+			| TIPO id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra
+;
+
+METODOBODY: prvoid id pabre pcierra labre INSTRUCCION lcierra
+			| TIPO id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra
+;
+
+EXECBODY: prexec id pabre pcierra ptcoma
+		| prexec id pabre LISTAVALORES pcierra ptcoma
+;
+
+LISTAPARAMETROS: LISTAPARAMETROS coma  PARAMETROS
+				| PARAMETROS
+;
+
+PARAMETROS: TIPO id
+;
+
+SENTENCIACONTROL: INSTRUCCION
+;
+
+SENTENCIACICLO:	INSTRUCCION
+;
+
+INSTRUCCION: INSTRUCCION DEC_VAR //en las declaraciones tambien estoy tomando las asignaciones y agregaciones menos en var
+			| INSTRUCCION SENTENCIACONTROL
+			| INSTRUCCION SENTENCIACICLO
+			| INSTRUCCION DEC_VECT
+			| INSTRUCCION DEC_LIST
+			| INSTRUCCION LLAMADA ptcoma
+			| DEC_VAR //string a; int b = 5;
+			| SENTENCIACONTROL //if, else, switch
+			| SENTENCIACICLO //ciclos o bucles
+			| DEC_VECT // []
+			| DEC_LIST // [[]]
+			| SENTENCIATRANSFERENCIA
+			| LLAMADA ptcoma
+			| FUNCIONESRESERVADAS //print... etc
+;
+
+FUNCIONESRESERVADAS: PRINT
+					| TOLOWER
+					| TOUPPER
+					| LENGTH
+					| TRUNCATE
+					| ROUND
+					| TYPEOF
+					| TOSTRING
+					| TOCHARARRAY
+;
+
+SENTENCIATRANSFERENCIA: prbreak ptcoma
+						| prcontinue ptcoma
+						| prreturn ptcoma
+;
+
+SENTENCIACICLO: WHILE
+				| FOR //PROBAR EL FOR CON DEC_VAR
+				| DOWHILE
+;
+
+WHILE: prwhile pabre EXPRESION pcierra labre INSTRUCCION lcierra
+;
+
+FOR: prfor pabre DEC_VAR CONDICION ptcoma ACTUALIZACION pcierra labre INSTRUCCION lcierra
+;
+
+ACTUALIZACION: id igual EXPRESION
+ 			| id incremento
+			| id decremento
+;
+
+DOWHILE: prdo labre INSTRUCCION lcierra prwhile pabre EXPRESION pcierra ptcoma
+;
+
+// ASIG_VAR: id igual EXPRESION
+// ;
+
+// CONDICION: id menor id
+// 		| id menorigual id
+// 		| id mayor id
+// 		| 
+// ;
+
+SENTENCIACONTROL: IF
+				| SWITCH
+;
+
+IF: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse IF
+	| prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse labre INSTRUCCION lcierra
+	| prif pabre EXPRESION pcierra labre INSTRUCCION lcierra
+;
+
+SWITCH: prswitch pabre EXPRESION pcierra labre CASESLIST DEFAULT lcierra
+		| prswitch pabre EXPRESION pcierra labre CASESLIST lcierra
+		| prswitch pabre EXPRESION pcierra labre DEFAULT lcierra
+;
+
+CASESLIST: prcase EXPRESION dospuntos INSTRUCCION
+;
+
+DEFAULT: prdefault dospuntos INSTRUCCION
+;
+
+DEC_VAR: TIPO id igual EXPRESION ptcoma { console.log($4); } //tentativamente agregar asignacion
+		| TIPO id ptcoma
+;
+
+DEC_VECT: TIPO cabre ccierra id igual prnew TIPO cabre EXPRESION ccierra ptcoma //En expresion agregar el acceso a vector
+		| TIPO cabre ccierra id igual cabre LISTAVALORES ccierra ptcoma
+		| id cabre EXPRESION ccierra igual EXPRESION ptcoma
+;
+
+DEC_LIST: prlist menor TIPO mayor id igual prnew prlist menor TIPO mayor ptcoma //agregar el acceso a lista en expresion
+		| id punto pradd pabre EXPRESION pcierra ptcoma
+		| id cabre cabre EXPRESION ccierra ccierra igual EXPRESION ptcoma
+;
+
+LISTAVALORES: LISTAVALORES coma VALORES
+			| VALORES
+;
+
+VALORES: EXPRESION	//cadena, boolean, entero, etc
+;
+
+TIPO: cabre ccierra TIPODATO
+	| TIPODATO
+;
+
+TIPODATO: prstring
+		| printeger
+		| prdouble
+		| prchar
+		| prboolean
+		| prlist
+;
+
+EXPRESION: 	EXPRESION suma EXPRESION
+			| EXPRESION menos EXPRESION
+			| EXPRESION multi EXPRESION
+			| EXPRESION div EXPRESION
+			| EXPRESION exponente EXPRESION
+			| EXPRESION modulo EXPRESION
+			| menos EXPRESION %prec umenos
+			| pabre EXPRESION pcierra
+			| EXPRESION igualigual EXPRESION
+			| EXPRESION diferente EXPRESION
+			| EXPRESION menor EXPRESION
+			| EXPRESION menorigual EXPRESION
+			| EXPRESION mayor EXPRESION
+			| EXPRESION mayorigual EXPRESION
+			| EXPRESION or EXPRESION
+			| EXPRESION and EXPRESION
+			| not EXPRESION
+			| cadena {$$=$1;}
+			| caracter {$$=$1;}
+			| true {$$=$1;}
+			| false {$$=$1;}
+			| entero {$$=$1;}
+			| doble {$$=$1;}
+			| pabre TIPODATO pcierra EXPRESION
+			| CONDICION interrogacion EXPRESION dospuntos EXPRESION //¿
+			| LLAMADA
+;
+
+LLAMADA: id pabre LISTAVALORES pcierra
+		| id pabre pcierra
+;
+
+CONDICION: //
+;
+
+// CASTEO: pabre TIPODATO pcierra EXPRESION
+// ;
+
 
 // OPCIONESCUERPO: OPCIONESCUERPO CUERPO {$1.push($2); $$=$1;}
 //               | CUERPO {$$=[$1];}
@@ -123,9 +350,6 @@ INICIO: clase identificador llaveA string llaveC EOF{return $4;}
 //         | identificador parA LISTAPARAMETROS parC llaveA OPCIONESMETODO llaveC
 // ;
 
-// LISTAPARAMETROS: LISTAPARAMETROS coma  PARAMETROS
-//                | PARAMETROS
-// ;
 
 // PARAMETROS: TIPO identificador
 // ;
