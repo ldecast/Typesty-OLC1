@@ -3,11 +3,16 @@ module.exports = (parser, app) => {
         try {
             var input = req.body.input;
             var ast = parser.parse(input);
-            var output = {
-                "ast": ast,
-                "output": ast //temporal
+            if (typeof ast === 'string') {
+                res.status(500).send({ "message": ast });
             }
-            res.status(200).send(output);
+            else {
+                var output = {
+                    "ast": ast,
+                    "output": ast //temporal
+                }
+                res.status(200).send(output);
+            }
         } catch (error) {
             res.status(500).send(error);
         }

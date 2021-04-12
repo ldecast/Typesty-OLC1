@@ -17,7 +17,7 @@ export class AppComponent {
     minimap: {
       enabled: true
     },
-    language: 'javascript'
+    language: 'java'
   }
 
   ConsoleOptions = {
@@ -45,17 +45,24 @@ export class AppComponent {
   }
 
   onSubmit() {
-    const x = { "input": this.entrada }
-    this.appService.compile(x).subscribe(
-      data => {
-        console.log('Data received!', data);
-        this.salida = data.output;
-      },
-      error => {
-        console.log('There was an error :(', error);
-        this.salida = error.error.message;
-      }
-    );
+    if (this.checkInput(this.entrada)) {
+      const x = { "input": this.entrada }
+      this.appService.compile(x).subscribe(
+        data => {
+          console.log('Data received!', data);
+          this.salida = data.output;
+        },
+        error => {
+          console.log('There was an error :(', error);
+          if (error.error.message == "ERROR: ONLY ONE 'EXEC' IS PERMITED") {
+            alert("Error: se ha encontrado más de un EXEC en la entrada. Vuelva a intentarlo.");
+          }
+          else {
+            this.salida = error.error.message;
+          }
+        }
+      );
+    }
   }
 
   saveFile() {
@@ -90,6 +97,19 @@ export class AppComponent {
     reader.readAsText(input.files[0]);
     this.salida = '';
     console.log('File opened!')
+  }
+
+  checkInput(x: string) {
+    // x = x.replace(" ", "");
+    // var count = (x.match(/exec/g) || []).length;
+    // if (count > 1) {
+    //   alert("Se ha encontrado más de un comando EXEC en la entrada, si se encuentra dentro de algún comentario elimínelo también.");
+    //   return false;
+    // }
+    // else {
+    //   return true;
+    // }
+    return true;
   }
 
 }

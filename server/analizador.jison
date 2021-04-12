@@ -88,10 +88,7 @@
 
 /lex
 %{
-	// const TIPO_OPERACION	= require('./controller/Enums/TipoOperacion');
-	// const TIPO_VALOR 		= require('./controller/Enums/TipoValor');
-	// const TIPO_DATO			= require('./controller/Enums/TipoDato'); //para jalar el tipo de dato
-	// const INSTRUCCION	= require('./controller/Instruccion/Instruccion');
+
 %}
 
 /* operator associations and precedence */
@@ -109,16 +106,21 @@
 
 %% /* language grammar */
 
-ini: ENTRADA EOF {return $1;}
+ini: ENTRADA EOF
 ;
 
-ENTRADA: ENTRADA FUNCIONBODY
-		| ENTRADA METODOBODY
-		| ENTRADA LLAMADA ptcoma
-		| FUNCIONBODY
+ENTRADA: ENTRADA ENTCERO
+		| ENTCERO
+;
+
+ENTCERO: FUNCIONBODY
 		| METODOBODY
-		| EXECBODY //solo deberia venir un exec
-		| LLAMADA ptcoma
+		| EXECBODY
+		//| LLAMADA ptcoma -- supuestamente solo declaraciones/asignaciones
+		| DEC_VAR
+		| DEC_VECT
+		| DEC_LIST
+		| FPRINT
 ;
 
 FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
@@ -126,7 +128,7 @@ FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
 ;
 
 METODOBODY: prvoid id pabre pcierra labre INSTRUCCION lcierra
-			| TIPO id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra
+			| prvoid id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra
 ;
 
 EXECBODY: prexec id pabre pcierra ptcoma
@@ -140,53 +142,35 @@ LISTAPARAMETROS: LISTAPARAMETROS coma  PARAMETROS
 PARAMETROS: TIPO id
 ;
 
-SENTENCIACONTROL: INSTRUCCION
+INSTRUCCION: INSTRUCCION INSCERO 
+			| INSCERO {$$="hola";}
 ;
 
-SENTENCIACICLO:	INSTRUCCION
-;
-
-INSTRUCCION: INSTRUCCION DEC_VAR //en las declaraciones tambien estoy tomando las asignaciones y agregaciones menos en var
-			| INSTRUCCION SENTENCIACONTROL
-			| INSTRUCCION SENTENCIACICLO
-			| INSTRUCCION DEC_VECT
-			| INSTRUCCION DEC_LIST
-			| INSTRUCCION LLAMADA ptcoma
-			| DEC_VAR //string a; int b = 5;
-			| SENTENCIACONTROL //if, else, switch
-			| SENTENCIACICLO //ciclos o bucles
-			| DEC_VECT // []
-			| DEC_LIST // [[]]
-			| SENTENCIATRANSFERENCIA
-			| LLAMADA ptcoma
-			| FUNCIONESRESERVADAS //print... etc
-;
-
-FUNCIONESRESERVADAS: PRINT
-					| TOLOWER
-					| TOUPPER
-					| LENGTH
-					| TRUNCATE
-					| ROUND
-					| TYPEOF
-					| TOSTRING
-					| TOCHARARRAY
+INSCERO: DEC_VAR //string a; int b = 5;
+		| SENTENCIACONTROL //if, else, switch
+		| SENTENCIACICLO //ciclos o bucles
+		| DEC_VECT // []
+		| DEC_LIST // [[]]
+		| SENTENCIATRANSFERENCIA
+		| LLAMADA ptcoma
+		| FPRINT //print
 ;
 
 SENTENCIATRANSFERENCIA: prbreak ptcoma
+						| prreturn EXPRESION ptcoma
 						| prcontinue ptcoma
 						| prreturn ptcoma
 ;
 
 SENTENCIACICLO: WHILE
-				| FOR //PROBAR EL FOR CON DEC_VAR
+				| FOR
 				| DOWHILE
 ;
 
 WHILE: prwhile pabre EXPRESION pcierra labre INSTRUCCION lcierra
 ;
 
-FOR: prfor pabre DEC_VAR CONDICION ptcoma ACTUALIZACION pcierra labre INSTRUCCION lcierra
+FOR: prfor pabre DEC_VAR EXPRESION ptcoma ACTUALIZACION pcierra labre INSTRUCCION lcierra {console.log($9);}
 ;
 
 ACTUALIZACION: id igual EXPRESION
@@ -196,15 +180,6 @@ ACTUALIZACION: id igual EXPRESION
 
 DOWHILE: prdo labre INSTRUCCION lcierra prwhile pabre EXPRESION pcierra ptcoma
 ;
-
-// ASIG_VAR: id igual EXPRESION
-// ;
-
-// CONDICION: id menor id
-// 		| id menorigual id
-// 		| id mayor id
-// 		| 
-// ;
 
 SENTENCIACONTROL: IF
 				| SWITCH
@@ -226,8 +201,14 @@ CASESLIST: prcase EXPRESION dospuntos INSTRUCCION
 DEFAULT: prdefault dospuntos INSTRUCCION
 ;
 
-DEC_VAR: TIPO id igual EXPRESION ptcoma { console.log($4); } //tentativamente agregar asignacion
+DEC_VAR: TIPO id igual TERNARIO ptcoma
+		| id igual TERNARIO ptcoma
+		| TIPO id igual EXPRESION ptcoma { console.log($4); }
 		| TIPO id ptcoma
+		| id igual EXPRESION ptcoma
+;
+
+TERNARIO: EXPRESION interrogacion EXPRESION dospuntos EXPRESION
 ;
 
 DEC_VECT: TIPO cabre ccierra id igual prnew TIPO cabre EXPRESION ccierra ptcoma //En expresion agregar el acceso a vector
@@ -240,12 +221,20 @@ DEC_LIST: prlist menor TIPO mayor id igual prnew prlist menor TIPO mayor ptcoma 
 		| id cabre cabre EXPRESION ccierra ccierra igual EXPRESION ptcoma
 ;
 
-LISTAVALORES: LISTAVALORES coma VALORES
-			| VALORES
-;
+// CONDICION: EXPRESION CONDICIONAL EXPRESION
+// 		| EXPRESION
+// ;
 
-VALORES: EXPRESION	//cadena, boolean, entero, etc
-;
+// CONDICIONAL: menorigual
+// 			| menor
+// 			| mayorigual
+// 			| mayor
+// 			| igualigual
+// 			| diferente
+// ;
+
+// CASTEO: pabre TIPODATO pcierra EXPRESION
+// ;
 
 TIPO: cabre ccierra TIPODATO
 	| TIPODATO
@@ -282,90 +271,81 @@ EXPRESION: 	EXPRESION suma EXPRESION
 			| false {$$=$1;}
 			| entero {$$=$1;}
 			| doble {$$=$1;}
-			| pabre TIPODATO pcierra EXPRESION
-			| CONDICION interrogacion EXPRESION dospuntos EXPRESION //¿
+			| id cabre cabre EXPRESION ccierra ccierra {$$=$1;} //acceso a lista
+			| id cabre EXPRESION ccierra {$$=$1;} //acceso a vector
+			| id {$$=$1;}
+			| CASTEO
+			// | TERNARIO
 			| LLAMADA
+			| FUNCIONESRESERVADAS
+;
+
+FUNCIONESRESERVADAS: FPRINT
+					| FTOLOWER
+					| FTOUPPER
+					| FLENGTH
+					| FTRUNCATE
+					| FROUND
+					| FTYPEOF
+					| FTOSTRING
+					| FTOCHARARRAY
+;
+
+FPRINT: prprint pabre EXPRESION pcierra ptcoma
+;
+
+FTOLOWER: prtoLower pabre EXPRESION pcierra
+;
+
+FTOUPPER: prtoUpper pabre EXPRESION pcierra
+;
+
+FLENGTH: prlength pabre VALORLEN pcierra
+;
+
+VALORLEN: id cabre cabre EXPRESION ccierra ccierra
+		| id cabre EXPRESION ccierra
+		| id
+;
+
+FTRUNCATE: prtruncate pabre EXPRESION pcierra
+;
+
+FROUND: prround pabre EXPRESION pcierra
+;
+
+FTYPEOF: prtypeof pabre EXPRESION pcierra
+;
+
+FTOSTRING: prtoString pabre EXPRESION pcierra
+;
+
+FTOCHARARRAY: prtoCharArray pabre EXPRESION pcierra //recibe una cadena
+;
+
+CASTEO: pabre TIPOCAST pcierra EXPRESION ptcoma//no debe llevar ';' pero sin el token truena
+;
+
+TIPOCAST: print
+		| prdouble
+		| prchar
+		| prstring
+;
+
+EXPCAST: caracter {$$=$1;}
+		| entero {$$=$1;}
+		| doble {$$=$1;}
+		| id {$$=$1;}
 ;
 
 LLAMADA: id pabre LISTAVALORES pcierra
 		| id pabre pcierra
 ;
 
-CONDICION: //
+LISTAVALORES: LISTAVALORES coma VALORES
+			| VALORES
 ;
 
-// CASTEO: pabre TIPODATO pcierra EXPRESION
-// ;
+VALORES: EXPRESION	//cadena, boolean, entero, etc
+;
 
-
-// OPCIONESCUERPO: OPCIONESCUERPO CUERPO {$1.push($2); $$=$1;}
-//               | CUERPO {$$=[$1];}
-// ;
-
-// CUERPO: DEC_VAR {$$=$1}
-//       | WHILE {$$=$1}
-//       | IMPRIMIR {$$=$1}
-//       | DEC_MET {$$=$1}
-//       | AS_VAR {$$=$1}
-// ;
-
-// AS_VAR: identificador menor menos EXPRESION ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $4, this._$.first_line,this._$.first_column+1)}
-// ;
-
-// DEC_VAR: TIPO identificador ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line,this._$.first_column+1)}
-//        | TIPO identificador menor menos EXPRESION ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $5, $1, this._$.first_line,this._$.first_column+1)}
-// ;
-
-// TIPO: decimal {$$ = TIPO_DATO.DECIMAL}
-//     | cadena
-//     | bandera
-// ;
-
-
-// EXPRESION: EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.SUMA,this._$.first_line,this._$.first_column+1);}
-//          | EXPRESION menos EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.RESTA,this._$.first_line,this._$.first_column+1);}
-//          | EXPRESION multi EXPRESION
-//          | EXPRESION div EXPRESION
-//          | EXPRESION exponente EXPRESION
-//          | EXPRESION modulo EXPRESION
-//          | menos EXPRESION %prec umenos
-//          | parA EXPRESION parC {$$=$2}
-//          | EXPRESION igualigual EXPRESION
-//          | EXPRESION diferente EXPRESION
-//          | EXPRESION menor EXPRESION
-//          | EXPRESION menorigual EXPRESION
-//          | EXPRESION mayor EXPRESION
-//          | EXPRESION mayorigual EXPRESION
-//          | EXPRESION or EXPRESION
-//          | EXPRESION and EXPRESION
-//          | not EXPRESION
-//          | NUMBER {$$ = INSTRUCCION.nuevoValor(Number($1), TIPO_VALOR.DECIMAL, this._$.first_line,this._$.first_column+1)}
-//          | true {$$ = INSTRUCCION.nuevoValor(Boolean($1), TIPO_VALOR.BANDERA, this._$.first_line,this._$.first_column+1)}
-//          | false {$$ = INSTRUCCION.nuevoValor(Boolean($1), TIPO_VALOR.BANDERA, this._$.first_line,this._$.first_column+1)}
-//          | string {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1)}
-//          | identificador {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.IDENTIFICADOR, this._$.first_line,this._$.first_column+1)}
-// ;
-
-// DEC_MET : identificador parA parC llaveA OPCIONESMETODO llaveC
-//         | identificador parA LISTAPARAMETROS parC llaveA OPCIONESMETODO llaveC
-// ;
-
-
-// PARAMETROS: TIPO identificador
-// ;
-
-// OPCIONESMETODO: OPCIONESMETODO CUERPOMETODO
-//               | CUERPOMETODO
-// ;
-
-// CUERPOMETODO: DEC_VAR
-//             | IMPRIMIR
-//             | WHILE
-//             | AS_VAR
-// ;
-
-// IMPRIMIR: cout menor menor EXPRESION ptcoma{$$ = new INSTRUCCION.nuevoCout($4, this._$.first_line,this._$.first_column+1)}
-// ;
-
-// WHILE: while parA EXPRESION parC llaveA OPCIONESMETODO llaveC
-// ;
