@@ -2,7 +2,7 @@ const TIPO_INSTRUCCION = require("../../controller/Enum/TipoInstrucciones");
 const Asignacion = require("./Asignacion");
 const Imprimir = require("./Print");
 const Declaracion = require("./Declaracion");
-// const CicloWhile = require("./While");
+const CicloWhile = require("./While");
 
 function Bloque(_instrucciones, _ambito) {
     var cadena = ""
@@ -22,12 +22,12 @@ function Bloque(_instrucciones, _ambito) {
                 cadena += mensaje + '\n'
             }
         }
-        // else if (instruccion.tipo === TIPO_INSTRUCCION.WHILE) {
-        //     var mensaje = CicloWhile(instruccion, _ambito)
-        //     if (mensaje != null) {
-        //         cadena += mensaje + '\n'
-        //     }
-        // }
+        else if (instruccion.tipo === TIPO_INSTRUCCION.WHILE) {
+            var mensaje = CicloWhile(instruccion, _ambito)
+            if (mensaje != null) {
+                cadena += mensaje + '\n'
+            }
+        }
     });
     return cadena
 }

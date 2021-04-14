@@ -50,10 +50,10 @@
 
 "||"                   	return 'or'
 "&&"                   	return 'and'
+"!="                   	return 'diferente'
+"=="                   	return 'igualigual'
 "!"                   	return 'not'
 "="						return 'igual'
-"=="                   	return 'igualigual'
-"!="                   	return 'diferente'
 "<="                   	return 'menorigual'
 ">="					return 'mayorigual'
 ">"                   	return 'mayor'
@@ -124,6 +124,7 @@ ENTCERO: FUNCIONBODY
 		| DEC_VECT
 		| DEC_LIST
 		| FPRINT {$$=$1}
+		| WHILE {$$=$1}
 ;
 
 FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
@@ -151,7 +152,7 @@ INSTRUCCION: INSTRUCCION INSCERO {$1.push($2); $$=$1;}
 
 INSCERO: DEC_VAR {$$=$1}
 		| SENTENCIACONTROL //if, else, switch
-		| SENTENCIACICLO //ciclos o bucles
+		| SENTENCIACICLO {$$=$1}
 		| DEC_VECT // []
 		| DEC_LIST // [[]]
 		| SENTENCIATRANSFERENCIA
@@ -165,12 +166,12 @@ SENTENCIATRANSFERENCIA: prbreak ptcoma
 						| prreturn ptcoma
 ;
 
-SENTENCIACICLO: WHILE
+SENTENCIACICLO: WHILE {$$=$1}
 				| FOR
 				| DOWHILE
 ;
 
-WHILE: prwhile pabre EXPRESION pcierra labre INSTRUCCION lcierra
+WHILE: prwhile pabre EXPRESION pcierra labre INSTRUCCION lcierra {$$ = new INSTRUCCION.nuevoWhile($3, $6 , this._$.first_line,this._$.first_column+1)}
 ;
 
 FOR: prfor pabre DEC_VAR EXPRESION ptcoma ACTUALIZACION pcierra labre INSTRUCCION lcierra
@@ -258,15 +259,15 @@ EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$
 			| EXPRESION modulo EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.MODULO,this._$.first_line,this._$.first_column+1);}
 			| menos EXPRESION %prec umenos {$$= INSTRUCCION.nuevaOperacionBinaria($2, null, TIPO_OPERACION.NEGACION,this._$.first_line,this._$.first_column+1);}
 			| pabre EXPRESION pcierra {$$=$2}
-			| EXPRESION igualigual EXPRESION
-			| EXPRESION diferente EXPRESION
-			| EXPRESION menor EXPRESION
-			| EXPRESION menorigual EXPRESION
-			| EXPRESION mayor EXPRESION
-			| EXPRESION mayorigual EXPRESION
-			| EXPRESION or EXPRESION
-			| EXPRESION and EXPRESION
-			| not EXPRESION
+			| EXPRESION igualigual EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.IGUALIGUAL,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION diferente EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.DIFERENTE,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION menor EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.MENOR,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION menorigual EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.MENORIGUAL,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION mayor EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.MAYOR,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION mayorigual EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.MAYORIGUAL,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION or EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.OR,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION and EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.AND,this._$.first_line,this._$.first_column+1);}
+			| not EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($2, null, TIPO_OPERACION.NOT,this._$.first_line,this._$.first_column+1);}
 			| cadena {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1)}
 			| caracter {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.CARACTER, this._$.first_line,this._$.first_column+1)}
 			| true {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.BOOLEANO, this._$.first_line,this._$.first_column+1)}

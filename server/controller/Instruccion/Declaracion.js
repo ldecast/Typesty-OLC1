@@ -45,12 +45,10 @@ function Declaracion(_instruccion, _ambito) {
     }
 
     else if (_instruccion.tipo_dato === TIPO_DATO.BOOLEANO) {
-        var valor = false // en caso sea sin asignación inicializamos la variable
-        //si es una declaracion con asignacion
+        var valor = true
         if (_instruccion.valor != null) {
             op = Operacion(_instruccion.valor, _ambito)
             tipo = op.tipo
-            //verificamos que el valor a asignar sea del mismo tipo
             if (tipo === TIPO_DATO.BOOLEANO) {
                 valor = (op.valor.toString() == 'true');
             }
@@ -58,14 +56,12 @@ function Declaracion(_instruccion, _ambito) {
                 return "Error: No es posible asignar un valor de tipo " + tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.BOOLEANO + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
             }
         }
-        //verificamos si ya existe
         const nuevoSimbolo = new Simbolo(_instruccion.id, valor, TIPO_DATO.BOOLEANO, _instruccion.linea, _instruccion.columna)
         if (_ambito.existeSimbolo(nuevoSimbolo.id) != false) {
             return "Error: La variable '" + nuevoSimbolo.id + "' ya existe.\nLínea: " + nuevoSimbolo.linea + " Columna: " + nuevoSimbolo.columna + "\n";
         }
         _ambito.addSimbolo(nuevoSimbolo.id, nuevoSimbolo)
         return null
-        //console.log(_ambito)
     }
 
     else if (_instruccion.tipo_dato === TIPO_DATO.CARACTER) {
@@ -83,20 +79,17 @@ function Declaracion(_instruccion, _ambito) {
     }
 
     else if (_instruccion.tipo_dato === TIPO_DATO.CADENA) {
-        var valor = "" // en caso sea sin asignación inicializamos la variable
-        //si es una declaracion con asignacion
+        var valor = ""
         if (_instruccion.valor != null) {
             op = Operacion(_instruccion.valor, _ambito)
-            valor = String(op.valor) //casteamos a cadena
+            valor = String(op.valor)
         }
-        //verificamos si ya existe
         const nuevoSimbolo = new Simbolo(_instruccion.id, valor, TIPO_DATO.CADENA, _instruccion.linea, _instruccion.columna)
         if (_ambito.existeSimbolo(nuevoSimbolo.id) != false) {
             return "Error: La variable '" + nuevoSimbolo.id + "' ya existe.\nLínea: " + nuevoSimbolo.linea + " Columna: " + nuevoSimbolo.columna + "\n";
         }
         _ambito.addSimbolo(nuevoSimbolo.id, nuevoSimbolo)
         return null
-        //console.log(_ambito)
     }
 
 }
