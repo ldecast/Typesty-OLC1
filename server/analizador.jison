@@ -78,9 +78,9 @@
 
 "\\n"|"\\\\"|"\\\""|"\\“"|"\\”"|"\\t"|"\\'" return 'especiales'
 ([a-zA-Z])([a-zA-Z0-9_])* return 'id'
-['].?[']				return 'caracter'
+['].?[']|[']especiales[']				return 'caracter' //probarlo
 ["\""]([^"\""])*["\""] 	return 'cadena'
-[0-9]+("."[0-9]+)?\b	return 'doble'
+[0-9]+("."[0-9]+)+\b	return 'doble'
 [0-9]+					return 'entero'
 
 <<EOF>>               return 'EOF'
@@ -88,7 +88,10 @@
 
 /lex
 %{
-
+	const TIPO_OPERACION	= require('./controller/Enum/TipoOperaciones');
+	const TIPO_VALOR 		= require('./controller/Enum/TipoValores');
+	const TIPO_DATO			= require('./controller/Enum/Tipados');
+	const INSTRUCCION		= require('./controller/Instruccion/Instruccion');
 %}
 
 /* operator associations and precedence */
@@ -106,21 +109,21 @@
 
 %% /* language grammar */
 
-ini: ENTRADA EOF
+ini: ENTRADA EOF {return $1;}
 ;
 
-ENTRADA: ENTRADA ENTCERO
-		| ENTCERO
+ENTRADA: ENTRADA ENTCERO {$1.push($2); $$=$1;}
+		| ENTCERO {$$=[$1];}
 ;
 
 ENTCERO: FUNCIONBODY
 		| METODOBODY
 		| EXECBODY
 		//| LLAMADA ptcoma -- supuestamente solo declaraciones/asignaciones
-		| DEC_VAR
+		| DEC_VAR {$$=$1}
 		| DEC_VECT
 		| DEC_LIST
-		| FPRINT
+		| FPRINT {$$=$1}
 ;
 
 FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
@@ -142,18 +145,18 @@ LISTAPARAMETROS: LISTAPARAMETROS coma  PARAMETROS
 PARAMETROS: TIPO id
 ;
 
-INSTRUCCION: INSTRUCCION INSCERO 
-			| INSCERO {$$="hola";}
+INSTRUCCION: INSTRUCCION INSCERO {$1.push($2); $$=$1;}
+			| INSCERO {$$=[$1];}
 ;
 
-INSCERO: DEC_VAR //string a; int b = 5;
+INSCERO: DEC_VAR {$$=$1}
 		| SENTENCIACONTROL //if, else, switch
 		| SENTENCIACICLO //ciclos o bucles
 		| DEC_VECT // []
 		| DEC_LIST // [[]]
 		| SENTENCIATRANSFERENCIA
 		| LLAMADA ptcoma
-		| FPRINT //print
+		| FPRINT {$$=$1}
 ;
 
 SENTENCIATRANSFERENCIA: prbreak ptcoma
@@ -170,7 +173,7 @@ SENTENCIACICLO: WHILE
 WHILE: prwhile pabre EXPRESION pcierra labre INSTRUCCION lcierra
 ;
 
-FOR: prfor pabre DEC_VAR EXPRESION ptcoma ACTUALIZACION pcierra labre INSTRUCCION lcierra {console.log($9);}
+FOR: prfor pabre DEC_VAR EXPRESION ptcoma ACTUALIZACION pcierra labre INSTRUCCION lcierra
 ;
 
 ACTUALIZACION: id igual EXPRESION
@@ -203,9 +206,9 @@ DEFAULT: prdefault dospuntos INSTRUCCION
 
 DEC_VAR: TIPO id igual TERNARIO ptcoma
 		| id igual TERNARIO ptcoma
-		| TIPO id igual EXPRESION ptcoma { console.log($4); }
-		| TIPO id ptcoma
-		| id igual EXPRESION ptcoma
+		| TIPO id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line,this._$.first_column+1)}
+		| TIPO id ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line,this._$.first_column+1)}
+		| id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line,this._$.first_column+1)}
 ;
 
 TERNARIO: EXPRESION interrogacion EXPRESION dospuntos EXPRESION
@@ -236,26 +239,25 @@ DEC_LIST: prlist menor TIPO mayor id igual prnew prlist menor TIPO mayor ptcoma 
 // CASTEO: pabre TIPODATO pcierra EXPRESION
 // ;
 
-TIPO: cabre ccierra TIPODATO
-	| TIPODATO
+TIPO: TIPODATO {$$ = $1}
 ;
 
-TIPODATO: prstring
-		| printeger
-		| prdouble
-		| prchar
-		| prboolean
-		| prlist
+TIPODATO: prstring {$$ = TIPO_DATO.CADENA}
+		| printeger {$$ = TIPO_DATO.ENTERO}
+		| prdouble {$$ = TIPO_DATO.DOBLE}
+		| prchar {$$ = TIPO_DATO.CARACTER}
+		| prboolean {$$ = TIPO_DATO.BOOLEANO}
+		| prlist {$$ = TIPO_DATO.LISTA}
 ;
 
-EXPRESION: 	EXPRESION suma EXPRESION
-			| EXPRESION menos EXPRESION
-			| EXPRESION multi EXPRESION
-			| EXPRESION div EXPRESION
-			| EXPRESION exponente EXPRESION
-			| EXPRESION modulo EXPRESION
-			| menos EXPRESION %prec umenos
-			| pabre EXPRESION pcierra
+EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.SUMA,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION menos EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.RESTA,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION multi EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.MULTIPLICACION,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION div EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.DIVISION,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION exponente EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.POTENCIA,this._$.first_line,this._$.first_column+1);}
+			| EXPRESION modulo EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.MODULO,this._$.first_line,this._$.first_column+1);}
+			| menos EXPRESION %prec umenos {$$= INSTRUCCION.nuevaOperacionBinaria($2, null, TIPO_OPERACION.NEGACION,this._$.first_line,this._$.first_column+1);}
+			| pabre EXPRESION pcierra {$$=$2}
 			| EXPRESION igualigual EXPRESION
 			| EXPRESION diferente EXPRESION
 			| EXPRESION menor EXPRESION
@@ -265,22 +267,22 @@ EXPRESION: 	EXPRESION suma EXPRESION
 			| EXPRESION or EXPRESION
 			| EXPRESION and EXPRESION
 			| not EXPRESION
-			| cadena {$$=$1;}
-			| caracter {$$=$1;}
-			| true {$$=$1;}
-			| false {$$=$1;}
-			| entero {$$=$1;}
-			| doble {$$=$1;}
+			| cadena {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1)}
+			| caracter {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.CARACTER, this._$.first_line,this._$.first_column+1)}
+			| true {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.BOOLEANO, this._$.first_line,this._$.first_column+1)}
+			| false {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.BOOLEANO, this._$.first_line,this._$.first_column+1)}
+			| entero {$$ = INSTRUCCION.nuevoValor(Number($1.trim()), TIPO_VALOR.ENTERO, this._$.first_line,this._$.first_column+1)}
+			| doble {$$ = INSTRUCCION.nuevoValor(Number($1.trim()), TIPO_VALOR.DOBLE, this._$.first_line,this._$.first_column+1)}
 			| id cabre cabre EXPRESION ccierra ccierra {$$=$1;} //acceso a lista
 			| id cabre EXPRESION ccierra {$$=$1;} //acceso a vector
-			| id {$$=$1;}
+			| id {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.IDENTIFICADOR, this._$.first_line,this._$.first_column+1)}
 			| CASTEO
 			// | TERNARIO
 			| LLAMADA
-			| FUNCIONESRESERVADAS
+			| FUNCIONESRESERVADAS {$$=$1}
 ;
 
-FUNCIONESRESERVADAS: FPRINT
+FUNCIONESRESERVADAS: FPRINT {$$=$1}
 					| FTOLOWER
 					| FTOUPPER
 					| FLENGTH
@@ -291,7 +293,7 @@ FUNCIONESRESERVADAS: FPRINT
 					| FTOCHARARRAY
 ;
 
-FPRINT: prprint pabre EXPRESION pcierra ptcoma
+FPRINT: prprint pabre EXPRESION pcierra ptcoma {$$ = new INSTRUCCION.nuevoImprimir($3, this._$.first_line,this._$.first_column+1)}
 ;
 
 FTOLOWER: prtoLower pabre EXPRESION pcierra

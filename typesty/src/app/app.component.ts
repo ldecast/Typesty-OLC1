@@ -22,6 +22,7 @@ export class AppComponent {
 
   ConsoleOptions = {
     theme: "vs-dark",
+    readOnly: true,
     automaticLayout: true,
     scrollBeyondLastLine: false,
     fontSize: 16,
