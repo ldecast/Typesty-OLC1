@@ -103,6 +103,7 @@
 %left 'suma' 'menos'
 %left 'multi' 'div' 'modulo'
 %left 'exponente'
+%left 'incremento','decremento'
 %left umenos
 
 %start ini
@@ -125,6 +126,7 @@ ENTCERO: FUNCIONBODY
 		| DEC_LIST
 		| FPRINT {$$=$1}
 		| WHILE {$$=$1}
+		| FOR {$$=$1}
 ;
 
 FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
@@ -167,19 +169,33 @@ SENTENCIATRANSFERENCIA: prbreak ptcoma
 ;
 
 SENTENCIACICLO: WHILE {$$=$1}
-				| FOR
-				| DOWHILE
+				| FOR {$$=$1}
+				| DOWHILE {$$=$1}
 ;
 
 WHILE: prwhile pabre EXPRESION pcierra labre INSTRUCCION lcierra {$$ = new INSTRUCCION.nuevoWhile($3, $6 , this._$.first_line,this._$.first_column+1)}
 ;
 
-FOR: prfor pabre DEC_VAR EXPRESION ptcoma ACTUALIZACION pcierra labre INSTRUCCION lcierra
+FOR: prfor pabre DEC_VAR EXPRESION ptcoma ACTUALIZACION pcierra labre INSTRUCCION lcierra {$9.push($6); $$ = new INSTRUCCION.nuevoFor($3, $4, $9, this._$.first_line,this._$.first_column+1)}
 ;
 
-ACTUALIZACION: id igual EXPRESION
- 			| id incremento
-			| id decremento
+ACTUALIZACION: id igual EXPRESION {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line,this._$.first_column+1)}
+ 			| id incremento {
+			$$ = INSTRUCCION.nuevaAsignacion($1,
+			{ opIzq: { tipo: 'VAL_IDENTIFICADOR', valor: $1, linea: this._$.first_line, columna: this._$.first_column+1 },
+  			opDer: { tipo: 'VAL_ENTERO', valor: 1, linea: this._$.first_line, columna: this._$.first_column+1 },
+  			tipo: 'SUMA',
+  			linea: this._$.first_line,
+  			columna: this._$.first_column+1 }, this._$.first_line,this._$.first_column+1)
+			}
+			| id decremento {
+			$$ = INSTRUCCION.nuevaAsignacion($1,
+			{ opIzq: { tipo: 'VAL_IDENTIFICADOR', valor: $1, linea: this._$.first_line, columna: this._$.first_column+1 },
+  			opDer: { tipo: 'VAL_ENTERO', valor: 1, linea: this._$.first_line, columna: this._$.first_column+1 },
+  			tipo: 'RESTA',
+  			linea: this._$.first_line,
+  			columna: this._$.first_column+1 }, this._$.first_line,this._$.first_column+1)
+			}
 ;
 
 DOWHILE: prdo labre INSTRUCCION lcierra prwhile pabre EXPRESION pcierra ptcoma
@@ -210,6 +226,22 @@ DEC_VAR: TIPO id igual TERNARIO ptcoma
 		| TIPO id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line,this._$.first_column+1)}
 		| TIPO id ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line,this._$.first_column+1)}
 		| id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line,this._$.first_column+1)}
+		| id incremento ptcoma {
+			$$ = INSTRUCCION.nuevaAsignacion($1,
+			{ opIzq: { tipo: 'VAL_IDENTIFICADOR', valor: $1, linea: this._$.first_line, columna: this._$.first_column+1 },
+  			opDer: { tipo: 'VAL_ENTERO', valor: 1, linea: this._$.first_line, columna: this._$.first_column+1 },
+  			tipo: 'SUMA',
+  			linea: this._$.first_line,
+  			columna: this._$.first_column+1 }, this._$.first_line,this._$.first_column+1)
+			}
+		| id decremento ptcoma {
+			$$ = INSTRUCCION.nuevaAsignacion($1,
+			{ opIzq: { tipo: 'VAL_IDENTIFICADOR', valor: $1, linea: this._$.first_line, columna: this._$.first_column+1 },
+  			opDer: { tipo: 'VAL_ENTERO', valor: 1, linea: this._$.first_line, columna: this._$.first_column+1 },
+  			tipo: 'RESTA',
+  			linea: this._$.first_line,
+  			columna: this._$.first_column+1 }, this._$.first_line,this._$.first_column+1)
+			}
 ;
 
 TERNARIO: EXPRESION interrogacion EXPRESION dospuntos EXPRESION

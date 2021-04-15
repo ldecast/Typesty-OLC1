@@ -287,7 +287,7 @@ function potencia(_opIzq, _opDer, _ambito) {
                     op2 = opDer.valor.charCodeAt(0);
                 else
                     op2 = Number(opDer.valor);
-                resultado = op1 ^ op2;
+                resultado = op1 ** op2;
                 return {
                     valor: resultado,
                     tipo: tipoRes,
@@ -307,7 +307,7 @@ function potencia(_opIzq, _opDer, _ambito) {
                     op2 = opDer.valor.charCodeAt(0);
                 else
                     op2 = Number(opDer.valor);
-                resultado = op1 ^ op2;
+                resultado = op1 ** op2;
                 return {
                     valor: resultado,
                     tipo: tipoRes,

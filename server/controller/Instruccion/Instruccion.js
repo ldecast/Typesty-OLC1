@@ -72,6 +72,17 @@ const Instruccion = {
             linea: _linea,
             columna: _columna
         }
+    },
+
+    nuevoFor: function (_variable, _expresion, _instrucciones, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.FOR,
+            variable: _variable,
+            expresion: _expresion,
+            instrucciones: _instrucciones,
+            linea: _linea,
+            columna: _columna
+        }
     }
 }
 
