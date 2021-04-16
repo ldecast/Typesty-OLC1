@@ -4,6 +4,7 @@ const Imprimir = require("./Print");
 const Declaracion = require("./Declaracion");
 const CicloWhile = require("./While");
 const CicloFor = require("./For");
+const CicloDoWhile = require("./DoWhile");
 
 function Bloque(_instrucciones, _ambito) {
     var cadena = ""
@@ -31,6 +32,12 @@ function Bloque(_instrucciones, _ambito) {
         }
         else if (instruccion.tipo === TIPO_INSTRUCCION.FOR) {
             var mensaje = CicloFor(instruccion, _ambito)
+            if (mensaje != null) {
+                cadena += mensaje + '\n'
+            }
+        }
+        else if (instruccion.tipo === TIPO_INSTRUCCION.DOWHILE) {
+            var mensaje = CicloDoWhile(instruccion, _ambito)
             if (mensaje != null) {
                 cadena += mensaje + '\n'
             }

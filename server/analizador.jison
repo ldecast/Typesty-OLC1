@@ -127,6 +127,7 @@ ENTCERO: FUNCIONBODY
 		| FPRINT {$$=$1}
 		| WHILE {$$=$1}
 		| FOR {$$=$1}
+		| DOWHILE {$$=$1}
 ;
 
 FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
@@ -198,7 +199,7 @@ ACTUALIZACION: id igual EXPRESION {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this
 			}
 ;
 
-DOWHILE: prdo labre INSTRUCCION lcierra prwhile pabre EXPRESION pcierra ptcoma
+DOWHILE: prdo labre INSTRUCCION lcierra prwhile pabre EXPRESION pcierra ptcoma {$$ = new INSTRUCCION.nuevoDoWhile($7, $3 , this._$.first_line,this._$.first_column+1)}
 ;
 
 SENTENCIACONTROL: IF

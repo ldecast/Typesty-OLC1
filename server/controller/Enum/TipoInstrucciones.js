@@ -4,7 +4,8 @@ const TIPO_INSTRUCCION = {
     ASIGNACION: 'ASIGNACION',
     AGREGACION: 'AGREGACION',
     WHILE: 'WHILE',
-    FOR: 'FOR'
+    FOR: 'FOR',
+    DOWHILE: 'DO-WHILE'
 }
 
 module.exports = TIPO_INSTRUCCION

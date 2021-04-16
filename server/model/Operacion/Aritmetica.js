@@ -3,11 +3,21 @@ const TIPO_OPERACION = require("../../controller/Enum/TipoOperaciones")
 const TIPO_VALOR = require("../../controller/Enum/TipoValores")
 const TipoResultado = require("./TipoResultado")
 const ValorExpresion = require("./ValorExpresion")
+const Relacional = require("./Relacional");
+const Logica = require("./Logica");
 
 function Aritmetica(_expresion, _ambito) {
     if (_expresion.tipo === TIPO_VALOR.ENTERO || _expresion.tipo === TIPO_VALOR.DOBLE || _expresion.tipo === TIPO_VALOR.BOOLEANO ||
         _expresion.tipo === TIPO_VALOR.CARACTER || _expresion.tipo === TIPO_VALOR.CADENA || _expresion.tipo === TIPO_VALOR.IDENTIFICADOR) {
         return ValorExpresion(_expresion, _ambito)
+    }
+    else if (_expresion.tipo === TIPO_OPERACION.IGUALIGUAL || _expresion.tipo === TIPO_OPERACION.DIFERENTE ||
+        _expresion.tipo === TIPO_OPERACION.MENOR || _expresion.tipo === TIPO_OPERACION.MENORIGUAL ||
+        _expresion.tipo === TIPO_OPERACION.MAYOR || _expresion.tipo === TIPO_OPERACION.MAYORIGUAL) {
+        return Relacional(_expresion, _ambito)
+    }
+    else if (_expresion.tipo === TIPO_OPERACION.OR || _expresion.tipo === TIPO_OPERACION.AND || _expresion.tipo === TIPO_OPERACION.NOT) {
+        return Logica(_expresion, _ambito)
     }
     else {
         switch (_expresion.tipo) {
@@ -247,6 +257,14 @@ function division(_opIzq, _opDer, _ambito) {
                     op2 = opDer.valor.charCodeAt(0);
                 else
                     op2 = Number(opDer.valor);
+                if (op2 == 0) {
+                    return {
+                        valor: '\nError: no es permitida la división entre 0.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
+                        tipo: null,
+                        linea: _opIzq.linea,
+                        columna: _opIzq.columna
+                    }
+                }
                 resultado = op1 / op2;
                 return {
                     valor: resultado,
