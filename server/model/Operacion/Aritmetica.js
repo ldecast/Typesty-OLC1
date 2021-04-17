@@ -2,21 +2,21 @@ const TIPO_DATO = require("../../controller/Enum/Tipados");
 const TIPO_OPERACION = require("../../controller/Enum/TipoOperaciones")
 const TIPO_VALOR = require("../../controller/Enum/TipoValores")
 const TipoResultado = require("./TipoResultado")
-const ValorExpresion = require("./ValorExpresion")
-const Relacional = require("./Relacional");
-const Logica = require("./Logica");
 
 function Aritmetica(_expresion, _ambito) {
     if (_expresion.tipo === TIPO_VALOR.ENTERO || _expresion.tipo === TIPO_VALOR.DOBLE || _expresion.tipo === TIPO_VALOR.BOOLEANO ||
         _expresion.tipo === TIPO_VALOR.CARACTER || _expresion.tipo === TIPO_VALOR.CADENA || _expresion.tipo === TIPO_VALOR.IDENTIFICADOR) {
+        const ValorExpresion = require("./ValorExpresion")
         return ValorExpresion(_expresion, _ambito)
     }
     else if (_expresion.tipo === TIPO_OPERACION.IGUALIGUAL || _expresion.tipo === TIPO_OPERACION.DIFERENTE ||
         _expresion.tipo === TIPO_OPERACION.MENOR || _expresion.tipo === TIPO_OPERACION.MENORIGUAL ||
         _expresion.tipo === TIPO_OPERACION.MAYOR || _expresion.tipo === TIPO_OPERACION.MAYORIGUAL) {
+        const Relacional = require("./Relacional");
         return Relacional(_expresion, _ambito)
     }
     else if (_expresion.tipo === TIPO_OPERACION.OR || _expresion.tipo === TIPO_OPERACION.AND || _expresion.tipo === TIPO_OPERACION.NOT) {
+        const Logica = require("./Logica");
         return Logica(_expresion, _ambito)
     }
     else {

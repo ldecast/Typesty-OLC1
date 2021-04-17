@@ -1,18 +1,25 @@
 const TIPO_DATO = require("../../controller/Enum/Tipados");
 const TIPO_OPERACION = require("../../controller/Enum/TipoOperaciones")
 const TIPO_VALOR = require("../../controller/Enum/TipoValores");
-const Relacional = require("./Relacional")
-const ValorExpresion = require("./ValorExpresion")
 
 function Logica(_expresion, _ambito) {
     if (_expresion.tipo === TIPO_VALOR.ENTERO || _expresion.tipo === TIPO_VALOR.DOBLE || _expresion.tipo === TIPO_VALOR.BOOLEANO ||
         _expresion.tipo === TIPO_VALOR.CARACTER || _expresion.tipo === TIPO_VALOR.CADENA || _expresion.tipo === TIPO_VALOR.IDENTIFICADOR) {
+        const ValorExpresion = require("./ValorExpresion")
         return ValorExpresion(_expresion, _ambito)
     }
     else if (_expresion.tipo === TIPO_OPERACION.IGUALIGUAL || _expresion.tipo === TIPO_OPERACION.DIFERENTE ||
         _expresion.tipo === TIPO_OPERACION.MENOR || _expresion.tipo === TIPO_OPERACION.MENORIGUAL ||
         _expresion.tipo === TIPO_OPERACION.MAYOR || _expresion.tipo === TIPO_OPERACION.MAYORIGUAL) {
+        const Relacional = require("./Relacional")
         return Relacional(_expresion, _ambito)
+    }
+    else if (_expresion.tipo === TIPO_OPERACION.SUMA || _expresion.tipo === TIPO_OPERACION.RESTA
+        || _expresion.tipo === TIPO_OPERACION.MULTIPLICACION || _expresion.tipo === TIPO_OPERACION.DIVISION
+        || _expresion.tipo === TIPO_OPERACION.POTENCIA || _expresion.tipo === TIPO_OPERACION.MODULO
+        || _expresion.tipo === TIPO_OPERACION.NEGACION) {
+        const Aritmetica = require("./Aritmetica");
+        return Aritmetica(_expresion, _ambito)
     }
     else if (_expresion.tipo === TIPO_OPERACION.OR) {
         return or(_expresion.opIzq, _expresion.opDer, _ambito)
@@ -109,7 +116,7 @@ function not(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "")
     return {
-        valor: respuesta + `\nError semántico: no se puede negar el valor de tipo ${opIzq.tipo} \nporque no es booleano.\nLínea: +${_opIzq.linea}+" Columna: "+${_opIzq.columna}\n`,
+        valor: respuesta + "\nError semántico: no se puede negar el valor de tipo " + opIzq.tipo + "\nporque no es booleano.\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna

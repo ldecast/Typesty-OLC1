@@ -32,8 +32,8 @@ function cicloFor(_instruccion, _ambito) {
         }
         return mensaje
     }
-    
-    return `Error: No es una expresión de tipo booleano en la condición.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`
+
+    return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
 }
 
 module.exports = cicloFor

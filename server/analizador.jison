@@ -6,7 +6,7 @@
 %%
 
 \s+                   				// Whitespace
-"\/\/".*							// EndOfLineComment
+"//".*							// EndOfLineComment
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]	// MultiLineComment
 
 "clase"               	return 'prclase'
@@ -128,6 +128,7 @@ ENTCERO: FUNCIONBODY
 		| WHILE {$$=$1}
 		| FOR {$$=$1}
 		| DOWHILE {$$=$1}
+		| CONTROLIF {$$=$1}
 ;
 
 FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
@@ -202,13 +203,22 @@ ACTUALIZACION: id igual EXPRESION {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this
 DOWHILE: prdo labre INSTRUCCION lcierra prwhile pabre EXPRESION pcierra ptcoma {$$ = new INSTRUCCION.nuevoDoWhile($7, $3 , this._$.first_line,this._$.first_column+1)}
 ;
 
-SENTENCIACONTROL: IF
-				| SWITCH
+SENTENCIACONTROL: CONTROLIF {$$=$1}
+				| SWITCH {$$=$1}
 ;
 
-IF: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse IF
-	| prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse labre INSTRUCCION lcierra
-	| prif pabre EXPRESION pcierra labre INSTRUCCION lcierra
+CONTROLIF: IF {$$=$1}
+	| IFELSE {$$=$1}
+	| ELSEIF {$$=$1}
+;
+
+IF: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra { $$ = new INSTRUCCION.nuevoIf($3, $6, this._$.first_line,this._$.first_column+1) }
+;
+
+IFELSE: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse labre INSTRUCCION lcierra { $$ = new INSTRUCCION.nuevoIfElse($3, $6, $10, this._$.first_line,this._$.first_column+1) }
+;
+
+ELSEIF: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse CONTROLIF { $$ = new INSTRUCCION.nuevoElseIf($3, $6, $9, this._$.first_line,this._$.first_column+1); }
 ;
 
 SWITCH: prswitch pabre EXPRESION pcierra labre CASESLIST DEFAULT lcierra

@@ -93,6 +93,38 @@ const Instruccion = {
             linea: _linea,
             columna: _columna
         }
+    },
+
+    nuevoIf: function (_expresion, _instrucciones, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.IF,
+            expresion: _expresion,
+            instrucciones: _instrucciones,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoIfElse: function (_expresion, _instruccionesIF, _instruccionesELSE, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.IF_ELSE,
+            expresion: _expresion,
+            instruccionesIF: _instruccionesIF,
+            instruccionesELSE: _instruccionesELSE,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoElseIf: function (_expresion, _instruccionesIF, _instruccionesELSEIF, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.ELSE_IF,
+            expresion: _expresion,
+            instruccionesIF: _instruccionesIF,
+            instruccionesELSEIF: _instruccionesELSEIF,
+            linea: _linea,
+            columna: _columna
+        }
     }
 }
 

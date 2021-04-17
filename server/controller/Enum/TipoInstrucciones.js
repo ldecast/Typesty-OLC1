@@ -5,7 +5,10 @@ const TIPO_INSTRUCCION = {
     AGREGACION: 'AGREGACION',
     WHILE: 'WHILE',
     FOR: 'FOR',
-    DOWHILE: 'DO-WHILE'
+    DOWHILE: 'DO-WHILE',
+    IF: 'IF',
+    IF_ELSE: 'IF-ELSE',
+    ELSE_IF: 'ELSE-IF'
 }
 
 module.exports = TIPO_INSTRUCCION
