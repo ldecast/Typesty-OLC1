@@ -6,6 +6,7 @@ const CicloWhile = require("./While");
 const CicloFor = require("./For");
 const CicloDoWhile = require("./DoWhile");
 const {If, IfElse, ElseIf} = require('./If');
+const Switch = require("./Switch");
 
 function Bloque(_instrucciones, _ambito) {
     var cadena = ""
@@ -57,6 +58,12 @@ function Bloque(_instrucciones, _ambito) {
         }
         else if (instruccion.tipo === TIPO_INSTRUCCION.ELSE_IF) {
             var mensaje = ElseIf(instruccion, _ambito)
+            if (mensaje != null) {
+                cadena += mensaje + '\n'
+            }
+        }
+        else if (instruccion.tipo === TIPO_INSTRUCCION.SWITCH) {
+            var mensaje = Switch(instruccion, _ambito)
             if (mensaje != null) {
                 cadena += mensaje + '\n'
             }

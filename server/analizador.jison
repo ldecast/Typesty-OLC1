@@ -129,6 +129,7 @@ ENTCERO: FUNCIONBODY
 		| FOR {$$=$1}
 		| DOWHILE {$$=$1}
 		| CONTROLIF {$$=$1}
+		| SWITCH {$$=$1}
 ;
 
 FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
@@ -221,15 +222,16 @@ IFELSE: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse labre INST
 ELSEIF: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse CONTROLIF { $$ = new INSTRUCCION.nuevoElseIf($3, $6, $9, this._$.first_line,this._$.first_column+1); }
 ;
 
-SWITCH: prswitch pabre EXPRESION pcierra labre CASESLIST DEFAULT lcierra
-		| prswitch pabre EXPRESION pcierra labre CASESLIST lcierra
-		| prswitch pabre EXPRESION pcierra labre DEFAULT lcierra
+SWITCH: prswitch pabre EXPRESION pcierra labre CASESLIST DEFAULT lcierra { $$ = new INSTRUCCION.nuevoSwitch($3, $6, $7, this._$.first_line, this._$.first_column+1); }
+		| prswitch pabre EXPRESION pcierra labre CASESLIST lcierra { $$ = new INSTRUCCION.nuevoSwitch($3, $6, null, this._$.first_line, this._$.first_column+1); }
+		| prswitch pabre EXPRESION pcierra labre DEFAULT lcierra { $$ = new INSTRUCCION.nuevoSwitch($3, null, $6, this._$.first_line, this._$.first_column+1); }
 ;
 
-CASESLIST: prcase EXPRESION dospuntos INSTRUCCION
+CASESLIST: CASESLIST prcase EXPRESION dospuntos INSTRUCCION { $1.push(new INSTRUCCION.nuevoCaso($3, $5, this._$.first_line, this._$.first_column+1)); $$=$1; }
+		| prcase EXPRESION dospuntos INSTRUCCION { $$ = [new INSTRUCCION.nuevoCaso($2, $4, this._$.first_line, this._$.first_column+1)]; }
 ;
 
-DEFAULT: prdefault dospuntos INSTRUCCION
+DEFAULT: prdefault dospuntos INSTRUCCION { $$ = new INSTRUCCION.nuevoCaso(null, $3, this._$.first_line, this._$.first_column+1); }
 ;
 
 DEC_VAR: TIPO id igual TERNARIO ptcoma
@@ -267,18 +269,6 @@ DEC_LIST: prlist menor TIPO mayor id igual prnew prlist menor TIPO mayor ptcoma 
 		| id punto pradd pabre EXPRESION pcierra ptcoma
 		| id cabre cabre EXPRESION ccierra ccierra igual EXPRESION ptcoma
 ;
-
-// CONDICION: EXPRESION CONDICIONAL EXPRESION
-// 		| EXPRESION
-// ;
-
-// CONDICIONAL: menorigual
-// 			| menor
-// 			| mayorigual
-// 			| mayor
-// 			| igualigual
-// 			| diferente
-// ;
 
 // CASTEO: pabre TIPODATO pcierra EXPRESION
 // ;

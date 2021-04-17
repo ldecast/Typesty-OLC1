@@ -8,7 +8,9 @@ const TIPO_INSTRUCCION = {
     DOWHILE: 'DO-WHILE',
     IF: 'IF',
     IF_ELSE: 'IF-ELSE',
-    ELSE_IF: 'ELSE-IF'
+    ELSE_IF: 'ELSE-IF',
+    CASO: 'CASO-SWITCH',
+    SWITCH: 'SWITCH'
 }
 
 module.exports = TIPO_INSTRUCCION

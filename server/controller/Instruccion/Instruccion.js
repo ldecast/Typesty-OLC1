@@ -125,6 +125,27 @@ const Instruccion = {
             linea: _linea,
             columna: _columna
         }
+    },
+
+    nuevoCaso: function (_expresion, _instrucciones, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.CASO,
+            expresion: _expresion,
+            instrucciones: _instrucciones,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoSwitch: function (_expresionEvaluar, _casosComparar, _casoDefault, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.SWITCH,
+            expresionEvaluar: _expresionEvaluar,
+            casosComparar: _casosComparar,  //arreglo de objetos de tipo nuevoCaso
+            casoDefault: _casoDefault,
+            linea: _linea,
+            columna: _columna
+        }
     }
 }
 
