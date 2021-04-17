@@ -5,7 +5,7 @@ const Declaracion = require("./Declaracion");
 const CicloWhile = require("./While");
 const CicloFor = require("./For");
 const CicloDoWhile = require("./DoWhile");
-const {If, IfElse, ElseIf} = require('./If');
+const { If, IfElse, ElseIf } = require('./If');
 const Switch = require("./Switch");
 
 function Bloque(_instrucciones, _ambito) {

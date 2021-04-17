@@ -62,8 +62,18 @@ function sentenciaElseIf(_instruccion, _ambito) {
     return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
 }
 
+function operadorTernario(_instruccion, _ambito) {
+    var operacion = Operacion(_instruccion.condicion, _ambito)
+    if (operacion.tipo === TIPO_DATO.BOOLEANO) {
+        var expresion = (operacion.valor ? _instruccion.expresionA : _instruccion.expresionB)
+        return Operacion(expresion, _ambito);
+    }
+    return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+}
+
 module.exports = {
     If: sentenciaIf,
     IfElse: sentenciaIfElse,
-    ElseIf: sentenciaElseIf
+    ElseIf: sentenciaElseIf,
+    Ternario: operadorTernario
 };

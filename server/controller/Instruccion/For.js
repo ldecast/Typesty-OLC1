@@ -7,30 +7,34 @@ const Declaracion = require("./Declaracion");
 
 function cicloFor(_instruccion, _ambito) {
     var mensaje = ""
+    var err = false;
 
     if (_instruccion.variable.tipo === TIPO_INSTRUCCION.DECLARACION) {
         var m = Declaracion(_instruccion.variable, _ambito)
         if (m != null) {
             mensaje += m + '\n'
+            err = true;
         }
     }
     else if (_instruccion.variable.tipo === TIPO_INSTRUCCION.ASIGNACION) {
         var m = Asignacion(_instruccion.variable, _ambito)
         if (m != null) {
             mensaje += m + '\n'
+            err = true;
         }
     }
 
-    var operacion = Operacion(_instruccion.expresion, _ambito)
-    if (operacion.tipo === TIPO_DATO.BOOLEANO) {
-        while (operacion.valor) {
-            var nuevoAmbito = new Ambito(_ambito)
-            const Bloque = require('./Bloque')
-
-            mensaje += Bloque(_instruccion.instrucciones, nuevoAmbito)
-            operacion = Operacion(_instruccion.expresion, _ambito)
+    if (!err) {
+        var operacion = Operacion(_instruccion.expresion, _ambito)
+        if (operacion.tipo === TIPO_DATO.BOOLEANO) {
+            while (operacion.valor) {
+                var nuevoAmbito = new Ambito(_ambito)
+                const Bloque = require('./Bloque')
+                mensaje += Bloque(_instruccion.instrucciones, nuevoAmbito)
+                operacion = Operacion(_instruccion.expresion, _ambito)
+            }
+            return mensaje
         }
-        return mensaje
     }
 
     return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"

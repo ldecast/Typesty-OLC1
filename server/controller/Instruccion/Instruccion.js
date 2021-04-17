@@ -146,6 +146,27 @@ const Instruccion = {
             linea: _linea,
             columna: _columna
         }
+    },
+
+    nuevoTernario: function (_condicion, _expresionA, _expresionB, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.TERNARIO,
+            condicion: _condicion,
+            expresionA: _expresionA,
+            expresionB: _expresionB,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoCasteo: function (_tipo, _expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.CASTEO,
+            nuevoTipo: _tipo,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
     }
 }
 

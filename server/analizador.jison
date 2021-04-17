@@ -76,10 +76,10 @@
 "["						return 'cabre'
 "]"						return 'ccierra'
 
-"\\n"|"\\\\"|"\\\""|"\\“"|"\\”"|"\\t"|"\\'" return 'especiales'
+"\\n"|"\\r"|"\\t"|"\\\\"|"\\\""|"\\“"|"\\”"|"\\\'" return 'especiales'
 ([a-zA-Z])([a-zA-Z0-9_])* return 'id'
-['].?[']|[']especiales[']				return 'caracter' //probarlo
-["\""]([^"\""])*["\""] 	return 'cadena'
+[']\\\\[']|[']\\\"[']|[']\\\'[']|[']\\n[']|[']\\t[']|[']\\r[']|['].?[']	return 'caracter'
+["\""]([^"\""])*["\""] 	return 'cadena' //truena con "\"Esto es una cadena\""
 [0-9]+("."[0-9]+)+\b	return 'doble'
 [0-9]+					return 'entero'
 
@@ -234,8 +234,10 @@ CASESLIST: CASESLIST prcase EXPRESION dospuntos INSTRUCCION { $1.push(new INSTRU
 DEFAULT: prdefault dospuntos INSTRUCCION { $$ = new INSTRUCCION.nuevoCaso(null, $3, this._$.first_line, this._$.first_column+1); }
 ;
 
-DEC_VAR: TIPO id igual TERNARIO ptcoma
-		| id igual TERNARIO ptcoma
+DEC_VAR: TIPO id igual CASTEO ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line, this._$.first_column+1)}
+		| id igual CASTEO ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line, this._$.first_column+1)}
+		| TIPO id igual TERNARIO ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line, this._$.first_column+1)}
+		| id igual TERNARIO ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line, this._$.first_column+1)}
 		| TIPO id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line,this._$.first_column+1)}
 		| TIPO id ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line,this._$.first_column+1)}
 		| id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line,this._$.first_column+1)}
@@ -257,7 +259,7 @@ DEC_VAR: TIPO id igual TERNARIO ptcoma
 			}
 ;
 
-TERNARIO: EXPRESION interrogacion EXPRESION dospuntos EXPRESION
+TERNARIO: EXPRESION interrogacion EXPRESION dospuntos EXPRESION { $$ = new INSTRUCCION.nuevoTernario($1, $3, $5, this._$.first_line, this._$.first_column+1) }
 ;
 
 DEC_VECT: TIPO cabre ccierra id igual prnew TIPO cabre EXPRESION ccierra ptcoma //En expresion agregar el acceso a vector
@@ -270,8 +272,8 @@ DEC_LIST: prlist menor TIPO mayor id igual prnew prlist menor TIPO mayor ptcoma 
 		| id cabre cabre EXPRESION ccierra ccierra igual EXPRESION ptcoma
 ;
 
-// CASTEO: pabre TIPODATO pcierra EXPRESION
-// ;
+CASTEO: pabre TIPO pcierra EXPRESION { $$ = new INSTRUCCION.nuevoCasteo($2, $4, this._$.first_line, this._$.first_column+1) }
+;
 
 TIPO: TIPODATO {$$ = $1}
 ;
@@ -310,7 +312,7 @@ EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$
 			| id cabre cabre EXPRESION ccierra ccierra {$$=$1;} //acceso a lista
 			| id cabre EXPRESION ccierra {$$=$1;} //acceso a vector
 			| id {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.IDENTIFICADOR, this._$.first_line,this._$.first_column+1)}
-			| CASTEO
+			// | CASTEO
 			// | TERNARIO
 			| LLAMADA
 			| FUNCIONESRESERVADAS {$$=$1}
@@ -357,21 +359,6 @@ FTOSTRING: prtoString pabre EXPRESION pcierra
 ;
 
 FTOCHARARRAY: prtoCharArray pabre EXPRESION pcierra //recibe una cadena
-;
-
-CASTEO: pabre TIPOCAST pcierra EXPRESION ptcoma//no debe llevar ';' pero sin el token truena
-;
-
-TIPOCAST: print
-		| prdouble
-		| prchar
-		| prstring
-;
-
-EXPCAST: caracter {$$=$1;}
-		| entero {$$=$1;}
-		| doble {$$=$1;}
-		| id {$$=$1;}
 ;
 
 LLAMADA: id pabre LISTAVALORES pcierra

@@ -1,5 +1,6 @@
 const TIPO_OPERACION = require("../../controller/Enum/TipoOperaciones");
 const TIPO_VALOR = require("../../controller/Enum/TipoValores");
+const TIPO_INSTRUCCION = require("../../controller/Enum/TipoInstrucciones");
 const ValorExpresion = require("./ValorExpresion");
 const Aritmetica = require("./Aritmetica");
 const Relacional = require("./Relacional");
@@ -25,8 +26,16 @@ function Operacion(_expresion, _ambito) {
     else if (_expresion.tipo === TIPO_OPERACION.OR || _expresion.tipo === TIPO_OPERACION.AND || _expresion.tipo === TIPO_OPERACION.NOT) {
         return Logica(_expresion, _ambito)
     }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.TERNARIO) {
+        const { Ternario } = require("../../controller/Instruccion/If");
+        return Ternario(_expresion, _ambito)
+    }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.CASTEO) {
+        const { Casteo } = require("../Funciones/Reservadas");
+        return Casteo(_expresion, _ambito)
+    }
     else {
-        return "Error. Expresión no reconocida.";
+        return "Error. Expresión no reconocida.\n";
     }
 }
 

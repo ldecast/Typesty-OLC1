@@ -5,6 +5,7 @@ function Asignacion(_instruccion, _ambito) {
     const existe = _ambito.existeSimbolo(id);
     if (existe) {
         var valor = Operacion(_instruccion.expresion, _ambito)
+        if (valor.err) return valor.err;
         var simbolo = _ambito.getSimbolo(id)
         var tipos = {
             tipoSimbolo: simbolo.tipo,

@@ -8,6 +8,7 @@ function Declaracion(_instruccion, _ambito) {
         var valor = 0
         if (_instruccion.valor != null) {
             var op = Operacion(_instruccion.valor, _ambito)
+            if (op.err) return op.err;
             tipo = op.tipo;
             if (tipo === TIPO_DATO.ENTERO) {
                 valor = op.valor;
@@ -28,6 +29,7 @@ function Declaracion(_instruccion, _ambito) {
         var valor = 0.0
         if (_instruccion.valor != null) {
             var op = Operacion(_instruccion.valor, _ambito)
+            if (op.err) return op.err;
             tipo = op.tipo;
             if (tipo === TIPO_DATO.DOBLE) {
                 valor = op.valor;
@@ -48,6 +50,7 @@ function Declaracion(_instruccion, _ambito) {
         var valor = true
         if (_instruccion.valor != null) {
             op = Operacion(_instruccion.valor, _ambito)
+            if (op.err) return op.err;
             tipo = op.tipo
             if (tipo === TIPO_DATO.BOOLEANO) {
                 valor = (op.valor.toString() == 'true');
@@ -68,7 +71,8 @@ function Declaracion(_instruccion, _ambito) {
         var valor = '\u0000'
         if (_instruccion.valor != null) {
             op = Operacion(_instruccion.valor, _ambito)
-            valor = op.valor.charAt(0);
+            if (op.err) return op.err;
+            valor = op.valor.toString();
         }
         const nuevoSimbolo = new Simbolo(_instruccion.id, valor, TIPO_DATO.CARACTER, _instruccion.linea, _instruccion.columna)
         if (_ambito.existeSimbolo(nuevoSimbolo.id) != false) {
@@ -82,6 +86,7 @@ function Declaracion(_instruccion, _ambito) {
         var valor = ""
         if (_instruccion.valor != null) {
             op = Operacion(_instruccion.valor, _ambito)
+            if (op.err) return op.err;
             valor = String(op.valor)
         }
         const nuevoSimbolo = new Simbolo(_instruccion.id, valor, TIPO_DATO.CADENA, _instruccion.linea, _instruccion.columna)
