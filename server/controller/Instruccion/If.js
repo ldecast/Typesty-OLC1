@@ -8,7 +8,7 @@ function sentenciaIf(_instruccion, _ambito) {
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         if (operacion.valor) {
-            var nuevoAmbito = new Ambito(_ambito)
+            var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
             mensaje += Bloque(_instruccion.instrucciones, nuevoAmbito)
             operacion = Operacion(_instruccion.expresion, _ambito)
@@ -23,13 +23,13 @@ function sentenciaIfElse(_instruccion, _ambito) {
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         if (operacion.valor) {
-            var nuevoAmbito = new Ambito(_ambito)
+            var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
             mensaje += Bloque(_instruccion.instruccionesIF, nuevoAmbito)
             operacion = Operacion(_instruccion.expresion, _ambito)
         }
         else {
-            var nuevoAmbito = new Ambito(_ambito)
+            var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
             mensaje += Bloque(_instruccion.instruccionesELSE, nuevoAmbito)
             operacion = Operacion(_instruccion.expresion, _ambito)
@@ -44,17 +44,17 @@ function sentenciaElseIf(_instruccion, _ambito) {
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         if (operacion.valor) {
-            var nuevoAmbito = new Ambito(_ambito)
+            var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
             mensaje += Bloque(_instruccion.instruccionesIF, nuevoAmbito)
             operacion = Operacion(_instruccion.expresion, _ambito)
         }
         else if (_instruccion.instruccionesELSEIF) {
-            var nuevoAmbito = new Ambito(_ambito)
+            var nuevoAmbito = new Ambito(_ambito, "control")
             mensaje += sentenciaElseIf(_instruccion.instruccionesELSEIF, nuevoAmbito);
         }
         else if (_instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE) {
-            var nuevoAmbito = new Ambito(_ambito)
+            var nuevoAmbito = new Ambito(_ambito, "control")
             mensaje += sentenciaIfElse(_instruccion, nuevoAmbito);
         }
         return mensaje

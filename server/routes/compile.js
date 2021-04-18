@@ -11,7 +11,7 @@ module.exports = (parser, app) => {
                 res.status(500).send({ "message": ast });
             }
             else {
-                const global = new Ambito(null);
+                const global = new Ambito(null, "global");
                 var cadena = Bloque(ast, global);
                 var output = {
                     "ast": ast,

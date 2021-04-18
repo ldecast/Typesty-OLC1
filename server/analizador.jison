@@ -122,8 +122,8 @@ ENTCERO: FUNCIONBODY
 		| EXECBODY
 		//| LLAMADA ptcoma -- supuestamente solo declaraciones/asignaciones
 		| DEC_VAR {$$=$1}
-		| DEC_VECT
-		| DEC_LIST
+		| DEC_VECT {$$=$1}
+		| DEC_LIST {$$=$1}
 		| FPRINT {$$=$1}
 		| WHILE {$$=$1}
 		| FOR {$$=$1}
@@ -156,18 +156,18 @@ INSTRUCCION: INSTRUCCION INSCERO {$1.push($2); $$=$1;}
 ;
 
 INSCERO: DEC_VAR {$$=$1}
-		| SENTENCIACONTROL //if, else, switch
+		| SENTENCIACONTROL {$$=$1}
 		| SENTENCIACICLO {$$=$1}
-		| DEC_VECT // []
-		| DEC_LIST // [[]]
-		| SENTENCIATRANSFERENCIA
+		| DEC_VECT {$$=$1}
+		| DEC_LIST {$$=$1}
+		| SENTENCIATRANSFERENCIA {$$=$1}
 		| LLAMADA ptcoma
 		| FPRINT {$$=$1}
 ;
 
-SENTENCIATRANSFERENCIA: prbreak ptcoma
-						| prreturn EXPRESION ptcoma
-						| prcontinue ptcoma
+SENTENCIATRANSFERENCIA: prbreak ptcoma { $$ = new INSTRUCCION.nuevoBreak(this._$.first_line, this._$.first_column+1) }
+						| prreturn EXPRESION ptcoma 
+						| prcontinue ptcoma { $$ = new INSTRUCCION.nuevoContinue(this._$.first_line, this._$.first_column+1) }
 						| prreturn ptcoma
 ;
 
@@ -262,9 +262,9 @@ DEC_VAR: TIPO id igual CASTEO ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, 
 TERNARIO: EXPRESION interrogacion EXPRESION dospuntos EXPRESION { $$ = new INSTRUCCION.nuevoTernario($1, $3, $5, this._$.first_line, this._$.first_column+1) }
 ;
 
-DEC_VECT: TIPO cabre ccierra id igual prnew TIPO cabre EXPRESION ccierra ptcoma //En expresion agregar el acceso a vector
-		| TIPO cabre ccierra id igual cabre LISTAVALORES ccierra ptcoma
-		| id cabre EXPRESION ccierra igual EXPRESION ptcoma
+DEC_VECT: TIPO cabre ccierra id igual prnew TIPO cabre EXPRESION ccierra ptcoma { $$ = INSTRUCCION.nuevoVector($1, $7, $4, $9, null, this._$.first_line, this._$.first_column+1) }
+		| TIPO cabre ccierra id igual labre LISTAVALORES lcierra ptcoma { $$ = INSTRUCCION.nuevoVector($1, null, $4, null, $7, this._$.first_line, this._$.first_column+1) }
+		| id cabre EXPRESION ccierra igual EXPRESION ptcoma { $$ = INSTRUCCION.modificacionVector($1, $3, $6, this._$.first_line, this._$.first_column+1) }
 ;
 
 DEC_LIST: prlist menor TIPO mayor id igual prnew prlist menor TIPO mayor ptcoma //agregar el acceso a lista en expresion
@@ -283,7 +283,6 @@ TIPODATO: prstring {$$ = TIPO_DATO.CADENA}
 		| prdouble {$$ = TIPO_DATO.DOBLE}
 		| prchar {$$ = TIPO_DATO.CARACTER}
 		| prboolean {$$ = TIPO_DATO.BOOLEANO}
-		| prlist {$$ = TIPO_DATO.LISTA}
 ;
 
 EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.SUMA,this._$.first_line,this._$.first_column+1);}
@@ -310,7 +309,7 @@ EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$
 			| entero {$$ = INSTRUCCION.nuevoValor(Number($1.trim()), TIPO_VALOR.ENTERO, this._$.first_line,this._$.first_column+1)}
 			| doble {$$ = INSTRUCCION.nuevoValor(Number($1.trim()), TIPO_VALOR.DOBLE, this._$.first_line,this._$.first_column+1)}
 			| id cabre cabre EXPRESION ccierra ccierra {$$=$1;} //acceso a lista
-			| id cabre EXPRESION ccierra {$$=$1;} //acceso a vector
+			| id cabre EXPRESION ccierra { $$ = INSTRUCCION.accesoVector($1, $3, this._$.first_line, this._$.first_column+1) }
 			| id {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.IDENTIFICADOR, this._$.first_line,this._$.first_column+1)}
 			// | CASTEO
 			// | TERNARIO
@@ -365,10 +364,10 @@ LLAMADA: id pabre LISTAVALORES pcierra
 		| id pabre pcierra
 ;
 
-LISTAVALORES: LISTAVALORES coma VALORES
-			| VALORES
+LISTAVALORES: LISTAVALORES coma VALORES {$1.push($3); $$=$1;}
+			| VALORES {$$=[$1];}
 ;
 
-VALORES: EXPRESION	//cadena, boolean, entero, etc
+VALORES: EXPRESION {$$=$1}
 ;
 

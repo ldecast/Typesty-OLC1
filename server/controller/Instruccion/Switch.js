@@ -12,7 +12,7 @@ function sentenciaSwitch(_instruccion, _ambito) {
         _instruccion.casosComparar.forEach(caso => {
             var comparar = Operacion(caso.expresion, _ambito);
             if (evaluar.valor == comparar.valor) {
-                var nuevoAmbito = new Ambito(_ambito)
+                var nuevoAmbito = new Ambito(_ambito, "control")
                 const Bloque = require('./Bloque')
                 mensaje += Bloque(caso.instrucciones, nuevoAmbito)
                 match = true;
@@ -22,7 +22,7 @@ function sentenciaSwitch(_instruccion, _ambito) {
 
     if (match === false) {
         if (_instruccion.casoDefault != null) {
-            var nuevoAmbito = new Ambito(_ambito)
+            var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
             mensaje += Bloque(_instruccion.casoDefault.instrucciones, nuevoAmbito)
         }

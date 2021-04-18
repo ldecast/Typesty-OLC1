@@ -7,7 +7,7 @@ function cicloWhile(_instruccion, _ambito) {
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         while (operacion.valor) {
-            var nuevoAmbito = new Ambito(_ambito)
+            var nuevoAmbito = new Ambito(_ambito, "ciclo")
             const Bloque = require('./Bloque')
             mensaje += Bloque(_instruccion.instrucciones, nuevoAmbito)
             operacion = Operacion(_instruccion.expresion, _ambito)

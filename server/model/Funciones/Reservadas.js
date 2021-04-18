@@ -1,4 +1,3 @@
-const Ambito = require("../Ambito/Ambito")
 const TIPO_DATO = require("../../controller/Enum/Tipados")
 const Operacion = require("../Operacion/Operacion")
 

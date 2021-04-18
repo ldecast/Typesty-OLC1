@@ -27,8 +27,8 @@ function cicloFor(_instruccion, _ambito) {
     if (!err) {
         var operacion = Operacion(_instruccion.expresion, _ambito)
         if (operacion.tipo === TIPO_DATO.BOOLEANO) {
-            while (operacion.valor) {
-                var nuevoAmbito = new Ambito(_ambito)
+            while (operacion.valor) {// && operacion.) {
+                var nuevoAmbito = new Ambito(_ambito, "ciclo")
                 const Bloque = require('./Bloque')
                 mensaje += Bloque(_instruccion.instrucciones, nuevoAmbito)
                 operacion = Operacion(_instruccion.expresion, _ambito)

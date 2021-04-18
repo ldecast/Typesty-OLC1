@@ -1,3 +1,4 @@
+const TIPO_DATO = require("../Enum/Tipados");
 const TIPO_INSTRUCCION = require("../Enum/TipoInstrucciones");
 
 function nuevaOperacion(_opIzq, _opDer, _tipo, _linea, _columna) {
@@ -164,6 +165,59 @@ const Instruccion = {
             tipo: TIPO_INSTRUCCION.CASTEO,
             nuevoTipo: _tipo,
             expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoVector: function (_tipo1, _tipo2, _id, _tamaño, _valores, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.DECLARACION,
+            tipo_dato: TIPO_DATO.VECTOR,
+            id: _id,
+            tamaño: _tamaño, //tamaño del vector en caso no venga una lista de valores
+            valores: _valores, //arreglo de valores que deben de coincidir con el tipo del vector
+            tipo_dato1: _tipo1, //tipo del vector
+            tipo_dato2: _tipo2, //tipo del vector deben coincidir o es error semantico
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    modificacionVector: function (_id, _posicion, _valor, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.ASIGNACION,
+            tipo_dato: TIPO_DATO.VECTOR,
+            id: _id,
+            posicion: _posicion,
+            valor: _valor,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    accesoVector: function (_id, _posicion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.ACCESO,
+            tipo_dato: TIPO_DATO.VECTOR,
+            id: _id,
+            posicion: _posicion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoContinue: function (_linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.CONTINUE,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoBreak: function (_linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.BREAK,
             linea: _linea,
             columna: _columna
         }

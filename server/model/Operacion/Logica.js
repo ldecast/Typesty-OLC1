@@ -1,6 +1,7 @@
 const TIPO_DATO = require("../../controller/Enum/Tipados");
 const TIPO_OPERACION = require("../../controller/Enum/TipoOperaciones")
 const TIPO_VALOR = require("../../controller/Enum/TipoValores");
+const TIPO_INSTRUCCION = require("../../controller/Enum/TipoInstrucciones")
 
 function Logica(_expresion, _ambito) {
     if (_expresion.tipo === TIPO_VALOR.ENTERO || _expresion.tipo === TIPO_VALOR.DOBLE || _expresion.tipo === TIPO_VALOR.BOOLEANO ||
@@ -20,6 +21,16 @@ function Logica(_expresion, _ambito) {
         || _expresion.tipo === TIPO_OPERACION.NEGACION) {
         const Aritmetica = require("./Aritmetica");
         return Aritmetica(_expresion, _ambito)
+    }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.ACCESO) {
+        switch (_expresion.tipo_dato) {
+            case TIPO_DATO.VECTOR:
+                const { AccesoVector } = require("./Acceso");
+                return AccesoVector(_expresion, _ambito);
+            case TIPO_DATO.LISTA:
+                const { AccesoLista } = require("./Acceso");
+                return AccesoLista(_expresion, _ambito);
+        }
     }
     else if (_expresion.tipo === TIPO_OPERACION.OR) {
         return or(_expresion.opIzq, _expresion.opDer, _ambito)
