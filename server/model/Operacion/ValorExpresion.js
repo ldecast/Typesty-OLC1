@@ -51,6 +51,32 @@ function ValorExpresion(_expresion, _ambito) {
     else if (_expresion.tipo === TIPO_VALOR.IDENTIFICADOR) {
         const simbolo = _ambito.getSimbolo(_expresion.valor)
         if (simbolo != null) {
+            if (simbolo.tipo === TIPO_DATO.VECTOR) {
+                var val = '[ '
+                for (let i = 0; i < simbolo.valor.length; i++) {
+                    val += simbolo.valor[i].valor + ", ";
+                }
+                val = val.substring(0, val.length - 2) + ' ]'
+                return {
+                    valor: val,
+                    tipo: simbolo.tipo,
+                    linea: simbolo.linea,
+                    columna: simbolo.columna
+                }
+            }
+            else if (simbolo.tipo === TIPO_DATO.LISTA) {
+                var val = '[[ '
+                for (let i = 0; i < simbolo.valor.length; i++) {
+                    val += simbolo.valor[i].valor + ", ";
+                }
+                val = val.substring(0, val.length - 2) + ' ]]'
+                return {
+                    valor: val,
+                    tipo: simbolo.tipo,
+                    linea: simbolo.linea,
+                    columna: simbolo.columna
+                }
+            }
             return {
                 valor: simbolo.valor,
                 tipo: simbolo.tipo,
