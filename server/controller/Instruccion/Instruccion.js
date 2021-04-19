@@ -207,6 +207,42 @@ const Instruccion = {
         }
     },
 
+    nuevaLista: function (_tipo1, _tipo2, _id, _expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.DECLARACION,
+            tipo_dato: TIPO_DATO.LISTA,
+            id: _id,
+            expresion: _expresion,
+            tipo_dato1: _tipo1,
+            tipo_dato2: _tipo2,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    modificacionLista: function (_id, _posicion, _valor, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.ASIGNACION,
+            tipo_dato: TIPO_DATO.LISTA,
+            id: _id,
+            posicion: _posicion, // posicion === null ? agregacion : modificacion
+            valor: _valor,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    accesoLista: function (_id, _posicion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.ACCESO,
+            tipo_dato: TIPO_DATO.LISTA,
+            id: _id,
+            posicion: _posicion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
     nuevoContinue: function (_linea, _columna) {
         return {
             tipo: TIPO_INSTRUCCION.CONTINUE,

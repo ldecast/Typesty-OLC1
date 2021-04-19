@@ -207,6 +207,15 @@ break;
 case 74:
  this.$ = INSTRUCCION.modificacionVector($$[$0-6], $$[$0-4], $$[$0-1], this._$.first_line, this._$.first_column+1) 
 break;
+case 75:
+ this.$ = INSTRUCCION.nuevaLista($$[$0-9], $$[$0-2], $$[$0-7], null, this._$.first_line, this._$.first_column+1) 
+break;
+case 76:
+ this.$ = INSTRUCCION.modificacionLista($$[$0-6], null, $$[$0-2], this._$.first_line, this._$.first_column+1) 
+break;
+case 77:
+ this.$ = INSTRUCCION.modificacionLista($$[$0-8], $$[$0-5], $$[$0-1], this._$.first_line, this._$.first_column+1) 
+break;
 case 78:
  this.$ = new INSTRUCCION.nuevoCasteo($$[$0-2], $$[$0], this._$.first_line, this._$.first_column+1) 
 break;
@@ -295,7 +304,7 @@ case 107:
 this.$ = INSTRUCCION.nuevoValor(Number($$[$0].trim()), TIPO_VALOR.DOBLE, this._$.first_line,this._$.first_column+1)
 break;
 case 108:
-this.$=$$[$0-5];
+ this.$ = INSTRUCCION.accesoLista($$[$0-5], $$[$0-2], this._$.first_line, this._$.first_column+1) 
 break;
 case 109:
  this.$ = INSTRUCCION.accesoVector($$[$0-3], $$[$0-1], this._$.first_line, this._$.first_column+1) 

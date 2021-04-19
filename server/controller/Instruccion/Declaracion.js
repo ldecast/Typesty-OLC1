@@ -156,42 +156,22 @@ function Declaracion(_instruccion, _ambito) {
 
     else if (_instruccion.tipo_dato === TIPO_DATO.LISTA) {
         var valores = [];
-        if (_instruccion.valores != null) { //Si tiene una lista de valores
-            for (let i = 0; i < _instruccion.valores.length; i++) {
-                var exp = Operacion(_instruccion.valores[i], _ambito);
-                if (exp.tipo === _instruccion.tipo_dato1)
-                    valores.push(exp);
-                else
-                    return "Error: La expresión '" + exp.valor + "' de tipo " + exp.tipo + " no corresponde al tipo " + _instruccion.tipo_dato1 + " de la declaración del vector.\nLínea: " + exp.linea + " Columna: " + exp.columna + "\n";
+        if (_instruccion.tipo_dato1 === _instruccion.tipo_dato2) {
+            var exp = {
+                tipo: _instruccion.tipo_dato1,
+                valor: 'EMPTY',
+                linea: _instruccion.linea,
+                columna: _instruccion.columna
             }
+            valores.push(exp);
         }
-        else { //Tiene un tamaño [expresion]
-            if (_instruccion.tipo_dato1 === _instruccion.tipo_dato2) {
-                var tamano = Operacion(_instruccion.tamaño, _ambito)
-                if (tamano.tipo === TIPO_DATO.ENTERO || tamano.tipo === TIPO_DATO.DOBLE) {
-                    if (tamano.valor < 1) return "Error: La expresión de valor " + tamano.valor + " no es un tamaño válido para declarar el vector.\nLínea: " + tamano.linea + " Columna: " + tamano.columna + "\n";
-                    for (let i = 0; i < tamano.valor; i++) {
-                        var exp = {
-                            tipo: _instruccion.tipo_dato1,
-                            valor: defaultValue(_instruccion.tipo_dato1),
-                            linea: _instruccion.linea,
-                            columna: _instruccion.columna
-                        }
-                        valores.push(exp);
-                    }
-                }
-                else
-                    return "Error: La expresión de tipo " + tamano.tipo + " no es de tipo numérica para declarar el tamaño del vector.\nLínea: " + tamano.linea + " Columna: " + tamano.columna + "\n";
-            }
-            else
-                return "Error: El tipo " + _instruccion.tipo_dato1 + " no coincide con el tipo " + _instruccion.tipo_dato2 + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
-        }
-        const nuevoSimbolo = new Simbolo(_instruccion.id, valores, TIPO_DATO.VECTOR, _instruccion.linea, _instruccion.columna)
+        else
+            return "Error: El tipo " + _instruccion.tipo_dato1 + " no coincide con el tipo " + _instruccion.tipo_dato2 + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
+        const nuevoSimbolo = new Simbolo(_instruccion.id, valores, TIPO_DATO.LISTA, _instruccion.linea, _instruccion.columna)
         if (_ambito.existeSimbolo(nuevoSimbolo.id) != false) {
             return "Error: La variable '" + nuevoSimbolo.id + "' ya existe.\nLínea: " + nuevoSimbolo.linea + " Columna: " + nuevoSimbolo.columna + "\n";
         }
         _ambito.addSimbolo(nuevoSimbolo.id, nuevoSimbolo)
-        console.log("todo ok", valores);
         return null
     }
 
