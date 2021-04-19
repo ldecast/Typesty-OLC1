@@ -58,7 +58,8 @@ function ValorExpresion(_expresion, _ambito) {
                 }
                 val = val.substring(0, val.length - 2) + ' ]'
                 return {
-                    valor: val,
+                    valor: simbolo.valor,
+                    print_val: val,
                     tipo: simbolo.tipo,
                     linea: simbolo.linea,
                     columna: simbolo.columna
@@ -71,7 +72,8 @@ function ValorExpresion(_expresion, _ambito) {
                 }
                 val = val.substring(0, val.length - 2) + ' ]]'
                 return {
-                    valor: val,
+                    valor: simbolo.valor,
+                    print_val: val,
                     tipo: simbolo.tipo,
                     linea: simbolo.linea,
                     columna: simbolo.columna

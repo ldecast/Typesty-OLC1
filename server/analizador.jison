@@ -317,47 +317,41 @@ EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$
 			| FUNCIONESRESERVADAS {$$=$1}
 ;
 
-FUNCIONESRESERVADAS: FPRINT {$$=$1}
-					| FTOLOWER
-					| FTOUPPER
-					| FLENGTH
-					| FTRUNCATE
-					| FROUND
-					| FTYPEOF
-					| FTOSTRING
-					| FTOCHARARRAY
+FUNCIONESRESERVADAS: FTOLOWER {$$=$1}
+					| FTOUPPER {$$=$1}
+					| FLENGTH {$$=$1}
+					| FTRUNCATE {$$=$1}
+					| FROUND {$$=$1}
+					| FTYPEOF {$$=$1}
+					| FTOSTRING {$$=$1}
+					| FTOCHARARRAY {$$=$1}
 ;
 
 FPRINT: prprint pabre EXPRESION pcierra ptcoma {$$ = new INSTRUCCION.nuevoImprimir($3, this._$.first_line,this._$.first_column+1)}
 ;
 
-FTOLOWER: prtoLower pabre EXPRESION pcierra
+FTOLOWER: prtoLower pabre EXPRESION pcierra {$$ = new INSTRUCCION.toLower($3, this._$.first_line,this._$.first_column+1)}
 ;
 
-FTOUPPER: prtoUpper pabre EXPRESION pcierra
+FTOUPPER: prtoUpper pabre EXPRESION pcierra {$$ = new INSTRUCCION.toUpper($3, this._$.first_line,this._$.first_column+1)}
 ;
 
-FLENGTH: prlength pabre VALORLEN pcierra
+FLENGTH: prlength pabre EXPRESION pcierra {$$ = new INSTRUCCION.nuevoLength($3, this._$.first_line,this._$.first_column+1)}
 ;
 
-VALORLEN: id cabre cabre EXPRESION ccierra ccierra
-		| id cabre EXPRESION ccierra
-		| id
+FTRUNCATE: prtruncate pabre EXPRESION pcierra {$$ = new INSTRUCCION.nuevoTruncate($3, this._$.first_line,this._$.first_column+1)}
 ;
 
-FTRUNCATE: prtruncate pabre EXPRESION pcierra
+FROUND: prround pabre EXPRESION pcierra {$$ = new INSTRUCCION.nuevoRound($3, this._$.first_line,this._$.first_column+1)}
 ;
 
-FROUND: prround pabre EXPRESION pcierra
+FTYPEOF: prtypeof pabre EXPRESION pcierra {$$ = new INSTRUCCION.nuevoTypeOf($3, this._$.first_line,this._$.first_column+1)}
 ;
 
-FTYPEOF: prtypeof pabre EXPRESION pcierra
+FTOSTRING: prtoString pabre EXPRESION pcierra {$$ = new INSTRUCCION.nuevoToString($3, this._$.first_line,this._$.first_column+1)}
 ;
 
-FTOSTRING: prtoString pabre EXPRESION pcierra
-;
-
-FTOCHARARRAY: prtoCharArray pabre EXPRESION pcierra //recibe una cadena
+FTOCHARARRAY: prtoCharArray pabre EXPRESION pcierra {$$ = new INSTRUCCION.nuevoToCharArray($3, this._$.first_line,this._$.first_column+1)}
 ;
 
 LLAMADA: id pabre LISTAVALORES pcierra

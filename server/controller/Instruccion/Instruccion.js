@@ -257,6 +257,78 @@ const Instruccion = {
             linea: _linea,
             columna: _columna
         }
+    },
+
+    toLower: function (_expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.TO_LOWER,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    toUpper: function (_expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.TO_UPPER,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoLength: function (_expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.LENGTH,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoTruncate: function (_expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.TRUNCATE,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoRound: function (_expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.ROUND,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoTypeOf: function (_expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.TYPEOF,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoToString: function (_expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.TOSTRING,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoToCharArray: function (_expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.TOCHARLIST,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
     }
 }
 

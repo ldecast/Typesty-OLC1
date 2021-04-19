@@ -71,7 +71,7 @@ function Bloque(_instrucciones, _ambito) {
                 }
             }
 
-
+            //Funciones y metodos
 
             else if (instruccion.tipo === TIPO_INSTRUCCION.BREAK) {
                 brk = true;

@@ -45,8 +45,20 @@ function Operacion(_expresion, _ambito) {
                 return AccesoLista(_expresion, _ambito);
         }
     }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.TO_LOWER) {
+        const { ToLower } = require("../Funciones/Reservadas");
+        return ToLower(_expresion, _ambito);
+    }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.TO_UPPER) {
+        const { ToUpper } = require("../Funciones/Reservadas");
+        return ToUpper(_expresion, _ambito);
+    }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.LENGTH) {
+        const { Length } = require("../Funciones/Reservadas");
+        return Length(_expresion, _ambito);
+    }
     else {
-        return "Error. Expresión no procesada.\n";
+        return { err: "Error. Expresión no procesada.\n" };
     }
 }
 
