@@ -156,17 +156,25 @@ function Declaracion(_instruccion, _ambito) {
 
     else if (_instruccion.tipo_dato === TIPO_DATO.LISTA) {
         var valores = [];
-        if (_instruccion.tipo_dato1 === _instruccion.tipo_dato2) {
-            var exp = {
-                tipo: _instruccion.tipo_dato1,
-                valor: 'EMPTY',
-                linea: _instruccion.linea,
-                columna: _instruccion.columna
-            }
-            valores.push(exp);
+        if (_instruccion.expresion != null) {
+            if (_instruccion.tipo_dato1 === TIPO_DATO.CARACTER)
+                valores = Operacion(_instruccion.expresion, _ambito).valor;
+            else
+                return `Error: la lista '${String(_instruccion.id)}' no es de tipo CHAR.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
         }
-        else
-            return "Error: El tipo " + _instruccion.tipo_dato1 + " no coincide con el tipo " + _instruccion.tipo_dato2 + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
+        else {
+            if (_instruccion.tipo_dato1 === _instruccion.tipo_dato2) {
+                var exp = {
+                    tipo: _instruccion.tipo_dato1,
+                    valor: 'EMPTY',
+                    linea: _instruccion.linea,
+                    columna: _instruccion.columna
+                }
+                valores.push(exp);
+            }
+            else
+                return "Error: El tipo " + _instruccion.tipo_dato1 + " no coincide con el tipo " + _instruccion.tipo_dato2 + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
+        }
         const nuevoSimbolo = new Simbolo(_instruccion.id, valores, TIPO_DATO.LISTA, _instruccion.linea, _instruccion.columna)
         if (_ambito.existeSimbolo(nuevoSimbolo.id) != false) {
             return "Error: La variable '" + nuevoSimbolo.id + "' ya existe.\nLínea: " + nuevoSimbolo.linea + " Columna: " + nuevoSimbolo.columna + "\n";

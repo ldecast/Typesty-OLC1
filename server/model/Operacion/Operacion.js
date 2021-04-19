@@ -57,6 +57,26 @@ function Operacion(_expresion, _ambito) {
         const { Length } = require("../Funciones/Reservadas");
         return Length(_expresion, _ambito);
     }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.TRUNCATE) {
+        const { Truncate } = require("../Funciones/Reservadas");
+        return Truncate(_expresion, _ambito);
+    }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.ROUND) {
+        const { Round } = require("../Funciones/Reservadas");
+        return Round(_expresion, _ambito);
+    }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.TYPEOF) {
+        const { TypeOf } = require("../Funciones/Reservadas");
+        return TypeOf(_expresion, _ambito);
+    }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.TOSTRING) {
+        const { ToString } = require("../Funciones/Reservadas");
+        return ToString(_expresion, _ambito);
+    }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.TOCHARLIST) {
+        const { ToCharList } = require("../Funciones/Reservadas");
+        return ToCharList(_expresion, _ambito);
+    }
     else {
         return { err: "Error. Expresión no procesada.\n" };
     }

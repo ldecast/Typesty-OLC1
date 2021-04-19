@@ -1,67 +1,39 @@
 const TIPO_DATO = require("../../controller/Enum/Tipados");
 const TIPO_OPERACION = require("../../controller/Enum/TipoOperaciones")
-const TIPO_VALOR = require("../../controller/Enum/TipoValores")
-const TIPO_INSTRUCCION = require("../../controller/Enum/TipoInstrucciones")
 const TipoResultado = require("./TipoResultado")
 
 function Aritmetica(_expresion, _ambito) {
-    if (_expresion.tipo === TIPO_VALOR.ENTERO || _expresion.tipo === TIPO_VALOR.DOBLE || _expresion.tipo === TIPO_VALOR.BOOLEANO ||
-        _expresion.tipo === TIPO_VALOR.CARACTER || _expresion.tipo === TIPO_VALOR.CADENA || _expresion.tipo === TIPO_VALOR.IDENTIFICADOR) {
-        const ValorExpresion = require("./ValorExpresion")
-        return ValorExpresion(_expresion, _ambito)
-    }
-    else if (_expresion.tipo === TIPO_OPERACION.IGUALIGUAL || _expresion.tipo === TIPO_OPERACION.DIFERENTE ||
-        _expresion.tipo === TIPO_OPERACION.MENOR || _expresion.tipo === TIPO_OPERACION.MENORIGUAL ||
-        _expresion.tipo === TIPO_OPERACION.MAYOR || _expresion.tipo === TIPO_OPERACION.MAYORIGUAL) {
-        const Relacional = require("./Relacional");
-        return Relacional(_expresion, _ambito)
-    }
-    else if (_expresion.tipo === TIPO_OPERACION.OR || _expresion.tipo === TIPO_OPERACION.AND || _expresion.tipo === TIPO_OPERACION.NOT) {
-        const Logica = require("./Logica");
-        return Logica(_expresion, _ambito)
-    }
-    else if (_expresion.tipo === TIPO_INSTRUCCION.ACCESO) {
-        switch (_expresion.tipo_dato) {
-            case TIPO_DATO.VECTOR:
-                const { AccesoVector } = require("./Acceso");
-                return AccesoVector(_expresion, _ambito);
-            case TIPO_DATO.LISTA:
-                const { AccesoLista } = require("./Acceso");
-                return AccesoLista(_expresion, _ambito);
-        }
-    }
-    else {
-        switch (_expresion.tipo) {
-            case TIPO_OPERACION.SUMA:
-                return suma(_expresion.opIzq, _expresion.opDer, _ambito)
+    switch (_expresion.tipo) {
+        case TIPO_OPERACION.SUMA:
+            return suma(_expresion.opIzq, _expresion.opDer, _ambito)
 
-            case TIPO_OPERACION.RESTA:
-                return resta(_expresion.opIzq, _expresion.opDer, _ambito)
+        case TIPO_OPERACION.RESTA:
+            return resta(_expresion.opIzq, _expresion.opDer, _ambito)
 
-            case TIPO_OPERACION.MULTIPLICACION:
-                return multiplicacion(_expresion.opIzq, _expresion.opDer, _ambito)
+        case TIPO_OPERACION.MULTIPLICACION:
+            return multiplicacion(_expresion.opIzq, _expresion.opDer, _ambito)
 
-            case TIPO_OPERACION.DIVISION:
-                return division(_expresion.opIzq, _expresion.opDer, _ambito)
+        case TIPO_OPERACION.DIVISION:
+            return division(_expresion.opIzq, _expresion.opDer, _ambito)
 
-            case TIPO_OPERACION.POTENCIA:
-                return potencia(_expresion.opIzq, _expresion.opDer, _ambito)
+        case TIPO_OPERACION.POTENCIA:
+            return potencia(_expresion.opIzq, _expresion.opDer, _ambito)
 
-            case TIPO_OPERACION.MODULO:
-                return modulo(_expresion.opIzq, _expresion.opDer, _ambito)
+        case TIPO_OPERACION.MODULO:
+            return modulo(_expresion.opIzq, _expresion.opDer, _ambito)
 
-            case TIPO_OPERACION.NEGACION:
-                return negacion(_expresion.opIzq, _ambito)
+        case TIPO_OPERACION.NEGACION:
+            return negacion(_expresion.opIzq, _ambito)
 
-            default:
-                break;
-        }
+        default:
+            break;
     }
 }
 
 function suma(_opIzq, _opDer, _ambito) {
-    const opIzq = Aritmetica(_opIzq, _ambito)
-    const opDer = Aritmetica(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.SUMA)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -129,8 +101,9 @@ function suma(_opIzq, _opDer, _ambito) {
 }
 
 function resta(_opIzq, _opDer, _ambito) {
-    const opIzq = Aritmetica(_opIzq, _ambito)
-    const opDer = Aritmetica(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.RESTA)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -189,8 +162,9 @@ function resta(_opIzq, _opDer, _ambito) {
 }
 
 function multiplicacion(_opIzq, _opDer, _ambito) {
-    const opIzq = Aritmetica(_opIzq, _ambito)
-    const opDer = Aritmetica(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.MULTIPLICACION)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -249,8 +223,9 @@ function multiplicacion(_opIzq, _opDer, _ambito) {
 }
 
 function division(_opIzq, _opDer, _ambito) {
-    const opIzq = Aritmetica(_opIzq, _ambito)
-    const opDer = Aritmetica(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.DIVISION)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -298,8 +273,9 @@ function division(_opIzq, _opDer, _ambito) {
 }
 
 function potencia(_opIzq, _opDer, _ambito) {
-    const opIzq = Aritmetica(_opIzq, _ambito)
-    const opDer = Aritmetica(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.POTENCIA)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -358,8 +334,9 @@ function potencia(_opIzq, _opDer, _ambito) {
 }
 
 function modulo(_opIzq, _opDer, _ambito) {
-    const opIzq = Aritmetica(_opIzq, _ambito)
-    const opDer = Aritmetica(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.MODULO)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -399,7 +376,8 @@ function modulo(_opIzq, _opDer, _ambito) {
 }
 
 function negacion(_opIzq, _ambito) {
-    const opIzq = Aritmetica(_opIzq, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
     const tipoRes = TipoResultado(opIzq.tipo, null, TIPO_OPERACION.NEGACION)
     var resultado;
     if (tipoRes != null) {

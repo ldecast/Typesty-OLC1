@@ -270,6 +270,7 @@ DEC_VECT: TIPO cabre ccierra id igual prnew TIPO cabre EXPRESION ccierra ptcoma 
 DEC_LIST: prlist menor TIPO mayor id igual prnew prlist menor TIPO mayor ptcoma { $$ = INSTRUCCION.nuevaLista($3, $10, $5, null, this._$.first_line, this._$.first_column+1) }
 		| id punto pradd pabre EXPRESION pcierra ptcoma { $$ = INSTRUCCION.modificacionLista($1, null, $5, this._$.first_line, this._$.first_column+1) }
 		| id cabre cabre EXPRESION ccierra ccierra igual EXPRESION ptcoma { $$ = INSTRUCCION.modificacionLista($1, $4, $8, this._$.first_line, this._$.first_column+1) }
+		| prlist menor TIPO mayor id igual FTOCHARARRAY ptcoma { $$ = INSTRUCCION.nuevaLista($3, null, $5, $7, this._$.first_line, this._$.first_column+1) }
 ;
 
 CASTEO: pabre TIPO pcierra EXPRESION { $$ = new INSTRUCCION.nuevoCasteo($2, $4, this._$.first_line, this._$.first_column+1) }

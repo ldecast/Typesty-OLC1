@@ -1,64 +1,35 @@
 const TIPO_DATO = require("../../controller/Enum/Tipados");
 const TIPO_OPERACION = require("../../controller/Enum/TipoOperaciones")
-const TIPO_VALOR = require("../../controller/Enum/TipoValores");
-const TIPO_INSTRUCCION = require("../../controller/Enum/TipoInstrucciones")
 
 function Relacional(_expresion, _ambito) {
-    if (_expresion.tipo === TIPO_VALOR.ENTERO || _expresion.tipo === TIPO_VALOR.DOBLE || _expresion.tipo === TIPO_VALOR.BOOLEANO ||
-        _expresion.tipo === TIPO_VALOR.CARACTER || _expresion.tipo === TIPO_VALOR.CADENA || _expresion.tipo === TIPO_VALOR.IDENTIFICADOR) {
-        const ValorExpresion = require("./ValorExpresion");
-        return ValorExpresion(_expresion, _ambito)
-    }
-    else if (_expresion.tipo === TIPO_OPERACION.SUMA || _expresion.tipo === TIPO_OPERACION.RESTA
-        || _expresion.tipo === TIPO_OPERACION.MULTIPLICACION || _expresion.tipo === TIPO_OPERACION.DIVISION
-        || _expresion.tipo === TIPO_OPERACION.POTENCIA || _expresion.tipo === TIPO_OPERACION.MODULO
-        || _expresion.tipo === TIPO_OPERACION.NEGACION) {
-        const Aritmetica = require("./Aritmetica");
-        return Aritmetica(_expresion, _ambito)
-    }
-    else if (_expresion.tipo === TIPO_OPERACION.OR || _expresion.tipo === TIPO_OPERACION.AND || _expresion.tipo === TIPO_OPERACION.NOT) {
-        const Logica = require("./Logica");
-        return Logica(_expresion, _ambito)
-    }
-    else if (_expresion.tipo === TIPO_INSTRUCCION.ACCESO) {
-        switch (_expresion.tipo_dato) {
-            case TIPO_DATO.VECTOR:
-                const { AccesoVector } = require("./Acceso");
-                return AccesoVector(_expresion, _ambito);
-            case TIPO_DATO.LISTA:
-                const { AccesoLista } = require("./Acceso");
-                return AccesoLista(_expresion, _ambito);
-        }
-    }
-    else {
-        switch (_expresion.tipo) {
-            case TIPO_OPERACION.IGUALIGUAL:
-                return igualigual(_expresion.opIzq, _expresion.opDer, _ambito);
+    switch (_expresion.tipo) {
+        case TIPO_OPERACION.IGUALIGUAL:
+            return igualigual(_expresion.opIzq, _expresion.opDer, _ambito);
 
-            case TIPO_OPERACION.DIFERENTE:
-                return diferente(_expresion.opIzq, _expresion.opDer, _ambito);
+        case TIPO_OPERACION.DIFERENTE:
+            return diferente(_expresion.opIzq, _expresion.opDer, _ambito);
 
-            case TIPO_OPERACION.MENOR:
-                return menor(_expresion.opIzq, _expresion.opDer, _ambito);
+        case TIPO_OPERACION.MENOR:
+            return menor(_expresion.opIzq, _expresion.opDer, _ambito);
 
-            case TIPO_OPERACION.MENORIGUAL:
-                return menorigual(_expresion.opIzq, _expresion.opDer, _ambito);
+        case TIPO_OPERACION.MENORIGUAL:
+            return menorigual(_expresion.opIzq, _expresion.opDer, _ambito);
 
-            case TIPO_OPERACION.MAYOR:
-                return mayor(_expresion.opIzq, _expresion.opDer, _ambito);
+        case TIPO_OPERACION.MAYOR:
+            return mayor(_expresion.opIzq, _expresion.opDer, _ambito);
 
-            case TIPO_OPERACION.MAYORIGUAL:
-                return mayorigual(_expresion.opIzq, _expresion.opDer, _ambito);
+        case TIPO_OPERACION.MAYORIGUAL:
+            return mayorigual(_expresion.opIzq, _expresion.opDer, _ambito);
 
-            default:
-                break;
-        }
+        default:
+            break;
     }
 }
 
 function igualigual(_opIzq, _opDer, _ambito) {
-    const opIzq = Relacional(_opIzq, _ambito)
-    const opDer = Relacional(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito)
+    const opDer = Operacion(_opDer, _ambito)
     if (opIzq.tipo == opDer.tipo) {
         var resultado = false
         if (opIzq.valor == opDer.valor) {
@@ -81,8 +52,9 @@ function igualigual(_opIzq, _opDer, _ambito) {
 }
 
 function diferente(_opIzq, _opDer, _ambito) {
-    const opIzq = Relacional(_opIzq, _ambito)
-    const opDer = Relacional(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito)
+    const opDer = Operacion(_opDer, _ambito)
     if (opIzq.tipo == opDer.tipo) {
         var resultado = false
         if (opIzq.valor != opDer.valor) {
@@ -105,8 +77,9 @@ function diferente(_opIzq, _opDer, _ambito) {
 }
 
 function menor(_opIzq, _opDer, _ambito) {
-    const opIzq = Relacional(_opIzq, _ambito)
-    const opDer = Relacional(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito)
+    const opDer = Operacion(_opDer, _ambito)
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
         var resultado = false;
         if (opIzq.valor < opDer.valor) {
@@ -153,8 +126,9 @@ function menor(_opIzq, _opDer, _ambito) {
 }
 
 function menorigual(_opIzq, _opDer, _ambito) {
-    const opIzq = Relacional(_opIzq, _ambito)
-    const opDer = Relacional(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito)
+    const opDer = Operacion(_opDer, _ambito)
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
         var resultado = false;
         if (opIzq.valor <= opDer.valor) {
@@ -201,8 +175,9 @@ function menorigual(_opIzq, _opDer, _ambito) {
 }
 
 function mayor(_opIzq, _opDer, _ambito) {
-    const opIzq = Relacional(_opIzq, _ambito)
-    const opDer = Relacional(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito)
+    const opDer = Operacion(_opDer, _ambito)
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
         var resultado = false;
         if (opIzq.valor > opDer.valor) {
@@ -249,8 +224,9 @@ function mayor(_opIzq, _opDer, _ambito) {
 }
 
 function mayorigual(_opIzq, _opDer, _ambito) {
-    const opIzq = Relacional(_opIzq, _ambito)
-    const opDer = Relacional(_opDer, _ambito)
+    const Operacion = require("./Operacion")
+    const opIzq = Operacion(_opIzq, _ambito)
+    const opDer = Operacion(_opDer, _ambito)
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
         var resultado = false;
         if (opIzq.valor >= opDer.valor) {

@@ -70,6 +70,18 @@ function Asignacion(_instruccion, _ambito) {
         if (existe) {
             var valor = Operacion(_instruccion.expresion, _ambito)
             if (valor.err) return valor.err;
+            if (valor.asignacionLista) {
+                var simbolo = _ambito.getSimbolo(id)
+                if (simbolo.tipo === TIPO_DATO.LISTA) {
+                    if (simbolo.valor[0].tipo === TIPO_DATO.CARACTER) {
+                        simbolo.valor = valor.valor
+                        _ambito.actualizar(id, simbolo)
+                        return null
+                    }
+                    return `Error: la lista '${String(id)}' no es de tipo CHAR.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+                }
+                return `Error: la variable '${String(id)}' no es una estructura de tipo lista.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+            }
             var simbolo = _ambito.getSimbolo(id)
             var tipos = {
                 tipoSimbolo: simbolo.tipo,
@@ -82,7 +94,7 @@ function Asignacion(_instruccion, _ambito) {
             }
             return "Error: No es posible asignar un valor de tipo " + tipos.tipoNuevoValor + " a la variable '" + id + "' que es de tipo " + tipos.tipoSimbolo + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
         }
-        return `Error: la variable '${String(id)}' no existe. Línea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+        return `Error: la variable '${String(id)}' no existe.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
     }
 
 }
