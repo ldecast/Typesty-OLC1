@@ -7,6 +7,8 @@ const CicloFor = require("./For");
 const CicloDoWhile = require("./DoWhile");
 const { If, IfElse, ElseIf } = require('./If');
 const Switch = require("./Switch");
+const TIPO_VALOR = require("../Enum/TipoValores");
+const TIPO_DATO = require("../Enum/Tipados");
 
 function Bloque(_instrucciones, _ambito) {
     var cadena = ""
@@ -70,9 +72,21 @@ function Bloque(_instrucciones, _ambito) {
                     cadena += mensaje
                 }
             }
-
-            //Funciones y metodos
-
+            else if (instruccion.tipo === TIPO_INSTRUCCION.LLAMADA) {
+                const Exec = require("./Exec")
+                const Operacion = require("../../model/Operacion/Operacion");
+                var global = _ambito.getGlobal();
+                for (let i = 0; i < instruccion.lista_valores.length; i++) {
+                    const expresion = instruccion.lista_valores[i];
+                    var op = Operacion(expresion, _ambito);
+                    instruccion.lista_valores[i].tipo = getTipado(op.tipo);
+                    instruccion.lista_valores[i].valor = op.valor;
+                }
+                var mensaje = Exec(instruccion, global)
+                if (mensaje != null) {
+                    cadena += mensaje
+                }
+            }
             else if (instruccion.tipo === TIPO_INSTRUCCION.BREAK) {
                 brk = true;
                 // while (_ambito.tipo != "ciclo" && _ambito.tipo != "switch") { if break is not in ambito.tipo==ciclo return error //agregar en jison otra produccion solo para break y continue
@@ -83,6 +97,23 @@ function Bloque(_instrucciones, _ambito) {
         }
     });
     return cadena
+}
+
+function getTipado(tipo_valor) {
+    switch (tipo_valor) {
+        case TIPO_DATO.ENTERO:
+            return TIPO_VALOR.ENTERO
+        case TIPO_DATO.DOBLE:
+            return TIPO_VALOR.DOBLE
+        case TIPO_DATO.CARACTER:
+            return TIPO_VALOR.CARACTER
+        case TIPO_DATO.CADENA:
+            return TIPO_VALOR.CADENA
+        case TIPO_DATO.BOOLEANO:
+            return TIPO_VALOR.BOOLEANO
+        default:
+            return null;
+    }
 }
 
 module.exports = Bloque

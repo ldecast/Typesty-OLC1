@@ -89,7 +89,12 @@ function Declaracion(_instruccion, _ambito) {
         if (_instruccion.valor != null) {
             op = Operacion(_instruccion.valor, _ambito)
             if (op.err) return op.err;
-            valor = String(op.valor);
+            tipo = op.tipo
+            if (tipo === TIPO_DATO.CARACTER) {
+                valor = String(op.valor);
+            }
+            else
+                return "Error: No es posible asignar un valor de tipo " + tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.CARACTER + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
         }
         const nuevoSimbolo = new Simbolo(_instruccion.id, valor, TIPO_DATO.CARACTER, _instruccion.linea, _instruccion.columna)
         if (_ambito.existeSimbolo(nuevoSimbolo.id) != false) {
@@ -104,7 +109,12 @@ function Declaracion(_instruccion, _ambito) {
         if (_instruccion.valor != null) {
             op = Operacion(_instruccion.valor, _ambito)
             if (op.err) return op.err;
-            valor = String(op.valor)
+            tipo = op.tipo
+            if (tipo === TIPO_DATO.CADENA) {
+                valor = String(op.valor)
+            }
+            else
+                return "Error: No es posible asignar un valor de tipo " + tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.CADENA + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
         }
         const nuevoSimbolo = new Simbolo(_instruccion.id, valor, TIPO_DATO.CADENA, _instruccion.linea, _instruccion.columna)
         if (_ambito.existeSimbolo(nuevoSimbolo.id) != false) {

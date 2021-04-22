@@ -77,7 +77,14 @@ function Operacion(_expresion, _ambito) {
         const { ToCharList } = require("../Funciones/Reservadas");
         return ToCharList(_expresion, _ambito);
     }
+    else if (_expresion.tipo === TIPO_INSTRUCCION.LLAMADA) { // Puede ser una expresión en caso de que sea una llamada a función que retorna algo
+        const Exec = require("../../controller/Instruccion/Exec");
+        var global = _ambito.getGlobal();
+        var retorno = Exec(instruccion, global);
+        return retorno;  //deberia retornar un objeto
+    }
     else {
+        console.log(_expresion,"chale")
         return { err: "Error. Expresión no procesada.\n" };
     }
 }

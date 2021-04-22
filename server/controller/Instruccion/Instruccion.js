@@ -55,16 +55,6 @@ const Instruccion = {
         }
     },
 
-    nuevaAgregacion: function (_id, _expresion, _linea, _columna) {
-        return {
-            tipo: TIPO_INSTRUCCION.AGREGACION,
-            id: _id,
-            expresion: _expresion,
-            linea: _linea,
-            columna: _columna
-        }
-    },
-
     nuevoWhile: function (_expresion, _instrucciones, _linea, _columna) {
         return {
             tipo: TIPO_INSTRUCCION.WHILE,
@@ -326,6 +316,58 @@ const Instruccion = {
         return {
             tipo: TIPO_INSTRUCCION.TOCHARLIST,
             expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoMetodo: function (_nombre, _lista_parametros, _instrucciones, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.NUEVO_METODO,
+            nombre: _nombre,
+            lista_parametros: _lista_parametros,
+            instrucciones: _instrucciones,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoParametro: function (_id, _tipo, _linea, _columna) {
+        return {
+            id: _id,
+            tipo_dato: _tipo,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevaFuncion: function (_nombre, _lista_parametros, _instrucciones, _tipo_retorno, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.NUEVA_FUNCION,
+            nombre: _nombre,
+            lista_parametros: _lista_parametros,
+            instrucciones: _instrucciones,
+            retorno: _tipo_retorno,
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevaLlamada: function (_id, _lista_valores, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.LLAMADA,
+            nombre: _id,
+            lista_valores: _lista_valores, //lista de EXPRESIONes
+            linea: _linea,
+            columna: _columna
+        }
+    },
+
+    nuevoExec: function (_nombre, _lista_valores, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.EXEC,
+            nombre: _nombre,
+            lista_valores: _lista_valores,
             linea: _linea,
             columna: _columna
         }

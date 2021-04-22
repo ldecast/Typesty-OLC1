@@ -117,10 +117,10 @@ ENTRADA: ENTRADA ENTCERO {$1.push($2); $$=$1;}
 		| ENTCERO {$$=[$1];}
 ;
 
-ENTCERO: FUNCIONBODY
-		| METODOBODY
-		| EXECBODY
-		//| LLAMADA ptcoma -- supuestamente solo declaraciones/asignaciones
+ENTCERO: FUNCIONBODY {$$=$1}
+		| METODOBODY {$$=$1}
+		| EXECBODY {$$=$1}
+		| LLAMADA ptcoma {$$=$1}
 		| DEC_VAR {$$=$1}
 		| DEC_VECT {$$=$1}
 		| DEC_LIST {$$=$1}
@@ -132,23 +132,23 @@ ENTCERO: FUNCIONBODY
 		| SWITCH {$$=$1}
 ;
 
-FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra
-			| TIPO id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra
+FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevaFuncion($2, null, $6, $1, this._$.first_line, this._$.first_column+1) }
+			| TIPO id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevaFuncion($2, $4, $7, $1, this._$.first_line, this._$.first_column+1) }
 ;
 
-METODOBODY: prvoid id pabre pcierra labre INSTRUCCION lcierra
-			| prvoid id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra
+METODOBODY: prvoid id pabre pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevoMetodo($2, [], $6, this._$.first_line, this._$.first_column+1) }
+			| prvoid id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevoMetodo($2, $4, $7, this._$.first_line, this._$.first_column+1) }
 ;
 
-EXECBODY: prexec id pabre pcierra ptcoma
-		| prexec id pabre LISTAVALORES pcierra ptcoma
+EXECBODY: prexec id pabre pcierra ptcoma {$$ = INSTRUCCION.nuevoExec($2, null, this._$.first_line, this._$.first_column+1)}
+		| prexec id pabre LISTAVALORES pcierra ptcoma {$$ = INSTRUCCION.nuevoExec($2, $4, this._$.first_line, this._$.first_column+1)}
 ;
 
-LISTAPARAMETROS: LISTAPARAMETROS coma  PARAMETROS
-				| PARAMETROS
+LISTAPARAMETROS: LISTAPARAMETROS coma PARAMETROS {$1.push($3); $$=$1;}
+				| PARAMETROS {$$=[$1];}
 ;
 
-PARAMETROS: TIPO id
+PARAMETROS: TIPO id {$$ = INSTRUCCION.nuevoParametro($2, $1, this._$.first_line, this._$.first_column+1)}
 ;
 
 INSTRUCCION: INSTRUCCION INSCERO {$1.push($2); $$=$1;}
@@ -161,7 +161,7 @@ INSCERO: DEC_VAR {$$=$1}
 		| DEC_VECT {$$=$1}
 		| DEC_LIST {$$=$1}
 		| SENTENCIATRANSFERENCIA {$$=$1}
-		| LLAMADA ptcoma
+		| LLAMADA ptcoma {$$=$1}
 		| FPRINT {$$=$1}
 ;
 
@@ -303,8 +303,8 @@ EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$
 			| EXPRESION or EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.OR,this._$.first_line,this._$.first_column+1);}
 			| EXPRESION and EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.AND,this._$.first_line,this._$.first_column+1);}
 			| not EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($2, null, TIPO_OPERACION.NOT,this._$.first_line,this._$.first_column+1);}
-			| cadena {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1)}
-			| caracter {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.CARACTER, this._$.first_line,this._$.first_column+1)}
+			| cadena {$$ = INSTRUCCION.nuevoValor($1.trim().substring(1, $1.length - 1), TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1)}
+			| caracter {$$ = INSTRUCCION.nuevoValor($1.trim().substring(1, $1.length - 1), TIPO_VALOR.CARACTER, this._$.first_line,this._$.first_column+1)}
 			| true {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.BOOLEANO, this._$.first_line,this._$.first_column+1)}
 			| false {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.BOOLEANO, this._$.first_line,this._$.first_column+1)}
 			| entero {$$ = INSTRUCCION.nuevoValor(Number($1.trim()), TIPO_VALOR.ENTERO, this._$.first_line,this._$.first_column+1)}
@@ -355,8 +355,8 @@ FTOSTRING: prtoString pabre EXPRESION pcierra {$$ = new INSTRUCCION.nuevoToStrin
 FTOCHARARRAY: prtoCharArray pabre EXPRESION pcierra {$$ = new INSTRUCCION.nuevoToCharArray($3, this._$.first_line,this._$.first_column+1)}
 ;
 
-LLAMADA: id pabre LISTAVALORES pcierra
-		| id pabre pcierra
+LLAMADA: id pabre LISTAVALORES pcierra {$$ = INSTRUCCION.nuevaLlamada($1, $3, this._$.first_line, this._$.first_column+1)}
+		| id pabre pcierra {$$ = INSTRUCCION.nuevaLlamada($1, [], this._$.first_line, this._$.first_column+1)}
 ;
 
 LISTAVALORES: LISTAVALORES coma VALORES {$1.push($3); $$=$1;}
