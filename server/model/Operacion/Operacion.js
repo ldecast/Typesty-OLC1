@@ -32,6 +32,7 @@ function Operacion(_expresion, _ambito) {
         return Ternario(_expresion, _ambito)
     }
     else if (_expresion.tipo === TIPO_INSTRUCCION.CASTEO) {
+        
         const { Casteo } = require("../Funciones/Reservadas");
         return Casteo(_expresion, _ambito)
     }
@@ -77,14 +78,23 @@ function Operacion(_expresion, _ambito) {
         const { ToCharList } = require("../Funciones/Reservadas");
         return ToCharList(_expresion, _ambito);
     }
-    else if (_expresion.tipo === TIPO_INSTRUCCION.LLAMADA) { // Puede ser una expresión en caso de que sea una llamada a función que retorna algo
+    else if (_expresion.tipo === TIPO_INSTRUCCION.LLAMADA) {
         const Exec = require("../../controller/Instruccion/Exec");
         var global = _ambito.getGlobal();
-        var retorno = Exec(instruccion, global);
-        return retorno;  //deberia retornar un objeto
+        for (let i = 0; i < _expresion.lista_valores.length; i++) {
+            const expresion = _expresion.lista_valores[i];
+            var op = Operacion(expresion, _ambito);
+            if (op.err) return op.err;
+            _expresion.lista_valores[i].tipo = getTipado(op.tipo);
+            _expresion.lista_valores[i].valor = op.valor;
+        }
+        var retorno = Exec(_expresion, global)
+        if (retorno.err) return retorno.err;
+        // if (retorno.retorno) return retorno.retorno
+        return retorno;  //deberia retornar un objeto algo como if retorno.retorno -> { retorno: EXPRESION }
     }
     else {
-        console.log(_expresion,"chale")
+        //console.log(_expresion);
         return { err: "Error. Expresión no procesada.\n" };
     }
 }

@@ -12,11 +12,13 @@ const TIPO_DATO = require("../Enum/Tipados");
 
 function Bloque(_instrucciones, _ambito) {
     var cadena = ""
+    var retorno;
     var brk = false;
     _instrucciones.forEach(instruccion => {
         if (!brk) {
             if (instruccion.tipo === TIPO_INSTRUCCION.PRINT) {
                 cadena += Imprimir(instruccion, _ambito) + '\n'
+                console.log(cadena)
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.DECLARACION) {
                 var mensaje = Declaracion(instruccion, _ambito)
@@ -79,6 +81,7 @@ function Bloque(_instrucciones, _ambito) {
                 for (let i = 0; i < instruccion.lista_valores.length; i++) {
                     const expresion = instruccion.lista_valores[i];
                     var op = Operacion(expresion, _ambito);
+                    if (op.err) return op.err;
                     instruccion.lista_valores[i].tipo = getTipado(op.tipo);
                     instruccion.lista_valores[i].valor = op.valor;
                 }
@@ -94,9 +97,19 @@ function Bloque(_instrucciones, _ambito) {
                 //     _ambito = _ambito.anterior;
                 // }
             }
+            else if (instruccion.tipo === TIPO_INSTRUCCION.RETURN) {
+                const Operacion = require("../../model/Operacion/Operacion");
+                brk = true;
+                var expresion;
+                expresion = Operacion(instruccion.expresion, _ambito);
+                // console.log(expresion,"chale")
+                //expresion.valor = cadena + expresion.valor;
+                cadena = expresion;
+            }
         }
     });
-    return cadena
+    // console.log(cadena)
+    return cadena   // habra que retornar un objeto { mensaje: cadena, retorno: expresion }
 }
 
 function getTipado(tipo_valor) {

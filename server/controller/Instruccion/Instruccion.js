@@ -371,6 +371,15 @@ const Instruccion = {
             linea: _linea,
             columna: _columna
         }
+    },
+
+    nuevoReturn: function (_expresion, _linea, _columna) {
+        return {
+            tipo: TIPO_INSTRUCCION.RETURN,
+            expresion: _expresion,
+            linea: _linea,
+            columna: _columna
+        }
     }
 }
 

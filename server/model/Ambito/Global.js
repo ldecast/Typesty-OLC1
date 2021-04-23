@@ -58,27 +58,6 @@ function Global(_instrucciones, _ambito) {
             break
         }
     }
-    // for (let j = 0; j < _instrucciones.length; j++) {
-    //     if (_instrucciones[j].tipo === TIPO_INSTRUCCION.EXEC) {
-
-    //         for (let i = 0; i < _instrucciones[j].lista_valores.length; i++) {
-    //             const expresion = _instrucciones[j].lista_valores[i];
-    //             console.log(expresion.valor)
-    //             if (expresion.tipo === TIPO_VALOR.IDENTIFICADOR) {
-    //                 console.log(_ambito.getSimbolo(expresion.valor))
-    //                 _instrucciones[j].lista_valores[i].tipo = _ambito.getSimbolo(expresion.valor).tipo;
-    //                 _instrucciones[j].lista_valores[i].valor = _ambito.getSimbolo(expresion.valor).valor;
-    //             }
-    //         }
-    //         const Exec = require("../../controller/Instruccion/Exec")
-    //         var global = _ambito.getGlobal();
-    //         var mensaje = Exec(_instrucciones[j], global)
-    //         if (mensaje != null) {
-    //             cadena += mensaje
-    //         }
-    //         break
-    //     }
-    // }
     return cadena
 }
 

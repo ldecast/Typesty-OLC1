@@ -166,9 +166,9 @@ INSCERO: DEC_VAR {$$=$1}
 ;
 
 SENTENCIATRANSFERENCIA: prbreak ptcoma { $$ = new INSTRUCCION.nuevoBreak(this._$.first_line, this._$.first_column+1) }
-						| prreturn EXPRESION ptcoma 
+						| prreturn EXPRESION ptcoma { $$ = new INSTRUCCION.nuevoReturn($2, this._$.first_line, this._$.first_column+1) }
 						| prcontinue ptcoma { $$ = new INSTRUCCION.nuevoContinue(this._$.first_line, this._$.first_column+1) }
-						| prreturn ptcoma
+						| prreturn ptcoma { $$ = new INSTRUCCION.nuevoReturn(null, this._$.first_line, this._$.first_column+1) }
 ;
 
 SENTENCIACICLO: WHILE {$$=$1}
@@ -259,9 +259,6 @@ DEC_VAR: TIPO id igual CASTEO ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, 
 			}
 ;
 
-TERNARIO: EXPRESION interrogacion EXPRESION dospuntos EXPRESION { $$ = new INSTRUCCION.nuevoTernario($1, $3, $5, this._$.first_line, this._$.first_column+1) }
-;
-
 DEC_VECT: TIPO cabre ccierra id igual prnew TIPO cabre EXPRESION ccierra ptcoma { $$ = INSTRUCCION.nuevoVector($1, $7, $4, $9, null, this._$.first_line, this._$.first_column+1) }
 		| TIPO cabre ccierra id igual labre LISTAVALORES lcierra ptcoma { $$ = INSTRUCCION.nuevoVector($1, null, $4, null, $7, this._$.first_line, this._$.first_column+1) }
 		| id cabre EXPRESION ccierra igual EXPRESION ptcoma { $$ = INSTRUCCION.modificacionVector($1, $3, $6, this._$.first_line, this._$.first_column+1) }
@@ -273,8 +270,7 @@ DEC_LIST: prlist menor TIPO mayor id igual prnew prlist menor TIPO mayor ptcoma 
 		| prlist menor TIPO mayor id igual FTOCHARARRAY ptcoma { $$ = INSTRUCCION.nuevaLista($3, null, $5, $7, this._$.first_line, this._$.first_column+1) }
 ;
 
-CASTEO: pabre TIPO pcierra EXPRESION { $$ = new INSTRUCCION.nuevoCasteo($2, $4, this._$.first_line, this._$.first_column+1) }
-;
+
 
 TIPO: TIPODATO {$$ = $1}
 ;
@@ -312,10 +308,16 @@ EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$
 			| id cabre cabre EXPRESION ccierra ccierra { $$ = INSTRUCCION.accesoLista($1, $4, this._$.first_line, this._$.first_column+1) }
 			| id cabre EXPRESION ccierra { $$ = INSTRUCCION.accesoVector($1, $3, this._$.first_line, this._$.first_column+1) }
 			| id {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.IDENTIFICADOR, this._$.first_line,this._$.first_column+1)}
-			// | CASTEO
-			// | TERNARIO
-			| LLAMADA
+			| pabre CASTEO pcierra {$$=$2}
+			| pabre TERNARIO pcierra {$$=$2}
+			| LLAMADA { $$=$1; }
 			| FUNCIONESRESERVADAS {$$=$1}
+;
+
+CASTEO: pabre TIPO pcierra EXPRESION { $$ = new INSTRUCCION.nuevoCasteo($2, $4, this._$.first_line, this._$.first_column+1) }
+;
+
+TERNARIO: EXPRESION interrogacion EXPRESION dospuntos EXPRESION { $$ = new INSTRUCCION.nuevoTernario($1, $3, $5, this._$.first_line, this._$.first_column+1) }
 ;
 
 FUNCIONESRESERVADAS: FTOLOWER {$$=$1}

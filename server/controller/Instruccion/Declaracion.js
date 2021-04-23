@@ -23,12 +23,18 @@ function Declaracion(_instruccion, _ambito) {
 
     if (_instruccion.tipo_dato === TIPO_DATO.ENTERO) {
         var valor = defaultValue(TIPO_DATO.ENTERO);
+        var mens = "";
         if (_instruccion.valor != null) {
             var op = Operacion(_instruccion.valor, _ambito)
             if (op.err) return op.err;
             tipo = op.tipo;
+            // console.log(op.retorno,"ssssssss");
             if (tipo === TIPO_DATO.ENTERO) {
-                valor = op.valor;
+                if (op.retorno) {
+                    valor = op.retorno;
+                }
+                else
+                    valor = op.valor;
             }
             else {
                 return "Error: No es posible declarar un valor de tipo " + tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.ENTERO + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
@@ -39,7 +45,7 @@ function Declaracion(_instruccion, _ambito) {
             return "Error: La variable '" + nuevoSimbolo.id + "' ya existe.\nLínea: " + nuevoSimbolo.linea + " Columna: " + nuevoSimbolo.columna + "\n";
         }
         _ambito.addSimbolo(nuevoSimbolo.id, nuevoSimbolo)
-        return null
+        return null;
     }
 
     else if (_instruccion.tipo_dato === TIPO_DATO.DOBLE) {
@@ -129,6 +135,7 @@ function Declaracion(_instruccion, _ambito) {
         if (_instruccion.valores != null) { //Si tiene una lista de valores
             for (let i = 0; i < _instruccion.valores.length; i++) {
                 var exp = Operacion(_instruccion.valores[i], _ambito);
+                if (exp.err) return exp.err;
                 if (exp.tipo === _instruccion.tipo_dato1)
                     valores.push(exp);
                 else
@@ -138,6 +145,7 @@ function Declaracion(_instruccion, _ambito) {
         else { //Tiene un tamaño [expresion]
             if (_instruccion.tipo_dato1 === _instruccion.tipo_dato2) {
                 var tamano = Operacion(_instruccion.tamaño, _ambito)
+                if (tamano.err) return tamano.err;
                 if (tamano.tipo === TIPO_DATO.ENTERO || tamano.tipo === TIPO_DATO.DOBLE) {
                     if (tamano.valor < 1) return "Error: La expresión de valor " + tamano.valor + " no es un tamaño válido para declarar el vector.\nLínea: " + tamano.linea + " Columna: " + tamano.columna + "\n";
                     for (let i = 0; i < tamano.valor; i++) {
@@ -168,9 +176,11 @@ function Declaracion(_instruccion, _ambito) {
         var valores = [];
         if (_instruccion.expresion != null) {
             if (_instruccion.tipo_dato1 === TIPO_DATO.CARACTER)
-                valores = Operacion(_instruccion.expresion, _ambito).valor;
+                op = Operacion(_instruccion.expresion, _ambito);
             else
                 return `Error: la lista '${String(_instruccion.id)}' no es de tipo CHAR.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+            if (op.err) return valores.err;
+            valores = op.valor;
         }
         else {
             if (_instruccion.tipo_dato1 === _instruccion.tipo_dato2) {
