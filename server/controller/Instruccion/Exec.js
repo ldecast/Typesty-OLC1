@@ -26,8 +26,14 @@ function Exec(_instruccion, _ambito) {
                 if (ex) return ex;
             }
         }
-        // console.log(funcionEjecutar.instrucciones)
-        return Bloque(funcionEjecutar.instrucciones, nuevoAmbito);
+        // console.log(funcionEjecutar.instrucciones[0], "OOOOOOOOOOOOOOOOOOOOO")
+        var mes = Bloque(funcionEjecutar.instrucciones, nuevoAmbito);
+        console.log(mes,'WWWWWWWWWWWWW')
+
+        return mes;
+        console.log(mes,'WWWWWWWWWWWWW')
+        if (mes.retorno) return mes.retorno;
+        return mes.cadena;
         // if (bloque.retorno) {console.log("retorno",bloque.retorno); return bloque.retorno;}
         // return bloque;
     }

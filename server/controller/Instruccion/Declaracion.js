@@ -22,29 +22,35 @@ function defaultValue(tipo_dato) {
 function Declaracion(_instruccion, _ambito) {
 
     if (_instruccion.tipo_dato === TIPO_DATO.ENTERO) {
+        // console.log(_instruccion,"aaaaaaaaaaaaaaa")
+        var cadena = "";
         var valor = defaultValue(TIPO_DATO.ENTERO);
-        var mens = "";
         if (_instruccion.valor != null) {
             var op = Operacion(_instruccion.valor, _ambito)
             if (op.err) return op.err;
-            tipo = op.tipo;
-            // console.log(op.retorno,"ssssssss");
-            if (tipo === TIPO_DATO.ENTERO) {
-                if (op.retorno) {
-                    valor = op.retorno;
-                }
+            if (op.retorno) {
+                if (op.cadena) cadena = op.cadena;
+                if (op.retorno.tipo === TIPO_DATO.ENTERO)
+                    valor = op.retorno.valor;
                 else
-                    valor = op.valor;
+                    return "Error: No es posible declarar un valor de tipo " + tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.ENTERO + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
             }
             else {
-                return "Error: No es posible declarar un valor de tipo " + tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.ENTERO + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
+                tipo = op.tipo;
+                if (tipo === TIPO_DATO.ENTERO)
+                    valor = op.valor;
+                else
+                    return "Error: No es posible declarar un valor de tipo " + tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.ENTERO + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
             }
         }
         const nuevoSimbolo = new Simbolo(_instruccion.id, valor, TIPO_DATO.ENTERO, _instruccion.linea, _instruccion.columna)
         if (_ambito.existeSimbolo(nuevoSimbolo.id) != false) {
             return "Error: La variable '" + nuevoSimbolo.id + "' ya existe.\nLínea: " + nuevoSimbolo.linea + " Columna: " + nuevoSimbolo.columna + "\n";
         }
+        // console.log("todo ok", nuevoSimbolo)
         _ambito.addSimbolo(nuevoSimbolo.id, nuevoSimbolo)
+        console.log(2222, cadena)
+        if (cadena.length > 0) return cadena;
         return null;
     }
 

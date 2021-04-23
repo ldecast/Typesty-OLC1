@@ -20,21 +20,9 @@ function Global(_instrucciones, _ambito) {
     if (countExec == 0)
         return "Error: No se ha encontrado ninguna sentencia EXEC.\n"
 
-    // Declarar variables, métodos y funciones
+    // Declarar métodos y funciones
     for (let i = 0; i < _instrucciones.length; i++) {
-        if (_instrucciones[i].tipo === TIPO_INSTRUCCION.DECLARACION) {
-            var mensaje = Declaracion(_instrucciones[i], _ambito)
-            if (mensaje != null) {
-                cadena += mensaje + '\n'
-            }
-        }
-        else if (_instrucciones[i].tipo === TIPO_INSTRUCCION.ASIGNACION) {
-            var mensaje = Asignacion(_instrucciones[i], _ambito)
-            if (mensaje != null) {
-                cadena += mensaje + '\n'
-            }
-        }
-        else if (_instrucciones[i].tipo === TIPO_INSTRUCCION.NUEVO_METODO) {
+        if (_instrucciones[i].tipo === TIPO_INSTRUCCION.NUEVO_METODO) {
             var mensaje = Metodo(_instrucciones[i], _ambito)
             if (mensaje != null) {
                 cadena += mensaje + '\n'
@@ -48,16 +36,34 @@ function Global(_instrucciones, _ambito) {
         }
     }
 
+    // Declarar y asignar variables
+    for (let i = 0; i < _instrucciones.length; i++) {
+        if (_instrucciones[i].tipo === TIPO_INSTRUCCION.DECLARACION) {
+            var mensaje = Declaracion(_instrucciones[i], _ambito)
+            if (mensaje != null) {
+                cadena += mensaje + '\n'
+            }
+        }
+        else if (_instrucciones[i].tipo === TIPO_INSTRUCCION.ASIGNACION) {
+            var mensaje = Asignacion(_instrucciones[i], _ambito)
+            if (mensaje != null) {
+                cadena += mensaje + '\n'
+            }
+        }
+    }
+
     // Ejecutar EXEC
     for (let i = 0; i < _instrucciones.length; i++) {
         if (_instrucciones[i].tipo === TIPO_INSTRUCCION.EXEC) {
             var mensaje = Exec(_instrucciones[i], _ambito)
             if (mensaje != null) {
-                cadena += mensaje
+                cadena += mensaje.cadena
             }
+            console.log(mensaje,"eijdeidjei",i)
             break
         }
     }
+    //console.log(cadena,"SSSSSSSSSSSSSSSSSSSSSSS")
     return cadena
 }
 

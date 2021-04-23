@@ -6,6 +6,7 @@ function imprimir(_instruccion, _ambito) {
         return cadena.err;
     if (cadena.print_val)
         return cadena.print_val;
+        console.log(cadena,"DDDDDDDDDDD")
     return cadena.valor;
 }
 

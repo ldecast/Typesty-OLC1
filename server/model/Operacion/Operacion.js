@@ -81,6 +81,8 @@ function Operacion(_expresion, _ambito) {
     else if (_expresion.tipo === TIPO_INSTRUCCION.LLAMADA) {
         const Exec = require("../../controller/Instruccion/Exec");
         var global = _ambito.getGlobal();
+        // console.log(_expresion,"PPPPPPPPPPPPPPppp")
+        
         for (let i = 0; i < _expresion.lista_valores.length; i++) {
             const expresion = _expresion.lista_valores[i];
             var op = Operacion(expresion, _ambito);
@@ -89,13 +91,33 @@ function Operacion(_expresion, _ambito) {
             _expresion.lista_valores[i].valor = op.valor;
         }
         var retorno = Exec(_expresion, global)
+        // console.log(retorno,"PPPPPPPPPPPPPPppp")
+        // console.log(retorno,"PPPPPPPPPPPPPPppp")
+        console.log(retorno,"JAJAJ")
         if (retorno.err) return retorno.err;
-        // if (retorno.retorno) return retorno.retorno
+        //if (retorno.retorno) return retorno.retorno
         return retorno;  //deberia retornar un objeto algo como if retorno.retorno -> { retorno: EXPRESION }
     }
     else {
         //console.log(_expresion);
         return { err: "Error. Expresión no procesada.\n" };
+    }
+}
+
+function getTipado(tipo_valor) {
+    switch (tipo_valor) {
+        case TIPO_DATO.ENTERO:
+            return TIPO_VALOR.ENTERO
+        case TIPO_DATO.DOBLE:
+            return TIPO_VALOR.DOBLE
+        case TIPO_DATO.CARACTER:
+            return TIPO_VALOR.CARACTER
+        case TIPO_DATO.CADENA:
+            return TIPO_VALOR.CADENA
+        case TIPO_DATO.BOOLEANO:
+            return TIPO_VALOR.BOOLEANO
+        default:
+            return null;
     }
 }
 

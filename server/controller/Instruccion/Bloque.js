@@ -11,67 +11,66 @@ const TIPO_VALOR = require("../Enum/TipoValores");
 const TIPO_DATO = require("../Enum/Tipados");
 
 function Bloque(_instrucciones, _ambito) {
-    var cadena = ""
-    var retorno;
+    var cadena = { cadena: "", retorno: null }
     var brk = false;
     _instrucciones.forEach(instruccion => {
         if (!brk) {
             if (instruccion.tipo === TIPO_INSTRUCCION.PRINT) {
-                cadena += Imprimir(instruccion, _ambito) + '\n'
-                console.log(cadena)
+                cadena.cadena += Imprimir(instruccion, _ambito) + '\n'
+                console.log(cadena, "MJM")
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.DECLARACION) {
                 var mensaje = Declaracion(instruccion, _ambito)
                 if (mensaje != null) {
-                    cadena += mensaje + '\n'
+                    cadena.cadena += mensaje + '\n'
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.ASIGNACION) {
                 var mensaje = Asignacion(instruccion, _ambito)
                 if (mensaje != null) {
-                    cadena += mensaje + '\n'
+                    cadena.cadena += mensaje + '\n'
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.WHILE) {
                 var mensaje = CicloWhile(instruccion, _ambito)
                 if (mensaje != null) {
-                    cadena += mensaje
+                    cadena.cadena += mensaje
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.FOR) {
                 var mensaje = CicloFor(instruccion, _ambito)
                 if (mensaje != null) {
-                    cadena += mensaje
+                    cadena.cadena += mensaje
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.DOWHILE) {
                 var mensaje = CicloDoWhile(instruccion, _ambito)
                 if (mensaje != null) {
-                    cadena += mensaje
+                    cadena.cadena += mensaje
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.IF) {
                 var mensaje = If(instruccion, _ambito)
                 if (mensaje != null) {
-                    cadena += mensaje
+                    cadena.cadena += mensaje
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE) {
                 var mensaje = IfElse(instruccion, _ambito)
                 if (mensaje != null) {
-                    cadena += mensaje
+                    cadena.cadena += mensaje
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.ELSE_IF) {
                 var mensaje = ElseIf(instruccion, _ambito)
                 if (mensaje != null) {
-                    cadena += mensaje
+                    cadena.cadena += mensaje
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.SWITCH) {
                 var mensaje = Switch(instruccion, _ambito)
                 if (mensaje != null) {
-                    cadena += mensaje
+                    cadena.cadena += mensaje
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.LLAMADA) {
@@ -87,7 +86,7 @@ function Bloque(_instrucciones, _ambito) {
                 }
                 var mensaje = Exec(instruccion, global)
                 if (mensaje != null) {
-                    cadena += mensaje
+                    cadena.cadena += mensaje.cadena
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.BREAK) {
@@ -104,7 +103,8 @@ function Bloque(_instrucciones, _ambito) {
                 expresion = Operacion(instruccion.expresion, _ambito);
                 // console.log(expresion,"chale")
                 //expresion.valor = cadena + expresion.valor;
-                cadena = expresion;
+                cadena.retorno = expresion;
+                console.log(cadena.retorno, "ESTO RETORNA")
             }
         }
     });
