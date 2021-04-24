@@ -57,13 +57,15 @@ function Global(_instrucciones, _ambito) {
         if (_instrucciones[i].tipo === TIPO_INSTRUCCION.EXEC) {
             var mensaje = Exec(_instrucciones[i], _ambito)
             if (mensaje != null) {
-                cadena += mensaje.cadena
+                if (mensaje.err) cadena += mensaje.err;
+                else
+                    cadena += mensaje.cadena
             }
-            console.log(mensaje,"eijdeidjei",i)
+            console.log("eijdeidjei", mensaje, 222222)
             break
         }
     }
-    //console.log(cadena,"SSSSSSSSSSSSSSSSSSSSSSS")
+    console.log(cadena, "SSSSSSSSSSSSSSSSSSSSSSS")
     return cadena
 }
 

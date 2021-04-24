@@ -10,7 +10,7 @@ function Exec(_instruccion, _ambito) {
             var x = funcionEjecutar.lista_parametros === null ? 0 : funcionEjecutar.lista_parametros.length; //cantidad de parámetros de la función
             var y = _instruccion.lista_valores === null ? 0 : _instruccion.lista_valores.length; //cantidad de valores en la llamada
             if (x != y) {
-                return `Error: La cantidad de parámetros en la llamada debe corresponder a con la declaración del método o función.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`
+                return { err: `Error: La cantidad de parámetros en la llamada debe corresponder a con la declaración del método o función.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
             }
             for (let i = 0; i < x; i++) {
                 var asignacion = {
@@ -27,17 +27,21 @@ function Exec(_instruccion, _ambito) {
             }
         }
         // console.log(funcionEjecutar.instrucciones[0], "OOOOOOOOOOOOOOOOOOOOO")
-        var mes = Bloque(funcionEjecutar.instrucciones, nuevoAmbito);
-        console.log(mes,'WWWWWWWWWWWWW')
+        var retorno = Bloque(funcionEjecutar.instrucciones, nuevoAmbito);
+        if (retorno.retorno) {
+            if (funcionEjecutar.retorno != retorno.retorno.tipo)
+                return { err: `Error: El retorno de la función '${funcionEjecutar.id}' no concuerda con el retorno de la expresión.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
+        }
+        console.log(retorno, 'WWWWWWWWWWWWW')
 
-        return mes;
-        console.log(mes,'WWWWWWWWWWWWW')
+        return retorno;
+        console.log(mes, 'WWWWWWWWWWWWW')
         if (mes.retorno) return mes.retorno;
         return mes.cadena;
         // if (bloque.retorno) {console.log("retorno",bloque.retorno); return bloque.retorno;}
         // return bloque;
     }
-    return `Error: El método o la función ${_instruccion.nombre} no existe.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`
+    return { err: `Error: El método o la función ${_instruccion.nombre} no existe.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
 }
 
 module.exports = Exec

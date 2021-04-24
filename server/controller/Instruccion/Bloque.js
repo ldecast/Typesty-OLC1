@@ -15,6 +15,7 @@ function Bloque(_instrucciones, _ambito) {
     var brk = false;
     _instrucciones.forEach(instruccion => {
         if (!brk) {
+            // console.log(instruccion,2222222);
             if (instruccion.tipo === TIPO_INSTRUCCION.PRINT) {
                 cadena.cadena += Imprimir(instruccion, _ambito) + '\n'
                 console.log(cadena, "MJM")
@@ -86,7 +87,9 @@ function Bloque(_instrucciones, _ambito) {
                 }
                 var mensaje = Exec(instruccion, global)
                 if (mensaje != null) {
-                    cadena.cadena += mensaje.cadena
+                    if (mensaje.err) cadena.cadena += mensaje.err;
+                    else
+                        cadena.cadena += mensaje.cadena
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.BREAK) {
@@ -101,14 +104,14 @@ function Bloque(_instrucciones, _ambito) {
                 brk = true;
                 var expresion;
                 expresion = Operacion(instruccion.expresion, _ambito);
-                // console.log(expresion,"chale")
+                // console.log(expresion,222222222222222)
                 //expresion.valor = cadena + expresion.valor;
                 cadena.retorno = expresion;
                 console.log(cadena.retorno, "ESTO RETORNA")
             }
         }
     });
-    // console.log(cadena)
+    console.log(cadena, 8888889)
     return cadena   // habra que retornar un objeto { mensaje: cadena, retorno: expresion }
 }
 

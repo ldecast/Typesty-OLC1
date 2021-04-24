@@ -8,6 +8,7 @@ const Relacional = require("./Relacional");
 const Logica = require("./Logica");
 
 function Operacion(_expresion, _ambito) {
+
     if (_expresion.tipo === TIPO_VALOR.DOBLE || _expresion.tipo === TIPO_VALOR.BOOLEANO ||
         _expresion.tipo === TIPO_VALOR.CADENA || _expresion.tipo === TIPO_VALOR.IDENTIFICADOR ||
         _expresion.tipo === TIPO_VALOR.CARACTER || _expresion.tipo === TIPO_VALOR.ENTERO) {
@@ -32,7 +33,6 @@ function Operacion(_expresion, _ambito) {
         return Ternario(_expresion, _ambito)
     }
     else if (_expresion.tipo === TIPO_INSTRUCCION.CASTEO) {
-        
         const { Casteo } = require("../Funciones/Reservadas");
         return Casteo(_expresion, _ambito)
     }
@@ -81,8 +81,6 @@ function Operacion(_expresion, _ambito) {
     else if (_expresion.tipo === TIPO_INSTRUCCION.LLAMADA) {
         const Exec = require("../../controller/Instruccion/Exec");
         var global = _ambito.getGlobal();
-        // console.log(_expresion,"PPPPPPPPPPPPPPppp")
-        
         for (let i = 0; i < _expresion.lista_valores.length; i++) {
             const expresion = _expresion.lista_valores[i];
             var op = Operacion(expresion, _ambito);
@@ -91,12 +89,10 @@ function Operacion(_expresion, _ambito) {
             _expresion.lista_valores[i].valor = op.valor;
         }
         var retorno = Exec(_expresion, global)
-        // console.log(retorno,"PPPPPPPPPPPPPPppp")
-        // console.log(retorno,"PPPPPPPPPPPPPPppp")
         console.log(retorno,"JAJAJ")
-        if (retorno.err) return retorno.err;
+        if (retorno.err) return retorno;
         //if (retorno.retorno) return retorno.retorno
-        return retorno;  //deberia retornar un objeto algo como if retorno.retorno -> { retorno: EXPRESION }
+        return retorno;
     }
     else {
         //console.log(_expresion);

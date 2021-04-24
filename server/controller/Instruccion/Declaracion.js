@@ -22,11 +22,11 @@ function defaultValue(tipo_dato) {
 function Declaracion(_instruccion, _ambito) {
 
     if (_instruccion.tipo_dato === TIPO_DATO.ENTERO) {
-        // console.log(_instruccion,"aaaaaaaaaaaaaaa")
         var cadena = "";
         var valor = defaultValue(TIPO_DATO.ENTERO);
         if (_instruccion.valor != null) {
             var op = Operacion(_instruccion.valor, _ambito)
+            console.log(op,99999999)
             if (op.err) return op.err;
             if (op.retorno) {
                 if (op.cadena) cadena = op.cadena;

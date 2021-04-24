@@ -10,7 +10,6 @@ function DecFuncion(_instruccion, _ambito) {
         return `Error: La función '${nuevaFuncion.id}' ya existe.\nLínea: ${nuevaFuncion.linea} Columna: ${nuevaFuncion.columna}\n`
     }
     var hasReturn = false;
-    // console.log(_instruccion.instrucciones);
     for (let i = 0; i < _instruccion.instrucciones.length; i++) {
         const instr = _instruccion.instrucciones[i];
         if (instr.tipo === TIPO_INSTRUCCION.RETURN) {
