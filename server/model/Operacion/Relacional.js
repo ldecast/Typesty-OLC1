@@ -44,6 +44,7 @@ function igualigual(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -69,6 +70,7 @@ function diferente(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "") //true+5+10+5
     return {
+        err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -118,6 +120,7 @@ function menor(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -167,6 +170,7 @@ function menorigual(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -216,6 +220,7 @@ function mayor(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -265,6 +270,7 @@ function mayorigual(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,

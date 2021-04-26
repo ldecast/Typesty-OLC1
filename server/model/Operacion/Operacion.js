@@ -8,7 +8,6 @@ const Relacional = require("./Relacional");
 const Logica = require("./Logica");
 
 function Operacion(_expresion, _ambito) {
-
     if (_expresion.tipo === TIPO_VALOR.DOBLE || _expresion.tipo === TIPO_VALOR.BOOLEANO ||
         _expresion.tipo === TIPO_VALOR.CADENA || _expresion.tipo === TIPO_VALOR.IDENTIFICADOR ||
         _expresion.tipo === TIPO_VALOR.CARACTER || _expresion.tipo === TIPO_VALOR.ENTERO) {
@@ -79,23 +78,21 @@ function Operacion(_expresion, _ambito) {
         return ToCharList(_expresion, _ambito);
     }
     else if (_expresion.tipo === TIPO_INSTRUCCION.LLAMADA) {
+        // console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",_expresion)
         const Exec = require("../../controller/Instruccion/Exec");
         var global = _ambito.getGlobal();
         for (let i = 0; i < _expresion.lista_valores.length; i++) {
             const expresion = _expresion.lista_valores[i];
-            var op = Operacion(expresion, _ambito);
-            if (op.err) return op.err;
-            _expresion.lista_valores[i].tipo = getTipado(op.tipo);
-            _expresion.lista_valores[i].valor = op.valor;
+            const op = Operacion(expresion, _ambito);
+            if (op.err) return op.err
+            instruccion.lista_valores[i] = op;
         }
         var retorno = Exec(_expresion, global)
-        console.log(retorno,"JAJAJ")
         if (retorno.err) return retorno;
-        //if (retorno.retorno) return retorno.retorno
         return retorno;
     }
     else {
-        //console.log(_expresion);
+        console.log(_expresion, "appppppppppppppppppppppppppppppppppppppppp");
         return { err: "Error. Expresión no procesada.\n" };
     }
 }

@@ -160,7 +160,7 @@ const Instruccion = {
         }
     },
 
-    nuevoVector: function (_tipo1, _tipo2, _id, _tamaño, _valores, _linea, _columna) {
+    nuevoVector: function (_tipo1, _tipo2, _id, _tamaño, _valores, _expresion, _linea, _columna) {
         return {
             tipo: TIPO_INSTRUCCION.DECLARACION,
             tipo_dato: TIPO_DATO.VECTOR,
@@ -169,6 +169,7 @@ const Instruccion = {
             valores: _valores, //arreglo de valores que deben de coincidir con el tipo del vector
             tipo_dato1: _tipo1, //tipo del vector
             tipo_dato2: _tipo2, //tipo del vector deben coincidir o es error semantico
+            expresion: _expresion, //en caso de asignar un vector con una expresión u otro vector
             linea: _linea,
             columna: _columna
         }

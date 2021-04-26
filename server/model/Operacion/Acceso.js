@@ -3,10 +3,9 @@ const Operacion = require("./Operacion")
 
 function accesoVector(_instruccion, _ambito) {
     const id = _instruccion.id;
-    const existe = _ambito.existeSimbolo(id);
-    if (existe) {
+    var simbolo = _ambito.getSimbolo(id);
+    if (simbolo) {
         var pos = Operacion(_instruccion.posicion, _ambito);
-        var simbolo = _ambito.getSimbolo(id);
         if (simbolo.tipo != TIPO_DATO.VECTOR) {
             return { err: `Error: la variable '${String(id)}' de tipo '${String(simbolo.tipo)}' no corresponde a un vector.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
         }
@@ -21,10 +20,9 @@ function accesoVector(_instruccion, _ambito) {
 
 function accesoLista(_instruccion, _ambito) {
     const id = _instruccion.id;
-    const existe = _ambito.existeSimbolo(id);
-    if (existe) {
+    var simbolo = _ambito.getSimbolo(id);
+    if (simbolo) {
         var pos = Operacion(_instruccion.posicion, _ambito);
-        var simbolo = _ambito.getSimbolo(id);
         if (simbolo.tipo != TIPO_DATO.LISTA) {
             return { err: `Error: la variable '${String(id)}' de tipo '${String(simbolo.tipo)}' no corresponde a una lista.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
         }

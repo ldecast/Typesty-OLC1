@@ -93,6 +93,7 @@ function suma(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + '\nError semántico: no se puede realizar la operación suma.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + '\nError semántico: no se puede realizar la operación suma.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -154,6 +155,7 @@ function resta(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + '\nError semántico: no se puede realizar la operación resta.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + '\nError semántico: no se puede realizar la operación resta.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -215,6 +217,7 @@ function multiplicacion(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + '\nError semántico: no se puede realizar la operación multiplicación.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + '\nError semántico: no se puede realizar la operación multiplicación.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -245,6 +248,7 @@ function division(_opIzq, _opDer, _ambito) {
                     op2 = Number(opDer.valor);
                 if (op2 == 0) {
                     return {
+                        err: '\nError: no es permitida la división entre 0.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
                         valor: '\nError: no es permitida la división entre 0.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
                         tipo: null,
                         linea: _opIzq.linea,
@@ -265,6 +269,7 @@ function division(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + '\nError semántico: no se puede realizar la operación división.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + '\nError semántico: no se puede realizar la operación división.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -326,6 +331,7 @@ function potencia(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + '\nError semántico: no se puede realizar la operación potencia.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + '\nError semántico: no se puede realizar la operación potencia.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -368,6 +374,7 @@ function modulo(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + '\nError semántico: no se puede realizar la operación módulo.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + '\nError semántico: no se puede realizar la operación módulo.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -406,6 +413,7 @@ function negacion(_opIzq, _ambito) {
     }
     var respuesta = opIzq.tipo === null ? opIzq.valor : "";
     return {
+        err: respuesta + '\nError semántico: no se puede realizar la operación negación unaria.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + '\nError semántico: no se puede realizar la operación negación unaria.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,

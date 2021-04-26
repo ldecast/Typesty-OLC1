@@ -35,11 +35,9 @@ class Ambito {
     }
 
     existeSimbolo(_s) {
-        for (let e = this; e != null; e = e.anterior) {
-            var encontrado = e.tablaSimbolos.get(_s.toLowerCase())
-            if (encontrado != null) {
-                return true
-            }
+        var encontrado = this.tablaSimbolos.get(_s.toLowerCase())
+        if (encontrado != null) {
+            return true
         }
         return false
     }

@@ -4,16 +4,18 @@ const TIPO_INSTRUCCION = require("../Enum/TipoInstrucciones")
 const Operacion = require("../../model/Operacion/Operacion")
 
 function sentenciaIf(_instruccion, _ambito) {
-    var mensaje = ""
+    var cadena = { cadena: "", retorno: null }
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         if (operacion.valor) {
             var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
-            mensaje += Bloque(_instruccion.instrucciones, nuevoAmbito)
+            var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito)
+            if (bloque.cadena) cadena.cadena += bloque.cadena;
+            if (bloque.retorno) cadena.retorno += bloque.retorno;
             operacion = Operacion(_instruccion.expresion, _ambito)
         }
-        return mensaje
+        return cadena
     }
     return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
 }

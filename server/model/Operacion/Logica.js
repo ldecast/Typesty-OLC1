@@ -42,6 +42,7 @@ function or(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -78,6 +79,7 @@ function and(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
+        err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
@@ -88,6 +90,7 @@ function and(_opIzq, _opDer, _ambito) {
 function not(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     const opIzq = Operacion(_opIzq, _ambito)
+    console.log(_ambito.getSimbolo('banderaedad'))
     var resultado = false;
     if (opIzq.tipo === TIPO_DATO.BOOLEANO) {
         resultado = !opIzq.valor;
@@ -100,6 +103,7 @@ function not(_opIzq, _opDer, _ambito) {
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "")
     return {
+        err: respuesta + "\nError semántico: no se puede negar el valor de tipo " + opIzq.tipo + "\nporque no es booleano.\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         valor: respuesta + "\nError semántico: no se puede negar el valor de tipo " + opIzq.tipo + "\nporque no es booleano.\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,

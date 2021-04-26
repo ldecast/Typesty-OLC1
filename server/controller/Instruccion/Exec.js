@@ -13,33 +13,29 @@ function Exec(_instruccion, _ambito) {
                 return { err: `Error: La cantidad de parámetros en la llamada debe corresponder a con la declaración del método o función.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
             }
             for (let i = 0; i < x; i++) {
-                var asignacion = {
+                var asignacion = { // Creando la instrucción para declarar un parámetro
                     tipo: TIPO_INSTRUCCION.DECLARACION,
                     id: funcionEjecutar.lista_parametros[i].id,
-                    valor: _instruccion.lista_valores[i],
+                    valor: _instruccion.lista_valores[i], // Podria hacerle un Operacion(expresion, ambito con las variables ya agregadas)
                     tipo_dato: funcionEjecutar.lista_parametros[i].tipo_dato,
-                    linea: _instruccion.linea,
-                    columna: _instruccion.columna
+                    linea: funcionEjecutar.linea,
+                    columna: funcionEjecutar.columna,
+                    isParam: true
                 }
+                // console.log(asignacion.id, asignacion, 8333333333434)
                 const Declaracion = require("./Declaracion");
                 ex = Declaracion(asignacion, nuevoAmbito);
-                if (ex) return ex;
+                if (ex) return { err: ex };
             }
         }
-        // console.log(funcionEjecutar.instrucciones[0], "OOOOOOOOOOOOOOOOOOOOO")
         var retorno = Bloque(funcionEjecutar.instrucciones, nuevoAmbito);
+        console.log(retorno,3333333333333)
         if (retorno.retorno) {
             if (funcionEjecutar.retorno != retorno.retorno.tipo)
                 return { err: `Error: El retorno de la función '${funcionEjecutar.id}' no concuerda con el retorno de la expresión.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
         }
-        console.log(retorno, 'WWWWWWWWWWWWW')
-
+        // console.log(retorno, 'WWWWWWWWWWWWW')
         return retorno;
-        console.log(mes, 'WWWWWWWWWWWWW')
-        if (mes.retorno) return mes.retorno;
-        return mes.cadena;
-        // if (bloque.retorno) {console.log("retorno",bloque.retorno); return bloque.retorno;}
-        // return bloque;
     }
     return { err: `Error: El método o la función ${_instruccion.nombre} no existe.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
 }

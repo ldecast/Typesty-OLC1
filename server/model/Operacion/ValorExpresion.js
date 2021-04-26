@@ -87,6 +87,7 @@ function ValorExpresion(_expresion, _ambito) {
             }
         }
         return {
+            err: "Error: la variable '" + _expresion.valor + "' no existe.\nLínea: " + _expresion.linea + " Columna: " + _expresion.columna + "\n",
             valor: "Error: la variable '" + _expresion.valor + "' no existe.\nLínea: " + _expresion.linea + " Columna: " + _expresion.columna + "\n",
             tipo: null,
             linea: _expresion.linea,
