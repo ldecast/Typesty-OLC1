@@ -32,8 +32,17 @@ function Aritmetica(_expresion, _ambito) {
 
 function suma(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.SUMA)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -55,7 +64,8 @@ function suma(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             case TIPO_DATO.DOBLE:

@@ -14,28 +14,53 @@ function Bloque(_instrucciones, _ambito) {
     var cadena = { cadena: "", retorno: null }
     var brk = false;
     _instrucciones.forEach(instruccion => {
+        // console.log(instruccion,9827733737)
         if (!brk) {
-            // console.log(instruccion,2222222);
             if (instruccion.tipo === TIPO_INSTRUCCION.PRINT) {
-                cadena.cadena += Imprimir(instruccion, _ambito) + '\n'
-                // console.log(cadena, "MJM")
+                var mensaje = Imprimir(instruccion, _ambito)
+                if (mensaje) {
+                    if (mensaje.print_val)
+                        cadena.cadena += mensaje.print_val + '\n'
+                    else if (mensaje.valor != null)
+                        cadena.cadena += mensaje.valor + '\n'
+                    if (mensaje.cadena)
+                        cadena.cadena += mensaje.cadena // + '\n'
+                    // if (mensaje.err)
+                    //     cadena.cadena += mensaje.err + '\n'
+                    if (mensaje.retorno)
+                        cadena.cadena += mensaje.retorno.valor + '\n'
+                }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.DECLARACION) {
                 var mensaje = Declaracion(instruccion, _ambito)
-                if (mensaje != null) {
-                    cadena.cadena += mensaje + '\n'
+                if (mensaje) {
+                    if (mensaje.cadena)
+                        cadena.cadena += mensaje.cadena
+                    if (mensaje.err)
+                        cadena.cadena += mensaje.err
+                    // if (mensaje.retorno)
+                    //     cadena.retorno += mensaje.retorno
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.ASIGNACION) {
                 var mensaje = Asignacion(instruccion, _ambito)
-                if (mensaje != null) {
-                    cadena.cadena += mensaje + '\n'
+                // console.log(mensaje, 4444444444444)
+                if (mensaje) {
+                    if (mensaje.cadena)
+                        cadena.cadena += mensaje.cadena
+                    if (mensaje.err)
+                        cadena.cadena += mensaje.err
+                    if (mensaje.retorno)
+                        cadena.retorno = mensaje.retorno
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.WHILE) {
                 var mensaje = CicloWhile(instruccion, _ambito)
-                if (mensaje != null) {
-                    cadena.cadena += mensaje
+                if (mensaje) {
+                    if (mensaje.cadena)
+                        cadena.cadena += mensaje.cadena
+                    if (mensaje.err)
+                        cadena.cadena += mensaje.err
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.FOR) {
@@ -52,22 +77,35 @@ function Bloque(_instrucciones, _ambito) {
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.IF) {
                 var mensaje = If(instruccion, _ambito)
-                if (mensaje.cadena) {
-                    // console.log(9999999,mensaje,9999999)
-                    cadena.cadena += mensaje.cadena
+                if (mensaje) {
+                    if (mensaje.cadena)
+                        cadena.cadena += mensaje.cadena
+                    if (mensaje.err)
+                        cadena.cadena += mensaje.err
+                    if (mensaje.retorno)
+                        cadena.retorno = mensaje.retorno
                 }
-                if (mensaje.retorno) cadena.retorno += mensaje.retorno
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE) {
                 var mensaje = IfElse(instruccion, _ambito)
-                if (mensaje != null) {
-                    cadena.cadena += mensaje
+                if (mensaje) {
+                    if (mensaje.cadena)
+                        cadena.cadena += mensaje.cadena
+                    if (mensaje.err)
+                        cadena.cadena += mensaje.err
+                    if (mensaje.retorno)
+                        cadena.retorno = mensaje.retorno
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.ELSE_IF) {
                 var mensaje = ElseIf(instruccion, _ambito)
-                if (mensaje != null) {
-                    cadena.cadena += mensaje
+                if (mensaje) {
+                    if (mensaje.cadena)
+                        cadena.cadena += mensaje.cadena
+                    if (mensaje.err)
+                        cadena.cadena += mensaje.err
+                    if (mensaje.retorno)
+                        cadena.retorno = mensaje.retorno
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.SWITCH) {
@@ -79,21 +117,14 @@ function Bloque(_instrucciones, _ambito) {
             else if (instruccion.tipo === TIPO_INSTRUCCION.LLAMADA) {
                 const Exec = require("./Exec")
                 const Operacion = require("../../model/Operacion/Operacion");
-                var global = _ambito.getGlobal();
-                for (let i = 0; i < instruccion.lista_valores.length; i++) {
-                    const expresion = instruccion.lista_valores[i];
-                    // console.log(expresion, 1222222222333333)
-                    const op = Operacion(expresion, _ambito);
-                    if (op.err) return op.err
-                    instruccion.lista_valores[i] = op;
-                    // instruccion.lista_valores[i].valor = op.valor;
-                }
-                var mensaje = Exec(instruccion, global)
-                if (mensaje != null) {
-                    if (mensaje.err) cadena.cadena += mensaje.err;
-                    else
-                        cadena.cadena += mensaje.cadena
-                }
+                var mensaje = Exec(instruccion, _ambito)
+                // console.log(mensaje,111233333)
+                if (mensaje.cadena)
+                    cadena.cadena += mensaje.cadena
+                if (mensaje.err)
+                    cadena.cadena += mensaje.err
+                // if (mensaje.retorno)
+                //     cadena.cadena += mensaje.retorno.cadena
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.BREAK) {
                 brk = true;
@@ -107,37 +138,19 @@ function Bloque(_instrucciones, _ambito) {
                 brk = true;
                 var expresion;
                 expresion = Operacion(instruccion.expresion, _ambito);
-                // console.log(expresion,222222222222222)
-                //expresion.valor = cadena + expresion.valor;
+                // console.log(expresion,11111111);
+                if (expresion.err) cadena.cadena += expresion.err;
+                if (expresion.cadena) cadena.cadena += expresion.cadena;
                 cadena.retorno = expresion;
-                console.log(cadena.retorno, "ESTO RETORNA")
+                // console.log(cadena.retorno, "ESTO RETORNA")
+            }
+            else{
+                console.log("EEEEEEEEEERRRORRRRRRRR")
             }
         }
     });
     // console.log(cadena, 8888889)
     return cadena
-}
-
-function getTipado(operacion) {
-    switch (operacion.tipo) {
-        case TIPO_DATO.ENTERO:
-            return TIPO_VALOR.ENTERO
-        case TIPO_DATO.DOBLE:
-            return TIPO_VALOR.DOBLE
-        case TIPO_DATO.CARACTER:
-            return TIPO_VALOR.CARACTER
-        case TIPO_DATO.CADENA:
-            return TIPO_VALOR.CADENA
-        case TIPO_DATO.BOOLEANO:
-            return TIPO_VALOR.BOOLEANO
-        case TIPO_DATO.VECTOR:
-            return TIPO_VALOR.IDENTIFICADOR
-        case TIPO_DATO.LISTA:
-            return { lista: operacion.valor[0].tipo }
-        default:
-            // console.log(operacion,99999999999)
-            return 'NINGUN TIPO';
-    }
 }
 
 module.exports = Bloque

@@ -15,12 +15,27 @@ class Ambito {
     }
 
     getSimbolo(_s) {
+        // if (this.tipo === 'exec') {
+        //     var encontrado = this.tablaSimbolos.get(_s.toLowerCase())
+        //     if (encontrado != null)
+        //         return encontrado
+        //     encontrado = this.anterior.tablaSimbolos.get(_s.toLowerCase())
+        //     if (encontrado != null)
+        //         return encontrado
+        //     else {
+        //         var global = this.getGlobal();
+        //         encontrado = global.tablaSimbolos.get(_s.toLowerCase())
+        //         if (encontrado != null)
+        //             return encontrado
+        //     }
+        // }
+        // else {
         for (let e = this; e != null; e = e.anterior) {
             var encontrado = e.tablaSimbolos.get(_s.toLowerCase())
-            if (encontrado != null) {
+            if (encontrado != null)
                 return encontrado
-            }
         }
+        // }
         return null
     }
 

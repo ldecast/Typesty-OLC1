@@ -4,73 +4,166 @@ const TIPO_INSTRUCCION = require("../Enum/TipoInstrucciones")
 const Operacion = require("../../model/Operacion/Operacion")
 
 function sentenciaIf(_instruccion, _ambito) {
-    var cadena = { cadena: "", retorno: null }
+    var cadena = { cadena: "", retorno: null, err: null }
     var operacion = Operacion(_instruccion.expresion, _ambito)
+    if (operacion.err) { cadena.err = operacion.err; return cadena; }
+    if (operacion.retorno) {
+        if (operacion.cadena) cadena.cadena = operacion.cadena;
+        if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
+            var condicion = operacion.retorno;
+            if (condicion.valor) {
+                var nuevoAmbito = new Ambito(_ambito, "control")
+                const Bloque = require('./Bloque')
+                var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito)
+                cadena.cadena += bloque.cadena;
+                if (bloque.retorno) cadena.retorno = bloque.retorno;
+            }
+            return cadena
+        }
+        cadena.err = "Error: La expresión a evaluar de tipo " + operacion.retorno.tipo + " no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+        return cadena;
+    }
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         if (operacion.valor) {
             var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
             var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito)
-            if (bloque.cadena) cadena.cadena += bloque.cadena;
-            if (bloque.retorno) cadena.retorno += bloque.retorno;
-            operacion = Operacion(_instruccion.expresion, _ambito)
+            cadena.cadena += bloque.cadena;
+            if (bloque.retorno) cadena.retorno = bloque.retorno;
         }
-        return cadena
+        return cadena;
     }
-    return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+    else
+        cadena.err = "Error: La expresión no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
+    return cadena
 }
 
 function sentenciaIfElse(_instruccion, _ambito) {
-    var mensaje = ""
+    var cadena = { cadena: "", retorno: null, err: null }
     var operacion = Operacion(_instruccion.expresion, _ambito)
+    if (operacion.err) { cadena.err = operacion.err; return cadena; }
+    if (operacion.retorno) {
+        if (operacion.cadena) cadena.cadena = operacion.cadena;
+        if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
+            var condicion = operacion.retorno;
+            if (condicion.valor) {
+                var nuevoAmbito = new Ambito(_ambito, "control")
+                const Bloque = require('./Bloque')
+                var bloque = Bloque(_instruccion.instruccionesIF, nuevoAmbito)
+                cadena.cadena += bloque.cadena;
+                if (bloque.retorno) cadena.retorno = bloque.retorno;
+            }
+            else {
+                var nuevoAmbito = new Ambito(_ambito, "control")
+                const Bloque = require('./Bloque')
+                var bloque = Bloque(_instruccion.instruccionesELSE, nuevoAmbito)
+                cadena.cadena += bloque.cadena;
+                if (bloque.retorno) cadena.retorno = bloque.retorno;
+            }
+            return cadena
+        }
+        cadena.err = "Error: La expresión a evaluar de tipo " + operacion.retorno.tipo + " no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+        return cadena;
+    }
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         if (operacion.valor) {
             var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
-            mensaje += Bloque(_instruccion.instruccionesIF, nuevoAmbito)
-            operacion = Operacion(_instruccion.expresion, _ambito)
+            var bloque = Bloque(_instruccion.instruccionesIF, nuevoAmbito)
+            cadena.cadena += bloque.cadena;
+            if (bloque.retorno) cadena.retorno = bloque.retorno;
         }
         else {
             var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
-            mensaje += Bloque(_instruccion.instruccionesELSE, nuevoAmbito)
-            operacion = Operacion(_instruccion.expresion, _ambito)
+            var bloque = Bloque(_instruccion.instruccionesELSE, nuevoAmbito)
+            cadena.cadena += bloque.cadena;
+            if (bloque.retorno) cadena.retorno = bloque.retorno;
         }
-        return mensaje
+        return cadena;
     }
-    return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+    else
+        cadena.err = "Error: La expresión no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
+    return cadena
 }
 
 function sentenciaElseIf(_instruccion, _ambito) {
-    var mensaje = ""
+    var cadena = { cadena: "", retorno: null, err: null }
     var operacion = Operacion(_instruccion.expresion, _ambito)
+    if (operacion.err) { cadena.err = operacion.err; return cadena; }
+    if (operacion.retorno) {
+        if (operacion.cadena) cadena.cadena = operacion.cadena;
+        if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
+            var condicion = operacion.retorno;
+            if (condicion.valor) {
+                var nuevoAmbito = new Ambito(_ambito, "control")
+                const Bloque = require('./Bloque')
+                var bloque = Bloque(_instruccion.instruccionesIF, nuevoAmbito)
+                cadena.cadena += bloque.cadena;
+                if (bloque.retorno) cadena.retorno = bloque.retorno;
+            }
+            else if (_instruccion.instruccionesELSEIF) {
+                var nuevoAmbito = new Ambito(_ambito, "control")
+                var bloque = sentenciaElseIf(_instruccion.instruccionesELSEIF, nuevoAmbito);
+                cadena.cadena += bloque.cadena;
+                if (bloque.retorno) cadena.retorno = bloque.retorno;
+            }
+            else if (_instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE) {
+                var nuevoAmbito = new Ambito(_ambito, "control")
+                var bloque = sentenciaIfElse(_instruccion, nuevoAmbito);
+                cadena.cadena += bloque.cadena;
+                if (bloque.retorno) cadena.retorno = bloque.retorno;
+            }
+            return cadena
+        }
+        cadena.err = "Error: La expresión a evaluar de tipo " + operacion.retorno.tipo + " no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+        return cadena;
+    }
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         if (operacion.valor) {
             var nuevoAmbito = new Ambito(_ambito, "control")
             const Bloque = require('./Bloque')
-            mensaje += Bloque(_instruccion.instruccionesIF, nuevoAmbito)
-            operacion = Operacion(_instruccion.expresion, _ambito)
+            var bloque = Bloque(_instruccion.instruccionesIF, nuevoAmbito)
+            cadena.cadena += bloque.cadena;
+            if (bloque.retorno) cadena.retorno = bloque.retorno;
         }
         else if (_instruccion.instruccionesELSEIF) {
             var nuevoAmbito = new Ambito(_ambito, "control")
-            mensaje += sentenciaElseIf(_instruccion.instruccionesELSEIF, nuevoAmbito);
+            var bloque = sentenciaElseIf(_instruccion.instruccionesELSEIF, nuevoAmbito);
+            cadena.cadena += bloque.cadena;
+            if (bloque.retorno) cadena.retorno = bloque.retorno;
         }
         else if (_instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE) {
             var nuevoAmbito = new Ambito(_ambito, "control")
-            mensaje += sentenciaIfElse(_instruccion, nuevoAmbito);
+            var bloque = sentenciaIfElse(_instruccion, nuevoAmbito);
+            cadena.cadena += bloque.cadena;
+            if (bloque.retorno) cadena.retorno = bloque.retorno;
         }
-        return mensaje
+        return cadena
     }
-    return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+    cadena.err = "Error: La expresión a evaluar de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+    return cadena;
 }
 
 function operadorTernario(_instruccion, _ambito) {
+    var cadena = { cadena: "", retorno: null, err: null }
     var operacion = Operacion(_instruccion.condicion, _ambito)
+    if (operacion.err) { cadena.err = operacion.err; return cadena; }
+    if (operacion.retorno) {
+        if (operacion.cadena) cadena.cadena = operacion.cadena;
+        var condicion = operacion.retorno;
+        if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
+            var expresion = (condicion.valor ? _instruccion.expresionA : _instruccion.expresionB)
+            return Operacion(expresion, _ambito);
+        }
+        cadena.err = "Error: La expresión a evaluar de tipo " + operacion.retorno.tipo + " no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+        return cadena;
+    }
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         var expresion = (operacion.valor ? _instruccion.expresionA : _instruccion.expresionB)
         return Operacion(expresion, _ambito);
     }
-    return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+    return "Error: La expresión no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
 }
 
 module.exports = {

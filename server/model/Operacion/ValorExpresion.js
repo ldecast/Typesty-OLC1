@@ -49,7 +49,11 @@ function ValorExpresion(_expresion, _ambito) {
     }
 
     else if (_expresion.tipo === TIPO_VALOR.IDENTIFICADOR) {
-        const simbolo = _ambito.getSimbolo(_expresion.valor)
+        var simbolo;
+        if (_ambito.isParam)
+            simbolo = _ambito.ambito.getParam(_expresion.valor);
+        else
+            simbolo = _ambito.getSimbolo(_expresion.valor)
         if (simbolo != null) {
             if (simbolo.tipo === TIPO_DATO.VECTOR) {
                 var val = '[ '

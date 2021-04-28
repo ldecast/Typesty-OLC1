@@ -9,16 +9,16 @@ function DecFuncion(_instruccion, _ambito) {
     else if (_ambito.existeFuncion(nuevaFuncion.id) != false) {
         return `Error: La función '${nuevaFuncion.id}' ya existe.\nLínea: ${nuevaFuncion.linea} Columna: ${nuevaFuncion.columna}\n`
     }
-    var hasReturn = false;
-    for (let i = 0; i < _instruccion.instrucciones.length; i++) {
-        const instr = _instruccion.instrucciones[i];
-        if (instr.tipo === TIPO_INSTRUCCION.RETURN) {
-            hasReturn = true;
-            break;
-        }
-    }
-    if (!hasReturn)
-        return `Error: La función '${nuevaFuncion.id}' no tiene una sentencia de retorno.\nLínea: ${nuevaFuncion.linea} Columna: ${nuevaFuncion.columna}\n`
+    // var hasReturn = false;
+    // for (let i = 0; i < _instruccion.instrucciones.length; i++) {
+    //     const instr = _instruccion.instrucciones[i];
+    //     if (instr.tipo === TIPO_INSTRUCCION.RETURN) {
+    //         hasReturn = true;
+    //         break;
+    //     }
+    // }
+    // if (!hasReturn)
+    //     return `Error: La función '${nuevaFuncion.id}' no tiene una sentencia de retorno.\nLínea: ${nuevaFuncion.linea} Columna: ${nuevaFuncion.columna}\n`
     _ambito.addFuncion(nuevaFuncion.id, nuevaFuncion)
     return null
 }

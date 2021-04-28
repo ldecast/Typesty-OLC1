@@ -148,7 +148,9 @@ LISTAPARAMETROS: LISTAPARAMETROS coma PARAMETROS {$1.push($3); $$=$1;}
 				| PARAMETROS {$$=[$1];}
 ;
 
-PARAMETROS: TIPO id {$$ = INSTRUCCION.nuevoParametro($2, $1, this._$.first_line, this._$.first_column+1)}
+PARAMETROS: TIPO_VECT id {$$ = INSTRUCCION.nuevoParametro($2, {vector: $1}, this._$.first_line, this._$.first_column+1)}
+			| TIPO_LIST id {$$ = INSTRUCCION.nuevoParametro($2, {lista: $1}, this._$.first_line, this._$.first_column+1)}
+			| TIPO id {$$ = INSTRUCCION.nuevoParametro($2, $1, this._$.first_line, this._$.first_column+1)}
 ;
 
 INSTRUCCION: INSTRUCCION INSCERO {$1.push($2); $$=$1;}
@@ -259,18 +261,23 @@ DEC_VAR: TIPO id igual CASTEO ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, 
 			}
 ;
 
-DEC_VECT: TIPO cabre ccierra id igual prnew TIPO cabre EXPRESION ccierra ptcoma { $$ = INSTRUCCION.nuevoVector($1, $7, $4, $9, null, this._$.first_line, this._$.first_column+1) }
-		| TIPO cabre ccierra id igual labre LISTAVALORES lcierra ptcoma { $$ = INSTRUCCION.nuevoVector($1, null, $4, null, $7, this._$.first_line, this._$.first_column+1) }
+DEC_VECT: TIPO_VECT id igual prnew TIPO cabre EXPRESION ccierra ptcoma { $$ = INSTRUCCION.nuevoVector($1, $5, $2, $7, null, null, this._$.first_line, this._$.first_column+1) }
+		| TIPO_VECT id igual labre LISTAVALORES lcierra ptcoma { $$ = INSTRUCCION.nuevoVector($1, null, $2, null, $5, null, this._$.first_line, this._$.first_column+1) }
 		| id cabre EXPRESION ccierra igual EXPRESION ptcoma { $$ = INSTRUCCION.modificacionVector($1, $3, $6, this._$.first_line, this._$.first_column+1) }
+		| TIPO_VECT id igual EXPRESION ptcoma { $$ = INSTRUCCION.nuevoVector($1, null, $2, null, null, $4, this._$.first_line, this._$.first_column+1) }
 ;
 
-DEC_LIST: prlist menor TIPO mayor id igual prnew prlist menor TIPO mayor ptcoma { $$ = INSTRUCCION.nuevaLista($3, $10, $5, null, this._$.first_line, this._$.first_column+1) }
+DEC_LIST: TIPO_LIST id igual prnew prlist menor TIPO mayor ptcoma { $$ = INSTRUCCION.nuevaLista($1, $7, $2, null, this._$.first_line, this._$.first_column+1) }
 		| id punto pradd pabre EXPRESION pcierra ptcoma { $$ = INSTRUCCION.modificacionLista($1, null, $5, this._$.first_line, this._$.first_column+1) }
 		| id cabre cabre EXPRESION ccierra ccierra igual EXPRESION ptcoma { $$ = INSTRUCCION.modificacionLista($1, $4, $8, this._$.first_line, this._$.first_column+1) }
-		| prlist menor TIPO mayor id igual FTOCHARARRAY ptcoma { $$ = INSTRUCCION.nuevaLista($3, null, $5, $7, this._$.first_line, this._$.first_column+1) }
+		| TIPO_LIST id igual EXPRESION ptcoma { $$ = INSTRUCCION.nuevaLista($1, null, $2, $4, this._$.first_line, this._$.first_column+1) }
 ;
 
+TIPO_VECT: TIPO cabre ccierra {$$ = $1}
+;
 
+TIPO_LIST: prlist menor TIPO mayor {$$ = $3}
+;
 
 TIPO: TIPODATO {$$ = $1}
 ;

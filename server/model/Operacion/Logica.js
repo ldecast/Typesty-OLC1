@@ -90,7 +90,6 @@ function and(_opIzq, _opDer, _ambito) {
 function not(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     const opIzq = Operacion(_opIzq, _ambito)
-    console.log(_ambito.getSimbolo('banderaedad'))
     var resultado = false;
     if (opIzq.tipo === TIPO_DATO.BOOLEANO) {
         resultado = !opIzq.valor;
