@@ -80,14 +80,17 @@ function Operacion(_expresion, _ambito) {
     else if (_expresion.tipo === TIPO_INSTRUCCION.LLAMADA) {
         const Exec = require("../../controller/Instruccion/Exec");
         var retorno = Exec(_expresion, _ambito); //retorno trae el valor de retorno de la función y todas las instrucciones que ejecutó
-        if (retorno.retorno) {
+        if (retorno.err) return retorno;
+        if (retorno.retorno == null) {
+            // console.log(retorno, 3333333333333333)
+            return { err: `Error: La función '${_expresion.nombre}' no ha retornado ningún valor.\nLínea: ${_expresion.linea} Columna: ${_expresion.columna}.\n` };
+        }
+        if (retorno.retorno != null) {
             if (retorno.retorno.retorno) {
                 retorno.cadena = retorno.retorno.cadena;
                 retorno.retorno = retorno.retorno.retorno;
             }
         }
-        // if (retorno.err) return retorno;
-        // if (retorno.retorno) return retorno.retorno;
         return retorno;
     }
     else {

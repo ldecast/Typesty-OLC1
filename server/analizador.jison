@@ -134,6 +134,10 @@ ENTCERO: FUNCIONBODY {$$=$1}
 
 FUNCIONBODY: TIPO id pabre pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevaFuncion($2, null, $6, $1, this._$.first_line, this._$.first_column+1) }
 			| TIPO id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevaFuncion($2, $4, $7, $1, this._$.first_line, this._$.first_column+1) }
+			| TIPO_VECT id pabre pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevaFuncion($2, null, $6, {vector: $1}, this._$.first_line, this._$.first_column+1) }
+			| TIPO_VECT id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevaFuncion($2, $4, $7, {vector: $1}, this._$.first_line, this._$.first_column+1) }
+			| TIPO_LIST id pabre pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevaFuncion($2, null, $6, {lista: $1}, this._$.first_line, this._$.first_column+1) }
+			| TIPO_LIST id pabre LISTAPARAMETROS pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevaFuncion($2, $4, $7, {lista: $1}, this._$.first_line, this._$.first_column+1) }
 ;
 
 METODOBODY: prvoid id pabre pcierra labre INSTRUCCION lcierra { $$ = INSTRUCCION.nuevoMetodo($2, [], $6, this._$.first_line, this._$.first_column+1) }

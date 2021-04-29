@@ -1,4 +1,5 @@
 const Ambito = require("../../model/Ambito/Ambito");
+const TIPO_DATO = require("../Enum/Tipados");
 const TIPO_INSTRUCCION = require("../Enum/TipoInstrucciones");
 const Bloque = require("./Bloque")
 
@@ -37,17 +38,27 @@ function Exec(_instruccion, _ambito) {
                 retorno.cadena = retorno.retorno.cadena;
                 retorno.retorno = retorno.retorno.retorno;
             }
-            if (funcionEjecutar.retorno != retorno.retorno.tipo) {
-                return { err: `Error: El retorno de la función '${funcionEjecutar.id}' no concuerda con el retorno de la expresión.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
+            if (funcionEjecutar.retorno && retorno.retorno === "RETORNO VACIO") {
+                return { err: `Error: La función '${funcionEjecutar.id}' debe retornar un valor de tipo ${funcionEjecutar.retorno} y no VOID.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
+            }
+            if (funcionEjecutar.retorno) {
+                if (funcionEjecutar.retorno.vector) {
+                    if (retorno.retorno.tipo != TIPO_DATO.VECTOR)
+                        return { err: `Error: La función '${funcionEjecutar.id}' debe retornar un VECTOR y no ${retorno.retorno.tipo}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
+                    if (retorno.retorno.valor[0].tipo != funcionEjecutar.retorno.vector)
+                        return { err: `Error: La función '${funcionEjecutar.id}' debe retornar un vector de tipo ${funcionEjecutar.retorno.vector} y no ${retorno.retorno.valor[0].tipo}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
+                }
+                else if (funcionEjecutar.retorno.lista) {
+                    if (retorno.retorno.tipo != TIPO_DATO.LISTA)
+                        return { err: `Error: La función '${funcionEjecutar.id}' debe retornar una LISTA y no ${retorno.retorno.tipo}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
+                    if (retorno.retorno.valor[0].tipo != funcionEjecutar.retorno.lista)
+                        return { err: `Error: La función '${funcionEjecutar.id}' debe retornar una lista de tipo ${funcionEjecutar.retorno.lista} y no ${retorno.retorno.valor[0].tipo}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
+                }
+                // console.log(funcionEjecutar.retorno, 888888888)
+                else if (funcionEjecutar.retorno != retorno.retorno.tipo)
+                    return { err: `Error: La función '${funcionEjecutar.id}' debe retornar un valor de tipo ${funcionEjecutar.retorno} y no ${retorno.retorno.tipo}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
             }
         }
-        // console.log(retorno, 888888888888)
-        // if (retorno.retorno) {
-        //     if (funcionEjecutar.retorno != retorno.retorno.tipo) {
-        //         console.log(retorno, 6799999999999999)
-        //         return { err: `Error: El retorno de la función '${funcionEjecutar.id}' no concuerda con el retorno de la expresión.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
-        //     }
-        // }
         return retorno;
     }
     return { err: `Error: El método o la función ${_instruccion.nombre} no existe.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }

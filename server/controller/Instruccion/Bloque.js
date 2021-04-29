@@ -7,8 +7,6 @@ const CicloFor = require("./For");
 const CicloDoWhile = require("./DoWhile");
 const { If, IfElse, ElseIf } = require('./If');
 const Switch = require("./Switch");
-const TIPO_VALOR = require("../Enum/TipoValores");
-const TIPO_DATO = require("../Enum/Tipados");
 
 function Bloque(_instrucciones, _ambito) {
     var cadena = { cadena: "", retorno: null }
@@ -136,15 +134,20 @@ function Bloque(_instrucciones, _ambito) {
             else if (instruccion.tipo === TIPO_INSTRUCCION.RETURN) {
                 const Operacion = require("../../model/Operacion/Operacion");
                 brk = true;
-                var expresion;
-                expresion = Operacion(instruccion.expresion, _ambito);
-                // console.log(expresion,11111111);
-                if (expresion.err) cadena.cadena += expresion.err;
-                if (expresion.cadena) cadena.cadena += expresion.cadena;
-                cadena.retorno = expresion;
-                // console.log(cadena.retorno, "ESTO RETORNA")
+                if (instruccion.expresion) {
+                    var expresion = Operacion(instruccion.expresion, _ambito);
+                    // console.log(expresion,11111111);
+                    if (expresion.err) cadena.cadena += expresion.err;
+                    if (expresion.cadena) cadena.cadena += expresion.cadena;
+                    cadena.retorno = expresion;
+                    // console.log(cadena.retorno, "ESTO RETORNA")
+                }
+                else {
+                    cadena.retorno = "RETORNO VACIO";
+                }
+
             }
-            else{
+            else {
                 console.log("EEEEEEEEEERRRORRRRRRRR")
             }
         }
