@@ -26,13 +26,12 @@ function Exec(_instruccion, _ambito) {
                 }
                 const Declaracion = require("./Declaracion");
                 ex = Declaracion(asignacion, nuevoAmbito);
+                if (ex.err) { return ex; }
                 if (ex.cadena)
                     cadena += ex.cadena;
-                if (ex.err) { return ex; }
             }
         }
         var retorno = Bloque(funcionEjecutar.instrucciones, nuevoAmbito);
-        retorno.cadena += cadena;
         if (retorno.retorno != null) {
             if (retorno.retorno.retorno) {
                 retorno.cadena = retorno.retorno.cadena;
@@ -40,6 +39,9 @@ function Exec(_instruccion, _ambito) {
             }
             if (funcionEjecutar.retorno && retorno.retorno === "RETORNO VACIO") {
                 return { err: `Error: La función '${funcionEjecutar.id}' debe retornar un valor de tipo ${funcionEjecutar.retorno} y no VOID.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
+            }
+            if (funcionEjecutar.retorno == null && retorno.retorno != null) {
+                return { err: `Error: El método '${funcionEjecutar.id}' no puede retornar un valor de tipo ${retorno.retorno.tipo}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
             }
             if (funcionEjecutar.retorno) {
                 if (funcionEjecutar.retorno.vector) {
@@ -54,11 +56,11 @@ function Exec(_instruccion, _ambito) {
                     if (retorno.retorno.valor[0].tipo != funcionEjecutar.retorno.lista)
                         return { err: `Error: La función '${funcionEjecutar.id}' debe retornar una lista de tipo ${funcionEjecutar.retorno.lista} y no ${retorno.retorno.valor[0].tipo}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
                 }
-                // console.log(funcionEjecutar.retorno, 888888888)
                 else if (funcionEjecutar.retorno != retorno.retorno.tipo)
                     return { err: `Error: La función '${funcionEjecutar.id}' debe retornar un valor de tipo ${funcionEjecutar.retorno} y no ${retorno.retorno.tipo}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
             }
         }
+        retorno.cadena = cadena + retorno.cadena;
         return retorno;
     }
     return { err: `Error: El método o la función ${_instruccion.nombre} no existe.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }

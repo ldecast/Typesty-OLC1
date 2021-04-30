@@ -8,8 +8,8 @@ function sentenciaIf(_instruccion, _ambito) {
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.retorno) {
-        if (operacion.cadena) cadena.cadena = operacion.cadena;
         if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
+            if (operacion.cadena) cadena.cadena = operacion.cadena;
             var condicion = operacion.retorno;
             if (condicion.valor) {
                 var nuevoAmbito = new Ambito(_ambito, "control")
@@ -17,6 +17,7 @@ function sentenciaIf(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito)
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                if(bloque.hasBreak) console.log("uuuuuuuu")
             }
             return cadena
         }
@@ -30,6 +31,7 @@ function sentenciaIf(_instruccion, _ambito) {
             var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito)
             cadena.cadena += bloque.cadena;
             if (bloque.retorno) cadena.retorno = bloque.retorno;
+            if(bloque.hasBreak) console.log("uuuuuuuu")
         }
         return cadena;
     }
@@ -43,8 +45,8 @@ function sentenciaIfElse(_instruccion, _ambito) {
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.retorno) {
-        if (operacion.cadena) cadena.cadena = operacion.cadena;
         if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
+            if (operacion.cadena) cadena.cadena = operacion.cadena;
             var condicion = operacion.retorno;
             if (condicion.valor) {
                 var nuevoAmbito = new Ambito(_ambito, "control")
@@ -92,8 +94,8 @@ function sentenciaElseIf(_instruccion, _ambito) {
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.retorno) {
-        if (operacion.cadena) cadena.cadena = operacion.cadena;
         if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
+            if (operacion.cadena) cadena.cadena = operacion.cadena;
             var condicion = operacion.retorno;
             if (condicion.valor) {
                 var nuevoAmbito = new Ambito(_ambito, "control")
@@ -150,9 +152,9 @@ function operadorTernario(_instruccion, _ambito) {
     var operacion = Operacion(_instruccion.condicion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.retorno) {
-        if (operacion.cadena) cadena.cadena = operacion.cadena;
         var condicion = operacion.retorno;
         if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
+            if (operacion.cadena) cadena.cadena = operacion.cadena;
             var expresion = (condicion.valor ? _instruccion.expresionA : _instruccion.expresionB)
             return Operacion(expresion, _ambito);
         }
@@ -163,7 +165,8 @@ function operadorTernario(_instruccion, _ambito) {
         var expresion = (operacion.valor ? _instruccion.expresionA : _instruccion.expresionB)
         return Operacion(expresion, _ambito);
     }
-    return "Error: La expresión no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+    cadena.err = "Error: La expresión no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+    return cadena;
 }
 
 module.exports = {

@@ -86,6 +86,31 @@ class Ambito {
         }
         return null
     }
+
+    isInsideLoop() {
+        for (let e = this; e != null; e = e.anterior) {
+            if (e.tipo === 'ciclo')
+                return true;
+        }
+        return false;
+    }
+
+    isInsideSwitch() {
+        for (let e = this; e != null; e = e.anterior) {
+            if (e.tipo === 'switch')
+                return true;
+        }
+        return false;
+    }
+
+    isInsideExec() {
+        for (let e = this; e != null; e = e.anterior) {
+            if (e.tipo === 'exec')
+                return true;
+        }
+        return false;
+    }
+
 }
 
 module.exports = Ambito

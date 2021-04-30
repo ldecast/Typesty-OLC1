@@ -6,38 +6,71 @@ const Asignacion = require("./Asignacion");
 const Declaracion = require("./Declaracion");
 
 function cicloFor(_instruccion, _ambito) {
-    var mensaje = ""
-    var err = false;
+    var cadena = { cadena: "", retorno: null, err: null }
 
     if (_instruccion.variable.tipo === TIPO_INSTRUCCION.DECLARACION) {
         var m = Declaracion(_instruccion.variable, _ambito)
-        if (m != null) {
-            mensaje += m + '\n'
-            err = true;
+        if (m.retorno) {
+            if (m.err) { cadena.err = m.err; return cadena; }
+            if (m.cadena) cadena.cadena = m.cadena;
         }
     }
     else if (_instruccion.variable.tipo === TIPO_INSTRUCCION.ASIGNACION) {
         var m = Asignacion(_instruccion.variable, _ambito)
-        if (m != null) {
-            mensaje += m + '\n'
-            err = true;
+        if (m.retorno) {
+            if (m.err) { cadena.err = m.err; return cadena; }
+            if (m.cadena) cadena.cadena = m.cadena;
         }
     }
-
-    if (!err) {
-        var operacion = Operacion(_instruccion.expresion, _ambito)
-        if (operacion.tipo === TIPO_DATO.BOOLEANO) {
-            while (operacion.valor) {// && operacion.) {
+    var max = 0;
+    var operacion = Operacion(_instruccion.expresion, _ambito)
+    if (operacion.retorno) {
+        if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
+            if (operacion.cadena) cadena.cadena = operacion.cadena;
+            var condicion = operacion.retorno;
+            while (condicion.valor && max < 1500) {
                 var nuevoAmbito = new Ambito(_ambito, "ciclo")
                 const Bloque = require('./Bloque')
-                mensaje += Bloque(_instruccion.instrucciones, nuevoAmbito)
+                var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito);
+                cadena.cadena += bloque.cadena;
+                if (bloque.retorno) cadena.retorno = bloque.retorno;
                 operacion = Operacion(_instruccion.expresion, _ambito)
+                if (operacion.err) { cadena.err = operacion.err; return cadena; }
+                if (operacion.retorno) {
+                    cadena.cadena += operacion.cadena;
+                    condicion = operacion.retorno;
+                }
+                max++;
             }
-            return mensaje
+            if (max === 1500) cadena.cadena += 'Maximum call stack size exceeded!\n'
+            return cadena
+        }
+        cadena.err = "Error: La expresión no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
+        return cadena;
+    }
+    else {
+        if (operacion.tipo === TIPO_DATO.BOOLEANO) {
+            while (operacion.valor && max < 1500) {// && operacion.) {
+                var nuevoAmbito = new Ambito(_ambito, "ciclo")
+                const Bloque = require('./Bloque')
+                var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito);
+                cadena.cadena += bloque.cadena;
+                if (bloque.retorno) cadena.retorno = bloque.retorno;
+                if (bloque.hasBreak) console.log("99999999");
+                operacion = Operacion(_instruccion.expresion, _ambito)
+                if (operacion.err) { cadena.err = operacion.err; return cadena; }
+                if (operacion.retorno) {
+                    cadena.cadena += operacion.cadena;
+                    operacion = operacion.retorno;
+                }
+                max++;
+            }
+            if (max === 1500) cadena.cadena += 'Maximum call stack size exceeded!\n'
+            return cadena
         }
     }
-
-    return "Error: La expresión no es de tipo booleano en la condición o la variable no existe.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
+    cadena.err = "Error: La expresión no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
+    return cadena;
 }
 
 module.exports = cicloFor

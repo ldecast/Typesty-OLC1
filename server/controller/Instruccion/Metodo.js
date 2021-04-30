@@ -9,13 +9,6 @@ function DecMetodo(_instruccion, _ambito) {
     else if (_ambito.existeFuncion(nuevoMetodo.id) != false) {
         return `Error: El método '${nuevoMetodo.id}' ya existe.\nLínea: ${nuevoMetodo.linea} Columna: ${nuevoMetodo.columna}\n`
     }
-    for (let i = 0; i < _instruccion.instrucciones.length; i++) {
-        const instr = _instruccion.instrucciones[i];
-        if (instr.tipo === TIPO_INSTRUCCION.RETURN) {
-            if (instr.expresion != null)
-                return `Error: El método '${nuevoMetodo.id}' tiene un retorno no esperado.\nLínea: ${instr.linea} Columna: ${instr.columna}\n`
-        }
-    }
     _ambito.addFuncion(nuevoMetodo.id, nuevoMetodo)
     return null
 }

@@ -27,13 +27,12 @@ function Declaracion(_instruccion, _ambito) {
         var valor = defaultValue(TIPO_DATO.ENTERO);
         if (_instruccion.valor != null) {
             var op = Operacion(_instruccion.valor, _ambito)
-            // console.log(_instruccion.valor, 333333333);
             if (op.err) { cadena.err = op.err; return cadena }
             if (op.retorno) {
-                // console.log(op, 333333333);
-                if (op.cadena) cadena.cadena = op.cadena;
-                if (op.retorno.tipo === TIPO_DATO.ENTERO)
+                if (op.retorno.tipo === TIPO_DATO.ENTERO) {
+                    if (op.cadena) cadena.cadena = op.cadena;
                     valor = op.retorno.valor;
+                }
                 else {
                     cadena.err = "Error: No es posible declarar un valor de tipo " + op.retorno.tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.ENTERO + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
                     return cadena;
@@ -64,9 +63,10 @@ function Declaracion(_instruccion, _ambito) {
             var op = Operacion(_instruccion.valor, _ambito)
             if (op.err) { cadena.err = op.err; return cadena; }
             if (op.retorno) {
-                if (op.cadena) cadena.cadena = op.cadena;
-                if (op.retorno.tipo === TIPO_DATO.DOBLE)
+                if (op.retorno.tipo === TIPO_DATO.DOBLE) {
+                    if (op.cadena) cadena.cadena = op.cadena;
                     valor = op.retorno.valor;
+                }
                 else {
                     cadena.err = "Error: No es posible declarar un valor de tipo " + op.retorno.tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.DOBLE + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
                     return cadena;
@@ -97,9 +97,10 @@ function Declaracion(_instruccion, _ambito) {
             var op = Operacion(_instruccion.valor, _ambito)
             if (op.err) { cadena.err = op.err; return cadena; }
             if (op.retorno) {
-                if (op.cadena) cadena.cadena = op.cadena;
-                if (op.retorno.tipo === TIPO_DATO.BOOLEANO)
+                if (op.retorno.tipo === TIPO_DATO.BOOLEANO) {
+                    if (op.cadena) cadena.cadena = op.cadena;
                     valor = (op.retorno.valor.toString() == 'true');
+                }
                 else {
                     cadena.err = "Error: No es posible declarar un valor de tipo " + op.retorno.tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.BOOLEANO + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
                     return cadena;
@@ -130,9 +131,10 @@ function Declaracion(_instruccion, _ambito) {
             var op = Operacion(_instruccion.valor, _ambito)
             if (op.err) { cadena.err = op.err; return cadena; }
             if (op.retorno) {
-                if (op.cadena) cadena.cadena = op.cadena;
-                if (op.retorno.tipo === TIPO_DATO.CARACTER)
+                if (op.retorno.tipo === TIPO_DATO.CARACTER) {
+                    if (op.cadena) cadena.cadena = op.cadena;
                     valor = String(op.retorno.valor);
+                }
                 else {
                     cadena.err = "Error: No es posible declarar un valor de tipo " + op.retorno.tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.CARACTER + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
                     return cadena;
@@ -163,9 +165,10 @@ function Declaracion(_instruccion, _ambito) {
             var op = Operacion(_instruccion.valor, _ambito)
             if (op.err) { cadena.err = op.err; return cadena; }
             if (op.retorno) {
-                if (op.cadena) cadena.cadena = op.cadena;
-                if (op.retorno.tipo === TIPO_DATO.CADENA)
+                if (op.retorno.tipo === TIPO_DATO.CADENA) {
+                    if (op.cadena) cadena.cadena = op.cadena;
                     valor = String(op.retorno.valor);
+                }
                 else {
                     cadena.err = "Error: No es posible declarar un valor de tipo " + op.retorno.tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.CADENA + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
                     return cadena;
@@ -195,41 +198,69 @@ function Declaracion(_instruccion, _ambito) {
         if (_instruccion.isParam) { //Estoy declarando un parámetro de tipo_dato { vector: Tipo }
             _instruccion.valor = Operacion(_instruccion.valor, _ambito)
             if (_instruccion.valor.err) { cadena.err = _instruccion.valor.err; return cadena }
-            if (_instruccion.valor.cadena) cadena.cadena = _instruccion.valor.cadena;
-            if (_instruccion.valor.tipo === TIPO_DATO.VECTOR) {
-                if (_instruccion.valor.valor[0].tipo === _instruccion.tipo_dato.vector)
-                    valores = _instruccion.valor.valor;
+            if (_instruccion.valor.retorno) {
+                if (_instruccion.valor.retorno.tipo === TIPO_DATO.VECTOR) {
+                    if (_instruccion.valor.retorno.valor[0].tipo === _instruccion.tipo_dato.vector) {
+                        if (_instruccion.valor.retorno.cadena) cadena.cadena = _instruccion.valor.retorno.cadena;
+                        valores = _instruccion.valor.retorno.valor;
+                    }
+                    else {
+                        cadena.err = `Error: No es posible declarar un vector de tipo ${_instruccion.valor.retorno.valor[0].tipo} al vector '${_instruccion.id}' que es de tipo ${_instruccion.tipo_dato.vector}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+                        return cadena;
+                    }
+                }
                 else {
-                    cadena.err = `Error: No es posible declarar un vector de tipo ${_instruccion.valor.valor[0].tipo} al vector '${_instruccion.id}' que es de tipo ${_instruccion.tipo_dato.vector}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+                    cadena.err = `Error: No es posible declarar un valor de tipo ${_instruccion.valor.retorno.tipo} al vector '${_instruccion.id}'.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
                     return cadena;
                 }
             }
             else {
-                cadena.err = `Error: No es posible declarar un valor de tipo ${_instruccion.valor.tipo} al vector '${_instruccion.id}'.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
-                return cadena;
+                if (_instruccion.valor.tipo === TIPO_DATO.VECTOR) {
+                    if (_instruccion.valor.valor[0].tipo === _instruccion.tipo_dato.vector) {
+                        valores = _instruccion.valor.valor;
+                    }
+                    else {
+                        cadena.err = `Error: No es posible declarar un vector de tipo ${_instruccion.valor.valor[0].tipo} al vector '${_instruccion.id}' que es de tipo ${_instruccion.tipo_dato.vector}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+                        return cadena;
+                    }
+                }
+                else {
+                    cadena.err = `Error: No es posible declarar un valor de tipo ${_instruccion.valor.tipo} al vector '${_instruccion.id}'.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+                    return cadena;
+                }
             }
         }
         else if (_instruccion.valores != null) { //Si tiene una lista de valores
             for (let i = 0; i < _instruccion.valores.length; i++) {
                 var exp = Operacion(_instruccion.valores[i], _ambito);
                 if (exp.err) { cadena.err = exp.err; return cadena; }
-                if (exp.cadena) cadena.cadena = exp.cadena;
-                if (exp.tipo === _instruccion.tipo_dato1)
-                    valores.push(exp);
+                if (exp.retorno) {
+                    if (exp.cadena) cadena.cadena += exp.cadena;
+                    if (exp.retorno.tipo === _instruccion.tipo_dato1)
+                        valores.push(exp.retorno);
+                    else {
+                        cadena.err = "Error: La expresión '" + exp.retorno.valor + "' de tipo " + exp.retorno.tipo + " no corresponde al tipo " + _instruccion.tipo_dato1 + " de la declaración del vector.\nLínea: " + exp.linea + " Columna: " + exp.columna + "\n";
+                        return cadena;
+                    }
+                }
                 else {
-                    cadena.err = "Error: La expresión '" + exp.valor + "' de tipo " + exp.tipo + " no corresponde al tipo " + _instruccion.tipo_dato1 + " de la declaración del vector.\nLínea: " + exp.linea + " Columna: " + exp.columna + "\n";
-                    return cadena;
+                    if (exp.tipo === _instruccion.tipo_dato1)
+                        valores.push(exp);
+                    else {
+                        cadena.err = "Error: La expresión '" + exp.valor + "' de tipo " + exp.tipo + " no corresponde al tipo " + _instruccion.tipo_dato1 + " de la declaración del vector.\nLínea: " + exp.linea + " Columna: " + exp.columna + "\n";
+                        return cadena;
+                    }
                 }
             }
         }
         else if (_instruccion.expresion != null) { //Declarando por medio de una expresión
             var op = Operacion(_instruccion.expresion, _ambito);
             if (op.err) { cadena.err = op.err; return cadena; }
-            if (op.cadena) cadena.cadena = op.cadena;
             if (op.retorno) {
                 if (op.retorno.tipo === TIPO_DATO.VECTOR) {
                     var tipoRetorno = op.retorno.valor[0].tipo;
                     if (tipoRetorno === _instruccion.tipo_dato1) {
+                        if (op.cadena) cadena.cadena = op.cadena;
                         valores = op.retorno.valor;
                     }
                     else {
@@ -259,21 +290,42 @@ function Declaracion(_instruccion, _ambito) {
             if (_instruccion.tipo_dato1 === _instruccion.tipo_dato2) {
                 var tamano = Operacion(_instruccion.tamaño, _ambito)
                 if (tamano.err) { cadena.err = tamano.err; return cadena; }
-                if (tamano.tipo === TIPO_DATO.ENTERO) {
-                    if (tamano.valor < 1) { cadena.err = "Error: La expresión de valor " + tamano.valor + " no es un tamaño válido para declarar el vector.\nLínea: " + tamano.linea + " Columna: " + tamano.columna + "\n"; return cadena; }
-                    for (let i = 0; i < tamano.valor; i++) {
-                        var exp = {
-                            tipo: _instruccion.tipo_dato1,
-                            valor: defaultValue(_instruccion.tipo_dato1),
-                            linea: _instruccion.linea,
-                            columna: _instruccion.columna
+                if (tamano.retorno) {
+                    if (tamano.retorno.tipo === TIPO_DATO.ENTERO) {
+                        if (tamano.retorno.valor < 1) { cadena.err = "Error: La expresión de valor " + tamano.retorno.valor + " no es un tamaño válido para declarar el vector.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.linea + "\n"; return cadena; }
+                        for (let i = 0; i < tamano.valor; i++) {
+                            var exp = {
+                                tipo: _instruccion.tipo_dato1,
+                                valor: defaultValue(_instruccion.tipo_dato1),
+                                linea: _instruccion.linea,
+                                columna: _instruccion.columna
+                            }
+                            valores.push(exp);
                         }
-                        valores.push(exp);
+                        if (tamano.cadena) cadena.cadena += tamano.cadena;
+                    }
+                    else {
+                        cadena.err = "Error: La expresión de tipo " + tamano.retorno.tipo + " no es de tipo numérica para declarar el tamaño del vector.\nLínea: " + tamano.retorno.linea + " Columna: " + tamano.retorno.columna + "\n";
+                        return cadena;
                     }
                 }
                 else {
-                    cadena.err = "Error: La expresión de tipo " + tamano.tipo + " no es de tipo numérica para declarar el tamaño del vector.\nLínea: " + tamano.linea + " Columna: " + tamano.columna + "\n";
-                    return cadena;
+                    if (tamano.tipo === TIPO_DATO.ENTERO) {
+                        if (tamano.valor < 1) { cadena.err = "Error: La expresión de valor " + tamano.valor + " no es un tamaño válido para declarar el vector.\nLínea: " + tamano.linea + " Columna: " + tamano.columna + "\n"; return cadena; }
+                        for (let i = 0; i < tamano.valor; i++) {
+                            var exp = {
+                                tipo: _instruccion.tipo_dato1,
+                                valor: defaultValue(_instruccion.tipo_dato1),
+                                linea: _instruccion.linea,
+                                columna: _instruccion.columna
+                            }
+                            valores.push(exp);
+                        }
+                    }
+                    else {
+                        cadena.err = "Error: La expresión de tipo " + tamano.tipo + " no es de tipo numérica para declarar el tamaño del vector.\nLínea: " + tamano.linea + " Columna: " + tamano.columna + "\n";
+                        return cadena;
+                    }
                 }
             }
             else {
@@ -295,28 +347,45 @@ function Declaracion(_instruccion, _ambito) {
         if (_instruccion.isParam) { //Estoy declarando un parámetro de tipo_dato { lista: Tipo }
             _instruccion.valor = Operacion(_instruccion.valor, _ambito)
             if (_instruccion.valor.err) { cadena.err = _instruccion.valor.err; return cadena }
-            if (_instruccion.valor.tipo === TIPO_DATO.LISTA) {
-                if (_instruccion.valor.valor[0].tipo === _instruccion.tipo_dato.lista)
-                    valores = _instruccion.valor.valor;
+            if (_instruccion.valor.retorno) {
+                if (_instruccion.valor.retorno.tipo === TIPO_DATO.LISTA) {
+                    if (_instruccion.valor.retorno.valor[0].tipo === _instruccion.tipo_dato.lista) {
+                        if (_instruccion.valor.cadena) cadena.cadena = _instruccion.valor.cadena;
+                        valores = _instruccion.valor.retorno.valor;
+                    }
+                    else {
+                        cadena.err = `Error: No es posible declarar una lista de tipo ${_instruccion.valor.retorno.valor[0].tipo} a la lista '${_instruccion.id}' que es de tipo ${_instruccion.tipo_dato.lista}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+                        return cadena;
+                    }
+                }
                 else {
-                    cadena.err = `Error: No es posible declarar una lista de tipo ${_instruccion.valor.valor[0].tipo} a la lista '${_instruccion.id}' que es de tipo ${_instruccion.tipo_dato.lista}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+                    cadena.err = `Error: No es posible declarar un valor de tipo ${_instruccion.valor.retorno.tipo} a la lista '${_instruccion.id}'.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
                     return cadena;
                 }
             }
             else {
-                cadena.err = `Error: No es posible declarar un valor de tipo ${_instruccion.valor.tipo} a la lista '${_instruccion.id}'.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
-                return cadena;
+                if (_instruccion.valor.tipo === TIPO_DATO.LISTA) {
+                    if (_instruccion.valor.valor[0].tipo === _instruccion.tipo_dato.lista)
+                        valores = _instruccion.valor.valor;
+                    else {
+                        cadena.err = `Error: No es posible declarar una lista de tipo ${_instruccion.valor.valor[0].tipo} a la lista '${_instruccion.id}' que es de tipo ${_instruccion.tipo_dato.lista}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+                        return cadena;
+                    }
+                }
+                else {
+                    cadena.err = `Error: No es posible declarar un valor de tipo ${_instruccion.valor.tipo} a la lista '${_instruccion.id}'.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n`;
+                    return cadena;
+                }
             }
         }
-
         else if (_instruccion.expresion != null) { //Declarando por medio de una expresión
             var op = Operacion(_instruccion.expresion, _ambito);
             if (op.err) { cadena.err = op.err; return cadena; }
-            if (op.cadena) cadena.cadena = op.cadena;
             if (op.retorno) {
                 if (op.retorno.tipo === TIPO_DATO.LISTA) {
                     var tipoRetorno = op.retorno.valor[0].tipo;
                     if (tipoRetorno === _instruccion.tipo_dato1) {
+                        if (op.cadena) cadena.cadena = op.cadena;
                         valores = op.retorno.valor;
                     }
                     else {
