@@ -1,5 +1,4 @@
 const { Funcion } = require("../../model/Ambito/Funcion_Metodo");
-const TIPO_INSTRUCCION = require("../Enum/TipoInstrucciones");
 
 function DecFuncion(_instruccion, _ambito) {
     const nuevaFuncion = new Funcion(_instruccion.nombre, _instruccion.lista_parametros, _instruccion.instrucciones, _instruccion.retorno, _instruccion.linea, _instruccion.columna)

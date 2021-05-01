@@ -1,5 +1,4 @@
 const { Metodo } = require("../../model/Ambito/Funcion_Metodo");
-const TIPO_INSTRUCCION = require("../Enum/TipoInstrucciones");
 
 function DecMetodo(_instruccion, _ambito) {
     const nuevoMetodo = new Metodo(_instruccion.nombre, _instruccion.lista_parametros, _instruccion.instrucciones, _instruccion.linea, _instruccion.columna)

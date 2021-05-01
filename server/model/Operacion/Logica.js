@@ -15,8 +15,17 @@ function Logica(_expresion, _ambito) {
 
 function or(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito)
-    const opDer = Operacion(_opDer, _ambito)
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     if (opIzq.tipo === TIPO_DATO.BOOLEANO || opDer.tipo === TIPO_DATO.BOOLEANO) {
         var resultado = false;
         var op1, op2;
@@ -37,13 +46,13 @@ function or(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -52,8 +61,17 @@ function or(_opIzq, _opDer, _ambito) {
 
 function and(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito)
-    const opDer = Operacion(_opDer, _ambito)
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     if (opIzq.tipo === TIPO_DATO.BOOLEANO || opDer.tipo === TIPO_DATO.BOOLEANO) {
         var resultado = false;
         var op1, op2;
@@ -74,13 +92,13 @@ function and(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -89,7 +107,12 @@ function and(_opIzq, _opDer, _ambito) {
 
 function not(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito)
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
     var resultado = false;
     if (opIzq.tipo === TIPO_DATO.BOOLEANO) {
         resultado = !opIzq.valor;
@@ -97,13 +120,13 @@ function not(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "")
     return {
         err: respuesta + "\nError semántico: no se puede negar el valor de tipo " + opIzq.tipo + "\nporque no es booleano.\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + "\nError semántico: no se puede negar el valor de tipo " + opIzq.tipo + "\nporque no es booleano.\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna

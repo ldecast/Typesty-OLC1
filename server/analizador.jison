@@ -1,12 +1,25 @@
 /* lexical grammar */
+%{
+	var cadena = '';
+%}
 %lex
 
 %options case-insensitive
+%x string
 
 %%
 
+//["]						{ cadena = ''; this.begin("string"); }
+//<string>[^"\\]+			{ cadena += yytext; }
+//<string>"\\\""			{ cadena += "\""; }
+//<string>"\\\'"			{ cadena += "\'"; }
+//<string>"\\\\"			{ cadena += "\\"; }
+//<string>"\\n"			{ cadena += "\n"; }
+//<string>"\\t"			{ cadena += "\t"; }
+//<string>["]				{ yytext = cadena; this.popState(); return 'cadena'; }
+
 \s+                   				// Whitespace
-"//".*							// EndOfLineComment
+"//".*								// EndOfLineComment
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]	// MultiLineComment
 
 "clase"               	return 'prclase'

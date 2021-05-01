@@ -189,7 +189,9 @@ function Bloque(_instrucciones, _ambito) {
                 else
                     cadena.retorno = "RETORNO VACIO";
             }
-            else return null;
+            else {
+                return { err: `Error. Instrucción no procesada.\nLínea: ${instruccion.linea} Columna: ${instruccion.columna}\n` };
+            }
         }
     });
     return cadena

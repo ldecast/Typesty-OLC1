@@ -85,7 +85,8 @@ function suma(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             case TIPO_DATO.CADENA:
@@ -94,7 +95,8 @@ function suma(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             default:
@@ -104,7 +106,6 @@ function suma(_opIzq, _opDer, _ambito) {
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + '\nError semántico: no se puede realizar la operación suma.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        //valor: respuesta + '\nError semántico: no se puede realizar la operación suma.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -113,8 +114,17 @@ function suma(_opIzq, _opDer, _ambito) {
 
 function resta(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.RESTA)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -136,7 +146,8 @@ function resta(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             case TIPO_DATO.DOBLE:
@@ -156,7 +167,8 @@ function resta(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             default:
@@ -166,7 +178,6 @@ function resta(_opIzq, _opDer, _ambito) {
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + '\nError semántico: no se puede realizar la operación resta.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + '\nError semántico: no se puede realizar la operación resta.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -175,8 +186,17 @@ function resta(_opIzq, _opDer, _ambito) {
 
 function multiplicacion(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.MULTIPLICACION)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -198,7 +218,8 @@ function multiplicacion(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             case TIPO_DATO.DOBLE:
@@ -218,7 +239,8 @@ function multiplicacion(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             default:
@@ -228,7 +250,6 @@ function multiplicacion(_opIzq, _opDer, _ambito) {
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + '\nError semántico: no se puede realizar la operación multiplicación.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + '\nError semántico: no se puede realizar la operación multiplicación.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -237,8 +258,17 @@ function multiplicacion(_opIzq, _opDer, _ambito) {
 
 function division(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.DIVISION)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -258,11 +288,10 @@ function division(_opIzq, _opDer, _ambito) {
                     op2 = Number(opDer.valor);
                 if (op2 == 0) {
                     return {
-                        err: '\nError: no es permitida la división entre 0.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-                        valor: '\nError: no es permitida la división entre 0.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
+                        err: '\nError: no es permitida la división entre 0.\nLínea: ' + _opDer.linea + " Columna: " + _opDer.columna + "\n",
                         tipo: null,
-                        linea: _opIzq.linea,
-                        columna: _opIzq.columna
+                        linea: _opDer.linea,
+                        columna: _opDer.columna
                     }
                 }
                 resultado = op1 / op2;
@@ -270,7 +299,8 @@ function division(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             default:
@@ -280,7 +310,6 @@ function division(_opIzq, _opDer, _ambito) {
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + '\nError semántico: no se puede realizar la operación división.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + '\nError semántico: no se puede realizar la operación división.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -289,8 +318,17 @@ function division(_opIzq, _opDer, _ambito) {
 
 function potencia(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.POTENCIA)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -312,7 +350,8 @@ function potencia(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             case TIPO_DATO.DOBLE:
@@ -332,7 +371,8 @@ function potencia(_opIzq, _opDer, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             default:
@@ -342,7 +382,6 @@ function potencia(_opIzq, _opDer, _ambito) {
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + '\nError semántico: no se puede realizar la operación potencia.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + '\nError semántico: no se puede realizar la operación potencia.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -351,8 +390,17 @@ function potencia(_opIzq, _opDer, _ambito) {
 
 function modulo(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    const opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.MODULO)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -370,12 +418,21 @@ function modulo(_opIzq, _opDer, _ambito) {
                     op2 = opDer.valor.charCodeAt(0);
                 else
                     op2 = Number(opDer.valor);
+                if (op2 == 0) {
+                    return {
+                        err: '\nError: no es permitida la operación módulo 0.\nLínea: ' + _opDer.linea + " Columna: " + _opDer.columna + "\n",
+                        tipo: null,
+                        linea: _opDer.linea,
+                        columna: _opDer.columna
+                    }
+                }
                 resultado = op1 % op2;
                 return {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             default:
@@ -385,7 +442,6 @@ function modulo(_opIzq, _opDer, _ambito) {
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + '\nError semántico: no se puede realizar la operación módulo.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + '\nError semántico: no se puede realizar la operación módulo.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -394,7 +450,12 @@ function modulo(_opIzq, _opDer, _ambito) {
 
 function negacion(_opIzq, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
     const tipoRes = TipoResultado(opIzq.tipo, null, TIPO_OPERACION.NEGACION)
     var resultado;
     if (tipoRes != null) {
@@ -405,7 +466,8 @@ function negacion(_opIzq, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             case TIPO_DATO.DOBLE:
@@ -414,7 +476,8 @@ function negacion(_opIzq, _ambito) {
                     valor: resultado,
                     tipo: tipoRes,
                     linea: _opIzq.linea,
-                    columna: _opIzq.columna
+                    columna: _opIzq.columna,
+                    cadena: cadena
                 }
 
             default:
@@ -424,7 +487,6 @@ function negacion(_opIzq, _ambito) {
     var respuesta = opIzq.tipo === null ? opIzq.valor : "";
     return {
         err: respuesta + '\nError semántico: no se puede realizar la operación negación unaria.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + '\nError semántico: no se puede realizar la operación negación unaria.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna

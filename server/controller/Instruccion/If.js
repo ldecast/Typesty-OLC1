@@ -190,14 +190,25 @@ function operadorTernario(_instruccion, _ambito) {
         if (operacion.retorno.tipo === TIPO_DATO.BOOLEANO) {
             if (operacion.cadena) cadena.cadena = operacion.cadena;
             var expresion = (condicion.valor ? _instruccion.expresionA : _instruccion.expresionB)
-            return Operacion(expresion, _ambito);
+            var op = Operacion(expresion, _ambito);
+            if (op.err) { cadena.err = op.err; return cadena }
+            if (op.cadena) cadena.cadena += op.cadena;
+            if (op.retorno) cadena.retorno = op.retorno;
+            else cadena.retorno = op;
+            return cadena;
         }
         cadena.err = "Error: La expresión a evaluar de tipo " + operacion.retorno.tipo + " no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
         return cadena;
     }
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
+        if (operacion.cadena) cadena.cadena = operacion.cadena;
         var expresion = (operacion.valor ? _instruccion.expresionA : _instruccion.expresionB)
-        return Operacion(expresion, _ambito);
+        var op = Operacion(expresion, _ambito);
+        if (op.err) { cadena.err = op.err; return cadena }
+        if (op.cadena) cadena.cadena += op.cadena;
+        if (op.retorno) cadena.retorno = op.retorno;
+        else cadena.retorno = op;
+        return cadena;
     }
     cadena.err = "Error: La expresión no es de tipo booleano en la condición.\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n"
     return cadena;

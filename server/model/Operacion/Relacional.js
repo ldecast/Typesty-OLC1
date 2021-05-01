@@ -28,8 +28,17 @@ function Relacional(_expresion, _ambito) {
 
 function igualigual(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito)
-    const opDer = Operacion(_opDer, _ambito)
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     if (opIzq.tipo == opDer.tipo) {
         var resultado = false
         if (opIzq.valor == opDer.valor) {
@@ -39,13 +48,13 @@ function igualigual(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -54,8 +63,17 @@ function igualigual(_opIzq, _opDer, _ambito) {
 
 function diferente(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito)
-    const opDer = Operacion(_opDer, _ambito)
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     if (opIzq.tipo == opDer.tipo) {
         var resultado = false
         if (opIzq.valor != opDer.valor) {
@@ -65,13 +83,13 @@ function diferente(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
-    var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "") //true+5+10+5
+    var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -80,8 +98,17 @@ function diferente(_opIzq, _opDer, _ambito) {
 
 function menor(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito)
-    const opDer = Operacion(_opDer, _ambito)
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
         var resultado = false;
         if (opIzq.valor < opDer.valor) {
@@ -91,7 +118,8 @@ function menor(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     else if ((opIzq.tipo === TIPO_DATO.CARACTER && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE))) {
@@ -103,7 +131,8 @@ function menor(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     else if ((opDer.tipo === TIPO_DATO.CARACTER && (opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE))) {
@@ -115,13 +144,13 @@ function menor(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -130,8 +159,17 @@ function menor(_opIzq, _opDer, _ambito) {
 
 function menorigual(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito)
-    const opDer = Operacion(_opDer, _ambito)
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
         var resultado = false;
         if (opIzq.valor <= opDer.valor) {
@@ -141,7 +179,8 @@ function menorigual(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     else if ((opIzq.tipo === TIPO_DATO.CARACTER && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE))) {
@@ -153,7 +192,8 @@ function menorigual(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     else if ((opDer.tipo === TIPO_DATO.CARACTER && (opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE))) {
@@ -165,13 +205,13 @@ function menorigual(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -180,8 +220,17 @@ function menorigual(_opIzq, _opDer, _ambito) {
 
 function mayor(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito)
-    const opDer = Operacion(_opDer, _ambito)
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
         var resultado = false;
         if (opIzq.valor > opDer.valor) {
@@ -191,7 +240,8 @@ function mayor(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     else if ((opIzq.tipo === TIPO_DATO.CARACTER && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE))) {
@@ -203,7 +253,8 @@ function mayor(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     else if ((opDer.tipo === TIPO_DATO.CARACTER && (opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE))) {
@@ -215,13 +266,13 @@ function mayor(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
@@ -230,8 +281,17 @@ function mayor(_opIzq, _opDer, _ambito) {
 
 function mayorigual(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
-    const opIzq = Operacion(_opIzq, _ambito)
-    const opDer = Operacion(_opDer, _ambito)
+    var cadena = "";
+    var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
+    if (opIzq.retorno) {
+        cadena += opIzq.cadena;
+        opIzq = opIzq.retorno;
+    }
+    var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
+    if (opDer.retorno) {
+        cadena += opDer.cadena;
+        opDer = opDer.retorno;
+    }
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
         var resultado = false;
         if (opIzq.valor >= opDer.valor) {
@@ -241,7 +301,8 @@ function mayorigual(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     else if ((opIzq.tipo === TIPO_DATO.CARACTER && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE))) {
@@ -253,7 +314,8 @@ function mayorigual(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     else if ((opDer.tipo === TIPO_DATO.CARACTER && (opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE))) {
@@ -265,13 +327,13 @@ function mayorigual(_opIzq, _opDer, _ambito) {
             valor: resultado,
             tipo: TIPO_DATO.BOOLEANO,
             linea: _opIzq.linea,
-            columna: _opIzq.columna
+            columna: _opIzq.columna,
+            cadena: cadena
         }
     }
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + "\nError semántico: no se puede comparar el valor de tipo " + opIzq.tipo + "\ncon el valor de tipo " + opDer.tipo + ".\nLínea: " + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna
