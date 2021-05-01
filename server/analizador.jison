@@ -83,8 +83,8 @@
 [0-9]+("."[0-9]+)+\b	return 'doble'
 [0-9]+					return 'entero'
 
-<<EOF>>               return 'EOF'
-.                     return 'INVALID'
+<<EOF>>               	return 'EOF'
+.                     	return 'INVALID'
 
 /lex
 %{

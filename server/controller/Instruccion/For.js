@@ -34,6 +34,11 @@ function cicloFor(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito);
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                if (bloque.hasBreak || bloque.hasReturn) break;
+                if (bloque.hasContinue) {
+                    var actualizacion = _instruccion.instrucciones[_instruccion.instrucciones.length - 1];
+                    Bloque([actualizacion], nuevoAmbito);
+                }
                 operacion = Operacion(_instruccion.expresion, _ambito)
                 if (operacion.err) { cadena.err = operacion.err; return cadena; }
                 if (operacion.retorno) {
@@ -50,13 +55,17 @@ function cicloFor(_instruccion, _ambito) {
     }
     else {
         if (operacion.tipo === TIPO_DATO.BOOLEANO) {
-            while (operacion.valor && max < 1500) {// && operacion.) {
+            while (operacion.valor && max < 1500) {
                 var nuevoAmbito = new Ambito(_ambito, "ciclo")
                 const Bloque = require('./Bloque')
                 var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito);
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
-                if (bloque.hasBreak) console.log("99999999");
+                if (bloque.hasBreak || bloque.hasReturn) break;
+                if (bloque.hasContinue) {
+                    var actualizacion = _instruccion.instrucciones[_instruccion.instrucciones.length - 1];
+                    Bloque([actualizacion], nuevoAmbito);
+                }
                 operacion = Operacion(_instruccion.expresion, _ambito)
                 if (operacion.err) { cadena.err = operacion.err; return cadena; }
                 if (operacion.retorno) {

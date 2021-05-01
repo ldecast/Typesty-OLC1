@@ -16,14 +16,16 @@ function Bloque(_instrucciones, _ambito) {
             if (instruccion.tipo === TIPO_INSTRUCCION.PRINT) {
                 var mensaje = Imprimir(instruccion, _ambito)
                 if (mensaje) {
-                    if (mensaje.print_val)
-                        cadena.cadena += mensaje.print_val + '\n'
-                    else if (mensaje.valor != null)
-                        cadena.cadena += mensaje.valor + '\n'
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.retorno)
                         cadena.cadena += mensaje.retorno.valor + '\n'
+                    if (mensaje.print_val)
+                        cadena.cadena += mensaje.print_val + '\n'
+                    else if (mensaje.valor != null)
+                        cadena.cadena += mensaje.valor + '\n'
+                    if (mensaje.err)
+                        cadena.cadena += mensaje.err
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.DECLARACION) {
@@ -51,8 +53,8 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err)
                         cadena.cadena += mensaje.err
-                    // if (mensaje.retorno)
-                    //     cadena.retorno = mensaje.retorno
+                    if (mensaje.retorno)
+                        cadena.retorno = mensaje.retorno
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.FOR) {
@@ -62,8 +64,8 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err)
                         cadena.cadena += mensaje.err
-                    // if (mensaje.retorno)
-                    //     cadena.retorno = mensaje.retorno
+                    if (mensaje.retorno)
+                        cadena.retorno = mensaje.retorno
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.DOWHILE) {
@@ -73,8 +75,8 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err)
                         cadena.cadena += mensaje.err
-                    // if (mensaje.retorno)
-                    // cadena.retorno = mensaje.retorno
+                    if (mensaje.retorno)
+                        cadena.retorno = mensaje.retorno
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.IF) {
@@ -86,6 +88,11 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.err
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
+                    cadena.hasBreak = mensaje.hasBreak;
+                    cadena.hasContinue = mensaje.hasContinue;
+                    cadena.hasReturn = mensaje.hasReturn;
+                    if (cadena.hasBreak || cadena.hasContinue || cadena.hasReturn)
+                        brk = true;
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE) {
@@ -97,6 +104,11 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.err
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
+                    cadena.hasBreak = mensaje.hasBreak;
+                    cadena.hasContinue = mensaje.hasContinue;
+                    cadena.hasReturn = mensaje.hasReturn;
+                    if (cadena.hasBreak || cadena.hasContinue || cadena.hasReturn)
+                        brk = true;
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.ELSE_IF) {
@@ -108,6 +120,11 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.err
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
+                    cadena.hasBreak = mensaje.hasBreak;
+                    cadena.hasContinue = mensaje.hasContinue;
+                    cadena.hasReturn = mensaje.hasReturn;
+                    if (cadena.hasBreak || cadena.hasContinue || cadena.hasReturn)
+                        brk = true;
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.SWITCH) {
@@ -119,6 +136,11 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.err
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
+                    cadena.hasBreak = mensaje.hasBreak;
+                    cadena.hasContinue = mensaje.hasContinue;
+                    cadena.hasReturn = mensaje.hasReturn;
+                    if (cadena.hasBreak || cadena.hasContinue || cadena.hasReturn)
+                        brk = true;
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.LLAMADA) {
@@ -138,11 +160,8 @@ function Bloque(_instrucciones, _ambito) {
                     cadena.retorno = null;
                     brk = true;
                 }
-                else {
-                    console.log(instruccion)
-                    brk = true;
-                    cadena.hasBreak = true;
-                }
+                else
+                    brk = cadena.hasBreak = true;
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.CONTINUE) {
                 if (!_ambito.isInsideLoop()) {
@@ -150,31 +169,29 @@ function Bloque(_instrucciones, _ambito) {
                     cadena.retorno = null;
                     brk = true;
                 }
-                else {
+                else if (_instrucciones[_instrucciones.length - 1] !== instruccion) {
+                    cadena.cadena = `Error: unreachable statement.\nLínea: ${_instrucciones[_instrucciones.indexOf(instruccion) + 1].linea} Columna: ${_instrucciones[_instrucciones.indexOf(instruccion) + 1].columna}\n`;
+                    cadena.retorno = null;
                     brk = true;
-                    cadena.hasContinue = true;
                 }
+                else
+                    brk = cadena.hasContinue = true;
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.RETURN) {
                 const Operacion = require("../../model/Operacion/Operacion");
-                brk = true;
-                cadena.hasReturn = true;
+                brk = cadena.hasReturn = true;
                 if (instruccion.expresion) {
                     var expresion = Operacion(instruccion.expresion, _ambito);
                     if (expresion.err) cadena.cadena += expresion.err;
                     if (expresion.cadena) cadena.cadena += expresion.cadena;
                     cadena.retorno = expresion;
-                    // console.log(cadena.retorno, "ESTO RETORNA")
                 }
                 else
                     cadena.retorno = "RETORNO VACIO";
             }
-            else {
-                console.log("EEEEEEEEEERRRORRRRRRRR")
-            }
+            else return null;
         }
     });
-    // console.log(cadena, 8888889)
     return cadena
 }
 

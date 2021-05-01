@@ -104,7 +104,7 @@ function suma(_opIzq, _opDer, _ambito) {
     var respuesta = (opIzq.tipo === null ? opIzq.valor : "") + (opDer.tipo === null ? opDer.valor : "")
     return {
         err: respuesta + '\nError semántico: no se puede realizar la operación suma.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
-        valor: respuesta + '\nError semántico: no se puede realizar la operación suma.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
+        //valor: respuesta + '\nError semántico: no se puede realizar la operación suma.\nLínea: ' + _opIzq.linea + " Columna: " + _opIzq.columna + "\n",
         tipo: null,
         linea: _opIzq.linea,
         columna: _opIzq.columna

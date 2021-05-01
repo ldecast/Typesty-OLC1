@@ -4,7 +4,7 @@ const TIPO_INSTRUCCION = require("../Enum/TipoInstrucciones")
 const Operacion = require("../../model/Operacion/Operacion")
 
 function sentenciaIf(_instruccion, _ambito) {
-    var cadena = { cadena: "", retorno: null, err: null }
+    var cadena = { cadena: "", retorno: null, err: null, hasBreak: false, hasContinue: false, hasReturn: false }
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.retorno) {
@@ -17,7 +17,9 @@ function sentenciaIf(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito)
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
-                if(bloque.hasBreak) console.log("uuuuuuuu")
+                if (bloque.hasBreak) cadena.hasBreak = true;
+                if (bloque.hasContinue) cadena.hasContinue = true;
+                if (bloque.hasReturn) cadena.hasReturn = true;
             }
             return cadena
         }
@@ -31,7 +33,9 @@ function sentenciaIf(_instruccion, _ambito) {
             var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito)
             cadena.cadena += bloque.cadena;
             if (bloque.retorno) cadena.retorno = bloque.retorno;
-            if(bloque.hasBreak) console.log("uuuuuuuu")
+            if (bloque.hasBreak) cadena.hasBreak = true;
+            if (bloque.hasContinue) cadena.hasContinue = true;
+            if (bloque.hasReturn) cadena.hasReturn = true;
         }
         return cadena;
     }
@@ -54,6 +58,9 @@ function sentenciaIfElse(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instruccionesIF, nuevoAmbito)
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                if (bloque.hasBreak) cadena.hasBreak = true;
+                if (bloque.hasContinue) cadena.hasContinue = true;
+                if (bloque.hasReturn) cadena.hasReturn = true;
             }
             else {
                 var nuevoAmbito = new Ambito(_ambito, "control")
@@ -61,6 +68,9 @@ function sentenciaIfElse(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instruccionesELSE, nuevoAmbito)
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                if (bloque.hasBreak) cadena.hasBreak = true;
+                if (bloque.hasContinue) cadena.hasContinue = true;
+                if (bloque.hasReturn) cadena.hasReturn = true;
             }
             return cadena
         }
@@ -74,6 +84,9 @@ function sentenciaIfElse(_instruccion, _ambito) {
             var bloque = Bloque(_instruccion.instruccionesIF, nuevoAmbito)
             cadena.cadena += bloque.cadena;
             if (bloque.retorno) cadena.retorno = bloque.retorno;
+            if (bloque.hasBreak) cadena.hasBreak = true;
+            if (bloque.hasContinue) cadena.hasContinue = true;
+            if (bloque.hasReturn) cadena.hasReturn = true;
         }
         else {
             var nuevoAmbito = new Ambito(_ambito, "control")
@@ -81,6 +94,9 @@ function sentenciaIfElse(_instruccion, _ambito) {
             var bloque = Bloque(_instruccion.instruccionesELSE, nuevoAmbito)
             cadena.cadena += bloque.cadena;
             if (bloque.retorno) cadena.retorno = bloque.retorno;
+            if (bloque.hasBreak) cadena.hasBreak = true;
+            if (bloque.hasContinue) cadena.hasContinue = true;
+            if (bloque.hasReturn) cadena.hasReturn = true;
         }
         return cadena;
     }
@@ -103,18 +119,27 @@ function sentenciaElseIf(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instruccionesIF, nuevoAmbito)
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                if (bloque.hasBreak) cadena.hasBreak = true;
+                if (bloque.hasContinue) cadena.hasContinue = true;
+                if (bloque.hasReturn) cadena.hasReturn = true;
             }
             else if (_instruccion.instruccionesELSEIF) {
                 var nuevoAmbito = new Ambito(_ambito, "control")
                 var bloque = sentenciaElseIf(_instruccion.instruccionesELSEIF, nuevoAmbito);
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                if (bloque.hasBreak) cadena.hasBreak = true;
+                if (bloque.hasContinue) cadena.hasContinue = true;
+                if (bloque.hasReturn) cadena.hasReturn = true;
             }
             else if (_instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE) {
                 var nuevoAmbito = new Ambito(_ambito, "control")
                 var bloque = sentenciaIfElse(_instruccion, nuevoAmbito);
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                if (bloque.hasBreak) cadena.hasBreak = true;
+                if (bloque.hasContinue) cadena.hasContinue = true;
+                if (bloque.hasReturn) cadena.hasReturn = true;
             }
             return cadena
         }
@@ -128,18 +153,27 @@ function sentenciaElseIf(_instruccion, _ambito) {
             var bloque = Bloque(_instruccion.instruccionesIF, nuevoAmbito)
             cadena.cadena += bloque.cadena;
             if (bloque.retorno) cadena.retorno = bloque.retorno;
+            if (bloque.hasBreak) cadena.hasBreak = true;
+            if (bloque.hasContinue) cadena.hasContinue = true;
+            if (bloque.hasReturn) cadena.hasReturn = true;
         }
         else if (_instruccion.instruccionesELSEIF) {
             var nuevoAmbito = new Ambito(_ambito, "control")
             var bloque = sentenciaElseIf(_instruccion.instruccionesELSEIF, nuevoAmbito);
             cadena.cadena += bloque.cadena;
             if (bloque.retorno) cadena.retorno = bloque.retorno;
+            if (bloque.hasBreak) cadena.hasBreak = true;
+            if (bloque.hasContinue) cadena.hasContinue = true;
+            if (bloque.hasReturn) cadena.hasReturn = true;
         }
         else if (_instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE) {
             var nuevoAmbito = new Ambito(_ambito, "control")
             var bloque = sentenciaIfElse(_instruccion, nuevoAmbito);
             cadena.cadena += bloque.cadena;
             if (bloque.retorno) cadena.retorno = bloque.retorno;
+            if (bloque.hasBreak) cadena.hasBreak = true;
+            if (bloque.hasContinue) cadena.hasContinue = true;
+            if (bloque.hasReturn) cadena.hasReturn = true;
         }
         return cadena
     }

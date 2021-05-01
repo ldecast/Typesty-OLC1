@@ -17,6 +17,8 @@ function cicloWhile(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito)
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                if (bloque.hasBreak || bloque.hasReturn) break;
+                if (bloque.hasContinue) continue;
                 condicion = Operacion(_instruccion.expresion, _ambito)
                 if (condicion.err) { cadena.err = condicion.err; return cadena; }
                 if (condicion.retorno) condicion = condicion.retorno;
@@ -36,6 +38,8 @@ function cicloWhile(_instruccion, _ambito) {
             var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito)
             cadena.cadena += bloque.cadena;
             if (bloque.retorno) cadena.retorno = bloque.retorno;
+            if (bloque.hasBreak || bloque.hasReturn) break;
+            if (bloque.hasContinue) continue;
             operacion = Operacion(_instruccion.expresion, _ambito)
             if (operacion.err) { cadena.err = operacion.err; return cadena; }
             if (operacion.retorno) operacion = operacion.retorno;
