@@ -263,6 +263,12 @@ function Asignacion(_instruccion, _ambito) {
                     tipoSimbolo: simbolo.tipo,
                     tipoNuevoValor: valor.retorno.tipo
                 }
+                if ((tipos.tipoSimbolo === TIPO_DATO.ENTERO || tipos.tipoSimbolo === TIPO_DATO.DOBLE) && (tipos.tipoNuevoValor === TIPO_DATO.ENTERO || tipos.tipoNuevoValor === TIPO_DATO.DOBLE)) {
+                    simbolo.valor = Number(valor.retorno.valor);
+                    if (valor.cadena) cadena.cadena = valor.cadena;
+                    _ambito.actualizar(id, simbolo)
+                    return cadena;
+                }
                 if (tipos.tipoSimbolo === tipos.tipoNuevoValor) {
                     simbolo.valor = valor.retorno.valor;
                     if (valor.cadena) cadena.cadena = valor.cadena;
@@ -308,6 +314,13 @@ function Asignacion(_instruccion, _ambito) {
                 var tipos = {
                     tipoSimbolo: simbolo.tipo,
                     tipoNuevoValor: valor.tipo
+                }
+                // Casteo implícito entero-doble, doble-entero
+                if ((tipos.tipoSimbolo === TIPO_DATO.ENTERO || tipos.tipoSimbolo === TIPO_DATO.DOBLE) && (tipos.tipoNuevoValor === TIPO_DATO.ENTERO || tipos.tipoNuevoValor === TIPO_DATO.DOBLE)) {
+                    simbolo.valor = Number(valor.valor);
+                    if (valor.cadena) cadena.cadena = valor.cadena;
+                    _ambito.actualizar(id, simbolo)
+                    return cadena;
                 }
                 if (tipos.tipoSimbolo === tipos.tipoNuevoValor) {
                     simbolo.valor = valor.valor;

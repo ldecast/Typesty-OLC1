@@ -9,15 +9,6 @@
 
 %%
 
-//["]						{ cadena = ''; this.begin("string"); }
-//<string>[^"\\]+			{ cadena += yytext; }
-//<string>"\\\""			{ cadena += "\""; }
-//<string>"\\\'"			{ cadena += "\'"; }
-//<string>"\\\\"			{ cadena += "\\"; }
-//<string>"\\n"			{ cadena += "\n"; }
-//<string>"\\t"			{ cadena += "\t"; }
-//<string>["]				{ yytext = cadena; this.popState(); return 'cadena'; }
-
 \s+                   				// Whitespace
 "//".*								// EndOfLineComment
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]	// MultiLineComment
@@ -89,12 +80,21 @@
 "["						return 'cabre'
 "]"						return 'ccierra'
 
-"\\n"|"\\r"|"\\t"|"\\\\"|"\\\""|"\\“"|"\\”"|"\\\'" return 'especiales'
 ([a-zA-Z])([a-zA-Z0-9_])* return 'id'
 [']\\\\[']|[']\\\"[']|[']\\\'[']|[']\\n[']|[']\\t[']|[']\\r[']|['].?[']	return 'caracter'
-["\""]([^"\""])*["\""] 	return 'cadena' //truena con "\"Esto es una cadena\""
 [0-9]+("."[0-9]+)+\b	return 'doble'
 [0-9]+					return 'entero'
+
+["]						{ cadena = ''; this.begin("string"); }
+<string>[^"\\]+			{ cadena += yytext; }
+<string>"\\\""			{ cadena += "\""; }
+<string>"\\n"			{ cadena += "\n"; }
+<string>\s				{ cadena += " "; }
+<string>"\\t"			{ cadena += "\t"; }
+<string>"\\\\"			{ cadena += "\\"; }
+<string>"\\\'"			{ cadena += "\'"; }
+<string>"\\r"			{ cadena += "\r"; }
+<string>["]				{ yytext = cadena; this.popState(); return 'cadena'; }
 
 <<EOF>>               	return 'EOF'
 .                     	return 'INVALID'
@@ -109,6 +109,8 @@
 
 /* operator associations and precedence */
 
+%left 'interrogacion'
+%left 'pabre'
 %left 'or'
 %left 'and'
 %right 'not'
@@ -253,11 +255,7 @@ CASESLIST: CASESLIST prcase EXPRESION dospuntos INSTRUCCION { $1.push(new INSTRU
 DEFAULT: prdefault dospuntos INSTRUCCION { $$ = new INSTRUCCION.nuevoCaso(null, $3, this._$.first_line, this._$.first_column+1); }
 ;
 
-DEC_VAR: TIPO id igual CASTEO ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line, this._$.first_column+1)}
-		| id igual CASTEO ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line, this._$.first_column+1)}
-		| TIPO id igual TERNARIO ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line, this._$.first_column+1)}
-		| id igual TERNARIO ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line, this._$.first_column+1)}
-		| TIPO id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line,this._$.first_column+1)}
+DEC_VAR: TIPO id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line,this._$.first_column+1)}
 		| TIPO id ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, null, $1, this._$.first_line,this._$.first_column+1)}
 		| id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaAsignacion($1, $3, this._$.first_line,this._$.first_column+1)}
 		| id incremento ptcoma {
@@ -323,7 +321,7 @@ EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$
 			| EXPRESION or EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.OR,this._$.first_line,this._$.first_column+1);}
 			| EXPRESION and EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$3, TIPO_OPERACION.AND,this._$.first_line,this._$.first_column+1);}
 			| not EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($2, null, TIPO_OPERACION.NOT,this._$.first_line,this._$.first_column+1);}
-			| cadena {$$ = INSTRUCCION.nuevoValor($1.trim().substring(1, $1.length - 1), TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1)}
+			| cadena {$$ = INSTRUCCION.nuevoValor($1, TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1)}
 			| caracter {$$ = INSTRUCCION.nuevoValor($1.trim().substring(1, $1.length - 1), TIPO_VALOR.CARACTER, this._$.first_line,this._$.first_column+1)}
 			| true {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.BOOLEANO, this._$.first_line,this._$.first_column+1)}
 			| false {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.BOOLEANO, this._$.first_line,this._$.first_column+1)}
@@ -332,9 +330,9 @@ EXPRESION: 	EXPRESION suma EXPRESION {$$= INSTRUCCION.nuevaOperacionBinaria($1,$
 			| id cabre cabre EXPRESION ccierra ccierra { $$ = INSTRUCCION.accesoLista($1, $4, this._$.first_line, this._$.first_column+1) }
 			| id cabre EXPRESION ccierra { $$ = INSTRUCCION.accesoVector($1, $3, this._$.first_line, this._$.first_column+1) }
 			| id {$$ = INSTRUCCION.nuevoValor($1.trim(), TIPO_VALOR.IDENTIFICADOR, this._$.first_line,this._$.first_column+1)}
-			| pabre CASTEO pcierra {$$=$2}
-			| pabre TERNARIO pcierra {$$=$2}
-			| LLAMADA { $$=$1; }
+			| CASTEO {$$=$1}
+			| TERNARIO {$$=$1}
+			| LLAMADA {$$=$1}
 			| FUNCIONESRESERVADAS {$$=$1}
 ;
 
@@ -391,4 +389,3 @@ LISTAVALORES: LISTAVALORES coma VALORES {$1.push($3); $$=$1;}
 
 VALORES: EXPRESION {$$=$1}
 ;
-

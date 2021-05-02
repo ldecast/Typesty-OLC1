@@ -29,9 +29,9 @@ function Declaracion(_instruccion, _ambito) {
             var op = Operacion(_instruccion.valor, _ambito)
             if (op.err) { cadena.err = op.err; return cadena }
             if (op.retorno) {
-                if (op.retorno.tipo === TIPO_DATO.ENTERO) {
+                if (op.retorno.tipo === TIPO_DATO.ENTERO || op.retorno.tipo === TIPO_DATO.DOBLE) {
                     if (op.cadena) cadena.cadena = op.cadena;
-                    valor = op.retorno.valor;
+                    valor = parseInt(op.retorno.valor);
                 }
                 else {
                     cadena.err = "Error: No es posible declarar un valor de tipo " + op.retorno.tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.ENTERO + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
@@ -40,8 +40,8 @@ function Declaracion(_instruccion, _ambito) {
             }
             else {
                 tipo = op.tipo;
-                if (tipo === TIPO_DATO.ENTERO)
-                    valor = op.valor;
+                if (tipo === TIPO_DATO.ENTERO || tipo === TIPO_DATO.DOBLE)
+                    valor = parseInt(op.valor);
                 else {
                     cadena.err = "Error: No es posible declarar un valor de tipo " + tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.ENTERO + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
                     return cadena;
@@ -63,9 +63,9 @@ function Declaracion(_instruccion, _ambito) {
             var op = Operacion(_instruccion.valor, _ambito)
             if (op.err) { cadena.err = op.err; return cadena; }
             if (op.retorno) {
-                if (op.retorno.tipo === TIPO_DATO.DOBLE) {
+                if (op.retorno.tipo === TIPO_DATO.DOBLE || op.retorno.tipo === TIPO_DATO.ENTERO) {
                     if (op.cadena) cadena.cadena = op.cadena;
-                    valor = op.retorno.valor;
+                    valor = parseFloat(op.retorno.valor);
                 }
                 else {
                     cadena.err = "Error: No es posible declarar un valor de tipo " + op.retorno.tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.DOBLE + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
@@ -74,8 +74,8 @@ function Declaracion(_instruccion, _ambito) {
             }
             else {
                 tipo = op.tipo;
-                if (tipo === TIPO_DATO.DOBLE)
-                    valor = op.valor;
+                if (tipo === TIPO_DATO.DOBLE || tipo === TIPO_DATO.ENTERO)
+                    valor = parseFloat(op.valor);
                 else {
                     cadena.err = "Error: No es posible declarar un valor de tipo " + tipo + " a la variable \n'" + _instruccion.id + "' que es de tipo " + TIPO_DATO.DOBLE + ".\nLínea: " + _instruccion.linea + " Columna: " + _instruccion.columna + "\n";
                     return cadena;
