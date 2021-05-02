@@ -18,14 +18,14 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
+                    if (mensaje.err)
+                        cadena.cadena += mensaje.err
                     if (mensaje.retorno)
                         cadena.cadena += mensaje.retorno.valor + '\n'
                     if (mensaje.print_val)
                         cadena.cadena += mensaje.print_val + '\n'
                     else if (mensaje.valor != null)
                         cadena.cadena += mensaje.valor + '\n'
-                    if (mensaje.err)
-                        cadena.cadena += mensaje.err
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.DECLARACION) {
@@ -55,6 +55,11 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.err
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
+                    cadena.hasBreak = mensaje.hasBreak;
+                    cadena.hasContinue = mensaje.hasContinue;
+                    cadena.hasReturn = mensaje.hasReturn;
+                    if (cadena.hasBreak || cadena.hasContinue || cadena.hasReturn)
+                        brk = true;
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.FOR) {
@@ -66,6 +71,11 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.err
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
+                    cadena.hasBreak = mensaje.hasBreak;
+                    cadena.hasContinue = mensaje.hasContinue;
+                    cadena.hasReturn = mensaje.hasReturn;
+                    if (cadena.hasBreak || cadena.hasContinue || cadena.hasReturn)
+                        brk = true;
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.DOWHILE) {
@@ -77,6 +87,11 @@ function Bloque(_instrucciones, _ambito) {
                         cadena.cadena += mensaje.err
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
+                    cadena.hasBreak = mensaje.hasBreak;
+                    cadena.hasContinue = mensaje.hasContinue;
+                    cadena.hasReturn = mensaje.hasReturn;
+                    if (cadena.hasBreak || cadena.hasContinue || cadena.hasReturn)
+                        brk = true;
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.IF) {
@@ -151,8 +166,6 @@ function Bloque(_instrucciones, _ambito) {
                     cadena.cadena += mensaje.cadena
                 if (mensaje.err)
                     cadena.cadena += mensaje.err
-                // if (mensaje.retorno)
-                //     cadena.cadena += mensaje.retorno.cadena
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.BREAK) {
                 if (!_ambito.isInsideLoop() && !_ambito.isInsideSwitch()) {

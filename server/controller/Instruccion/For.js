@@ -6,7 +6,7 @@ const Asignacion = require("./Asignacion");
 const Declaracion = require("./Declaracion");
 
 function cicloFor(_instruccion, _ambito) {
-    var cadena = { cadena: "", retorno: null, err: null }
+    var cadena = { cadena: "", retorno: null, err: null, hasBreak: false, hasContinue: false, hasReturn: false }
 
     if (_instruccion.variable.tipo === TIPO_INSTRUCCION.DECLARACION) {
         var m = Declaracion(_instruccion.variable, _ambito)
@@ -34,6 +34,8 @@ function cicloFor(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito);
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                cadena.hasBreak = bloque.hasBreak;
+                cadena.hasReturn = bloque.hasReturn;
                 if (bloque.hasBreak || bloque.hasReturn) break;
                 if (bloque.hasContinue) {
                     var actualizacion = _instruccion.instrucciones[_instruccion.instrucciones.length - 1];
@@ -61,6 +63,8 @@ function cicloFor(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito);
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                cadena.hasBreak = bloque.hasBreak;
+                cadena.hasReturn = bloque.hasReturn;
                 if (bloque.hasBreak || bloque.hasReturn) break;
                 if (bloque.hasContinue) {
                     var actualizacion = _instruccion.instrucciones[_instruccion.instrucciones.length - 1];

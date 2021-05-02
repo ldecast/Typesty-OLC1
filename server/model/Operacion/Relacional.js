@@ -39,6 +39,48 @@ function igualigual(_opIzq, _opDer, _ambito) {
         cadena += opDer.cadena;
         opDer = opDer.retorno;
     }
+    // Casteo implícito entero-doble/doble-entero
+    if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
+        var resultado = false
+        if (opIzq.valor == opDer.valor) {
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
+    }
+    // Casteo implícito entero-doble/caracter
+    if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.CARACTER)) {
+        var resultado = false
+        if (opIzq.valor == opDer.valor.charCodeAt(0)) {
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
+    }
+    // Casteo implícito caracter/entero-doble
+    if ((opIzq.tipo === TIPO_DATO.CARACTER) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
+        var resultado = false
+        if (opIzq.valor.charCodeAt(0) == opDer.valor) {
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
+    }
     if (opIzq.tipo == opDer.tipo) {
         var resultado = false
         if (opIzq.valor == opDer.valor) {
@@ -73,6 +115,48 @@ function diferente(_opIzq, _opDer, _ambito) {
     if (opDer.retorno) {
         cadena += opDer.cadena;
         opDer = opDer.retorno;
+    }
+    // Casteo implícito entero-doble/doble-entero
+    if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
+        var resultado = false
+        if (opIzq.valor != opDer.valor) {
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
+    }
+    // Casteo implícito entero-doble/caracter
+    if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.CARACTER)) {
+        var resultado = false
+        if (opIzq.valor != opDer.valor.charCodeAt(0)) {
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
+    }
+    // Casteo implícito caracter/entero-doble
+    if ((opIzq.tipo === TIPO_DATO.CARACTER) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
+        var resultado = false
+        if (opIzq.valor.charCodeAt(0) != opDer.valor) {
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
     }
     if (opIzq.tipo == opDer.tipo) {
         var resultado = false
@@ -109,10 +193,11 @@ function menor(_opIzq, _opDer, _ambito) {
         cadena += opDer.cadena;
         opDer = opDer.retorno;
     }
+    // Casteo implícito entero-doble/doble-entero
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
-        var resultado = false;
+        var resultado = false
         if (opIzq.valor < opDer.valor) {
-            resultado = true;
+            resultado = true
         }
         return {
             valor: resultado,
@@ -122,23 +207,25 @@ function menor(_opIzq, _opDer, _ambito) {
             cadena: cadena
         }
     }
-    else if ((opIzq.tipo === TIPO_DATO.CARACTER && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE))) {
-        var resultado = false;
-        if (opIzq.valor.charCodeAt(0) < opDer.valor) {
-            resultado = true;
-        }
-        return {
-            valor: resultado,
-            tipo: TIPO_DATO.BOOLEANO,
-            linea: _opIzq.linea,
-            columna: _opIzq.columna,
-            cadena: cadena
-        }
-    }
-    else if ((opDer.tipo === TIPO_DATO.CARACTER && (opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE))) {
-        var resultado = false;
+    // Casteo implícito entero-doble/caracter
+    if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.CARACTER)) {
+        var resultado = false
         if (opIzq.valor < opDer.valor.charCodeAt(0)) {
-            resultado = true;
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
+    }
+    // Casteo implícito caracter/entero-doble
+    if ((opIzq.tipo === TIPO_DATO.CARACTER) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
+        var resultado = false
+        if (opIzq.valor.charCodeAt(0) < opDer.valor) {
+            resultado = true
         }
         return {
             valor: resultado,
@@ -170,10 +257,11 @@ function menorigual(_opIzq, _opDer, _ambito) {
         cadena += opDer.cadena;
         opDer = opDer.retorno;
     }
+    // Casteo implícito entero-doble/doble-entero
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
-        var resultado = false;
+        var resultado = false
         if (opIzq.valor <= opDer.valor) {
-            resultado = true;
+            resultado = true
         }
         return {
             valor: resultado,
@@ -183,23 +271,25 @@ function menorigual(_opIzq, _opDer, _ambito) {
             cadena: cadena
         }
     }
-    else if ((opIzq.tipo === TIPO_DATO.CARACTER && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE))) {
-        var resultado = false;
-        if (opIzq.valor.charCodeAt(0) <= opDer.valor) {
-            resultado = true;
-        }
-        return {
-            valor: resultado,
-            tipo: TIPO_DATO.BOOLEANO,
-            linea: _opIzq.linea,
-            columna: _opIzq.columna,
-            cadena: cadena
-        }
-    }
-    else if ((opDer.tipo === TIPO_DATO.CARACTER && (opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE))) {
-        var resultado = false;
+    // Casteo implícito entero-doble/caracter
+    if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.CARACTER)) {
+        var resultado = false
         if (opIzq.valor <= opDer.valor.charCodeAt(0)) {
-            resultado = true;
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
+    }
+    // Casteo implícito caracter/entero-doble
+    if ((opIzq.tipo === TIPO_DATO.CARACTER) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
+        var resultado = false
+        if (opIzq.valor.charCodeAt(0) <= opDer.valor) {
+            resultado = true
         }
         return {
             valor: resultado,
@@ -231,10 +321,11 @@ function mayor(_opIzq, _opDer, _ambito) {
         cadena += opDer.cadena;
         opDer = opDer.retorno;
     }
+    // Casteo implícito entero-doble/doble-entero
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
-        var resultado = false;
+        var resultado = false
         if (opIzq.valor > opDer.valor) {
-            resultado = true;
+            resultado = true
         }
         return {
             valor: resultado,
@@ -244,23 +335,25 @@ function mayor(_opIzq, _opDer, _ambito) {
             cadena: cadena
         }
     }
-    else if ((opIzq.tipo === TIPO_DATO.CARACTER && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE))) {
-        var resultado = false;
-        if (opIzq.valor.charCodeAt(0) > opDer.valor) {
-            resultado = true;
-        }
-        return {
-            valor: resultado,
-            tipo: TIPO_DATO.BOOLEANO,
-            linea: _opIzq.linea,
-            columna: _opIzq.columna,
-            cadena: cadena
-        }
-    }
-    else if ((opDer.tipo === TIPO_DATO.CARACTER && (opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE))) {
-        var resultado = false;
+    // Casteo implícito entero-doble/caracter
+    if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.CARACTER)) {
+        var resultado = false
         if (opIzq.valor > opDer.valor.charCodeAt(0)) {
-            resultado = true;
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
+    }
+    // Casteo implícito caracter/entero-doble
+    if ((opIzq.tipo === TIPO_DATO.CARACTER) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
+        var resultado = false
+        if (opIzq.valor.charCodeAt(0) > opDer.valor) {
+            resultado = true
         }
         return {
             valor: resultado,
@@ -292,10 +385,11 @@ function mayorigual(_opIzq, _opDer, _ambito) {
         cadena += opDer.cadena;
         opDer = opDer.retorno;
     }
+    // Casteo implícito entero-doble/doble-entero
     if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
-        var resultado = false;
+        var resultado = false
         if (opIzq.valor >= opDer.valor) {
-            resultado = true;
+            resultado = true
         }
         return {
             valor: resultado,
@@ -305,23 +399,25 @@ function mayorigual(_opIzq, _opDer, _ambito) {
             cadena: cadena
         }
     }
-    else if ((opIzq.tipo === TIPO_DATO.CARACTER && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE))) {
-        var resultado = false;
-        if (opIzq.valor.charCodeAt(0) >= opDer.valor) {
-            resultado = true;
-        }
-        return {
-            valor: resultado,
-            tipo: TIPO_DATO.BOOLEANO,
-            linea: _opIzq.linea,
-            columna: _opIzq.columna,
-            cadena: cadena
-        }
-    }
-    else if ((opDer.tipo === TIPO_DATO.CARACTER && (opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE))) {
-        var resultado = false;
+    // Casteo implícito entero-doble/caracter
+    if ((opIzq.tipo === TIPO_DATO.ENTERO || opIzq.tipo === TIPO_DATO.DOBLE) && (opDer.tipo === TIPO_DATO.CARACTER)) {
+        var resultado = false
         if (opIzq.valor >= opDer.valor.charCodeAt(0)) {
-            resultado = true;
+            resultado = true
+        }
+        return {
+            valor: resultado,
+            tipo: TIPO_DATO.BOOLEANO,
+            linea: _opIzq.linea,
+            columna: _opIzq.columna,
+            cadena: cadena
+        }
+    }
+    // Casteo implícito caracter/entero-doble
+    if ((opIzq.tipo === TIPO_DATO.CARACTER) && (opDer.tipo === TIPO_DATO.ENTERO || opDer.tipo === TIPO_DATO.DOBLE)) {
+        var resultado = false
+        if (opIzq.valor.charCodeAt(0) >= opDer.valor) {
+            resultado = true
         }
         return {
             valor: resultado,

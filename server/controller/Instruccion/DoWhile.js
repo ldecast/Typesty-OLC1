@@ -3,7 +3,7 @@ const TIPO_DATO = require("../Enum/Tipados")
 const Operacion = require("../../model/Operacion/Operacion")
 
 function cicloDoWhile(_instruccion, _ambito) {
-    var cadena = { cadena: "", retorno: null, err: null }
+    var cadena = { cadena: "", retorno: null, err: null, hasBreak: false, hasContinue: false, hasReturn: false }
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     var max = 0;
@@ -17,6 +17,8 @@ function cicloDoWhile(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito);
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                cadena.hasBreak = bloque.hasBreak;
+                cadena.hasReturn = bloque.hasReturn;
                 if (bloque.hasBreak || bloque.hasReturn) break;
                 if (bloque.hasContinue) continue;
                 condicion = Operacion(_instruccion.expresion, _ambito)
@@ -39,6 +41,8 @@ function cicloDoWhile(_instruccion, _ambito) {
                 var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito);
                 cadena.cadena += bloque.cadena;
                 if (bloque.retorno) cadena.retorno = bloque.retorno;
+                cadena.hasBreak = bloque.hasBreak;
+                cadena.hasReturn = bloque.hasReturn;
                 if (bloque.hasBreak || bloque.hasReturn) break;
                 if (bloque.hasContinue) continue;
                 condicion = Operacion(_instruccion.expresion, _ambito)

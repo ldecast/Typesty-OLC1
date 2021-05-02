@@ -45,7 +45,7 @@ function sentenciaIf(_instruccion, _ambito) {
 }
 
 function sentenciaIfElse(_instruccion, _ambito) {
-    var cadena = { cadena: "", retorno: null, err: null }
+    var cadena = { cadena: "", retorno: null, err: null, hasBreak: false, hasContinue: false, hasReturn: false }
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.retorno) {
@@ -106,7 +106,7 @@ function sentenciaIfElse(_instruccion, _ambito) {
 }
 
 function sentenciaElseIf(_instruccion, _ambito) {
-    var cadena = { cadena: "", retorno: null, err: null }
+    var cadena = { cadena: "", retorno: null, err: null, hasBreak: false, hasContinue: false, hasReturn: false }
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.retorno) {
@@ -182,7 +182,7 @@ function sentenciaElseIf(_instruccion, _ambito) {
 }
 
 function operadorTernario(_instruccion, _ambito) {
-    var cadena = { cadena: "", retorno: null, err: null }
+    var cadena = { cadena: "", retorno: null, err: null, hasBreak: false, hasContinue: false, hasReturn: false }
     var operacion = Operacion(_instruccion.condicion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.retorno) {

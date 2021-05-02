@@ -32,7 +32,7 @@ function Exec(_instruccion, _ambito) {
             }
         }
         var retorno = Bloque(funcionEjecutar.instrucciones, nuevoAmbito);
-        if (funcionEjecutar.retorno && retorno.retorno == null) return { err: `Error: La función '${funcionEjecutar.id}' no tiene una sentencia de retorno.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
+        if (funcionEjecutar.retorno && retorno.retorno == null) return { err: `Error: La función '${funcionEjecutar.id}' no ejecutó ninguna sentencia de retorno.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
         if (retorno.retorno != null) {
             if (retorno.retorno.retorno) {
                 retorno.cadena = retorno.retorno.cadena;
