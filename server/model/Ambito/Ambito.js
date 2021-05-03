@@ -180,6 +180,7 @@ class Ambito {
     getSimbolos(instrucciones, simbolos, clave) {
         for (let i = 0; i < instrucciones.length; i++) {
             const instruccion = instrucciones[i];
+            if (instruccion.tipo === TIPO_INSTRUCCION.BREAK || instruccion.tipo === TIPO_INSTRUCCION.RETURN) break;
             if (instruccion.tipo === TIPO_INSTRUCCION.DECLARACION) {
                 simbolos.push({
                     id: instruccion.id,
@@ -209,8 +210,9 @@ class Ambito {
                 if (instruccion.casosComparar) {
                     for (let i = 0; i < instruccion.casosComparar.length; i++) {
                         const caso = instruccion.casosComparar[i];
-                        simbolos = this.getSimbolos(caso.instrucciones, simbolos, clave + "->" + instruccion.tipo);
+                        simbolos = this.getSimbolos(caso.instrucciones, simbolos, clave + "->" + instruccion.tipo + "->CASO");
                     }
+                    simbolos = this.getSimbolos(instruccion.casoDefault.instrucciones, simbolos, clave + "->" + instruccion.tipo + "->DEFAULT");
                 }
             }
         }

@@ -14,9 +14,10 @@ function Global(_instrucciones, _ambito) {
         if (_instrucciones[i].tipo === TIPO_INSTRUCCION.EXEC) {
             countExec++;
             if (countExec > 1) {
+                cadena.cadena = `Error: No es posible ejecutar más de un EXEC.\nLínea: ${String(_instrucciones[i].linea)} Columna: ${String(_instrucciones[i].columna)}\n`;
                 cadena.errores.push({
                     tipo: 'Semántico',
-                    error: "Error: No es posible ejecutar más de un EXEC.",
+                    error: "No es posible ejecutar más de un EXEC.",
                     linea: _instrucciones[i].linea,
                     columna: _instrucciones[i].columna
                 });
@@ -26,9 +27,10 @@ function Global(_instrucciones, _ambito) {
         }
     }
     if (countExec == 0) {
+        cadena.cadena = `Error: No se ha encontrado ninguna sentencia EXEC.\n`;
         cadena.errores.push({
             tipo: 'Semántico',
-            error: "Error: No se ha encontrado ninguna sentencia EXEC.",
+            error: "No se ha encontrado ninguna sentencia EXEC.",
             linea: "-",
             columna: "-"
         });
@@ -41,24 +43,26 @@ function Global(_instrucciones, _ambito) {
         if (_instrucciones[i].tipo === TIPO_INSTRUCCION.NUEVO_METODO) {
             var mensaje = Metodo(_instrucciones[i], _ambito)
             if (mensaje != null) {
-                cadena.cadena += mensaje + '\n'
+                var error = String(mensaje);
+                cadena.cadena += error;
                 cadena.errores.push({
                     tipo: 'Semántico',
-                    error: mensaje,
-                    linea: "-",
-                    columna: "-"
+                    error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                    linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                    columna: error.substring(error.indexOf("Columna") + 9),
                 });
             }
         }
         else if (_instrucciones[i].tipo === TIPO_INSTRUCCION.NUEVA_FUNCION) {
             var mensaje = Funcion(_instrucciones[i], _ambito)
             if (mensaje != null) {
-                cadena.cadena += mensaje + '\n'
+                var error = String(mensaje);
+                cadena.cadena += error;
                 cadena.errores.push({
                     tipo: 'Semántico',
-                    error: mensaje,
-                    linea: "-",
-                    columna: "-"
+                    error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                    linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                    columna: error.substring(error.indexOf("Columna") + 9),
                 });
             }
         }
@@ -72,12 +76,13 @@ function Global(_instrucciones, _ambito) {
                 if (mensaje.cadena)
                     cadena.cadena += mensaje.cadena
                 if (mensaje.err) {
-                    cadena.cadena += mensaje.err
+                    var error = String(mensaje.err);
+                    cadena.cadena += error;
                     cadena.errores.push({
                         tipo: 'Semántico',
-                        error: mensaje.err,
-                        linea: "-",
-                        columna: "-"
+                        error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                        linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                        columna: error.substring(error.indexOf("Columna") + 9),
                     });
                 }
             }
@@ -88,12 +93,13 @@ function Global(_instrucciones, _ambito) {
                 if (mensaje.cadena)
                     cadena.cadena += mensaje.cadena
                 if (mensaje.err) {
-                    cadena.cadena += mensaje.err
+                    var error = String(mensaje.err);
+                    cadena.cadena += error;
                     cadena.errores.push({
                         tipo: 'Semántico',
-                        error: mensaje.err,
-                        linea: "-",
-                        columna: "-"
+                        error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                        linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                        columna: error.substring(error.indexOf("Columna") + 9),
                     });
                 }
             }
@@ -112,12 +118,13 @@ function Global(_instrucciones, _ambito) {
     if (mensaje.cadena)
         cadena.cadena += mensaje.cadena
     if (mensaje.err) {
-        cadena.cadena += mensaje.err
+        var error = String(mensaje.err);
+        cadena.cadena += error;
         cadena.errores.push({
             tipo: 'Semántico',
-            error: mensaje.err,
-            linea: "-",
-            columna: "-"
+            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+            columna: error.substring(error.indexOf("Columna") + 9),
         });
     }
     if (mensaje.errores) {
@@ -127,7 +134,6 @@ function Global(_instrucciones, _ambito) {
         }
     }
 
-    // console.log(cadena.errores, 677777)
     return cadena
 }
 

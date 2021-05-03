@@ -30,3 +30,7 @@ hr {
     border-width: 0.13em;
     border-color: gray;
 }
+
+.fc:first-letter{
+    text-transform: capitalize
+  }

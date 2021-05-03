@@ -19,13 +19,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                     if (mensaje.retorno)
                         cadena.cadena += mensaje.retorno.valor + '\n'
@@ -41,13 +42,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                 }
             }
@@ -57,13 +59,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                 }
             }
@@ -73,13 +76,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
@@ -96,13 +100,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
@@ -119,13 +124,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
@@ -142,13 +148,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
@@ -165,13 +172,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
@@ -188,13 +196,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
@@ -211,13 +220,14 @@ function Bloque(_instrucciones, _ambito) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
                     if (mensaje.err) {
-                        cadena.cadena += mensaje.err
+                        var error = String(mensaje.err);
+                        cadena.cadena += error;
                         cadena.errores.push({
                             tipo: 'Semántico',
-                            error: mensaje.err,
-                            linea: instruccion.linea,
-                            columna: instruccion.columna
-                        })
+                            error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                            linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                            columna: error.substring(error.indexOf("Columna") + 9),
+                        });
                     }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
@@ -235,13 +245,14 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje.cadena)
                     cadena.cadena += mensaje.cadena
                 if (mensaje.err) {
-                    cadena.cadena += mensaje.err
+                    var error = String(mensaje.err);
+                    cadena.cadena += error;
                     cadena.errores.push({
                         tipo: 'Semántico',
-                        error: mensaje.err,
-                        linea: instruccion.linea,
-                        columna: instruccion.columna
-                    })
+                        error: error.substring(error.indexOf("Error") + 7, error.indexOf("Línea") - 1),
+                        linea: error.substring(error.indexOf("Línea") + 7, error.indexOf("Columna") - 1),
+                        columna: error.substring(error.indexOf("Columna") + 9),
+                    });
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.BREAK) {
@@ -249,7 +260,7 @@ function Bloque(_instrucciones, _ambito) {
                     cadena.cadena = `Error: se ha encontrado una sentencia BREAK fuera de un ciclo o switch.\nLínea: ${instruccion.linea} Columna: ${instruccion.columna}\n`;
                     cadena.errores.push({
                         tipo: 'Semántico',
-                        error: cadena.cadena,
+                        error: "Se ha encontrado una sentencia BREAK fuera de un ciclo o switch.",
                         linea: instruccion.linea,
                         columna: instruccion.columna
                     });
@@ -264,7 +275,7 @@ function Bloque(_instrucciones, _ambito) {
                     cadena.cadena = `Error: se ha encontrado una sentencia CONTINUE fuera de un ciclo.\nLínea: ${instruccion.linea} Columna: ${instruccion.columna}\n`;
                     cadena.errores.push({
                         tipo: 'Semántico',
-                        error: cadena.cadena,
+                        error: "Se ha encontrado una sentencia CONTINUE fuera de un ciclo.",
                         linea: instruccion.linea,
                         columna: instruccion.columna
                     });
@@ -275,9 +286,9 @@ function Bloque(_instrucciones, _ambito) {
                     cadena.cadena = `Error: unreachable statement.\nLínea: ${_instrucciones[_instrucciones.indexOf(instruccion) + 1].linea} Columna: ${_instrucciones[_instrucciones.indexOf(instruccion) + 1].columna}\n`;
                     cadena.errores.push({
                         tipo: 'Semántico',
-                        error: cadena.cadena,
-                        linea: instruccion.linea,
-                        columna: instruccion.columna
+                        error: "Error: unreachable statement.",
+                        linea: _instrucciones[_instrucciones.indexOf(instruccion) + 1].linea,
+                        columna: _instrucciones[_instrucciones.indexOf(instruccion) + 1].columna
                     });
                     cadena.retorno = null;
                     brk = true;
@@ -298,12 +309,7 @@ function Bloque(_instrucciones, _ambito) {
                     cadena.retorno = "RETORNO VACIO";
             }
             else {
-                cadena.errores.push({
-                    tipo: 'Semántico',
-                    error: "Error. Instrucción no procesada.",
-                    linea: instruccion.linea,
-                    columna: instruccion.columna
-                });
+                return { err: `Error. Instrucción no procesada.\nLínea: ${instruccion.linea} Columna: ${instruccion.columna}\n` };
             }
         }
     });

@@ -1255,7 +1255,7 @@ case 78: yy_.yytext = cadena; this.popState(); return 89;
 break;
 case 79:return 5
 break;
-case 80: errores.push({ tipo: "Léxico", error: yy_.yytext, linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column }); return 'INVALID'; 
+case 80: errores.push({ tipo: "Léxico", error: yy_.yytext, linea: yy_.yylloc.first_line, columna: yy_.yylloc.first_column+1 }); return 'INVALID'; 
 break;
 }
 },

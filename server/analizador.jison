@@ -98,7 +98,7 @@
 <string>["]				{ yytext = cadena; this.popState(); return 'cadena'; }
 
 <<EOF>>               	return 'EOF'
-.                     	{ errores.push({ tipo: "Léxico", error: yytext, linea: yylloc.first_line, columna: yylloc.first_column }); return 'INVALID'; } 
+.                     	{ errores.push({ tipo: "Léxico", error: yytext, linea: yylloc.first_line, columna: yylloc.first_column+1 }); return 'INVALID'; } 
 
 /lex
 %{
