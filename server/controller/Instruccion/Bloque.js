@@ -9,7 +9,7 @@ const { If, IfElse, ElseIf } = require('./If');
 const Switch = require("./Switch");
 
 function Bloque(_instrucciones, _ambito) {
-    var cadena = { cadena: "", retorno: null, hasBreak: false, hasContinue: false, hasReturn: false }
+    var cadena = { cadena: "", retorno: null, hasBreak: false, hasContinue: false, hasReturn: false, errores: [] };
     var brk = false;
     _instrucciones.forEach(instruccion => {
         if (!brk) {
@@ -18,8 +18,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                     if (mensaje.retorno)
                         cadena.cadena += mensaje.retorno.valor + '\n'
                     if (mensaje.print_val)
@@ -33,8 +40,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.ASIGNACION) {
@@ -42,8 +56,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                 }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.WHILE) {
@@ -51,8 +72,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
                     cadena.hasBreak = mensaje.hasBreak;
@@ -67,8 +95,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
                     cadena.hasBreak = mensaje.hasBreak;
@@ -83,8 +118,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
                     cadena.hasBreak = mensaje.hasBreak;
@@ -99,8 +141,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
                     cadena.hasBreak = mensaje.hasBreak;
@@ -115,8 +164,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
                     cadena.hasBreak = mensaje.hasBreak;
@@ -131,8 +187,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
                     cadena.hasBreak = mensaje.hasBreak;
@@ -147,8 +210,15 @@ function Bloque(_instrucciones, _ambito) {
                 if (mensaje) {
                     if (mensaje.cadena)
                         cadena.cadena += mensaje.cadena
-                    if (mensaje.err)
+                    if (mensaje.err) {
                         cadena.cadena += mensaje.err
+                        cadena.errores.push({
+                            tipo: 'Semántico',
+                            error: mensaje.err,
+                            linea: instruccion.linea,
+                            columna: instruccion.columna
+                        })
+                    }
                     if (mensaje.retorno)
                         cadena.retorno = mensaje.retorno
                     cadena.hasBreak = mensaje.hasBreak;
@@ -164,12 +234,25 @@ function Bloque(_instrucciones, _ambito) {
                 var mensaje = Exec(instruccion, _ambito)
                 if (mensaje.cadena)
                     cadena.cadena += mensaje.cadena
-                if (mensaje.err)
+                if (mensaje.err) {
                     cadena.cadena += mensaje.err
+                    cadena.errores.push({
+                        tipo: 'Semántico',
+                        error: mensaje.err,
+                        linea: instruccion.linea,
+                        columna: instruccion.columna
+                    })
+                }
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.BREAK) {
                 if (!_ambito.isInsideLoop() && !_ambito.isInsideSwitch()) {
                     cadena.cadena = `Error: se ha encontrado una sentencia BREAK fuera de un ciclo o switch.\nLínea: ${instruccion.linea} Columna: ${instruccion.columna}\n`;
+                    cadena.errores.push({
+                        tipo: 'Semántico',
+                        error: cadena.cadena,
+                        linea: instruccion.linea,
+                        columna: instruccion.columna
+                    });
                     cadena.retorno = null;
                     brk = true;
                 }
@@ -179,11 +262,23 @@ function Bloque(_instrucciones, _ambito) {
             else if (instruccion.tipo === TIPO_INSTRUCCION.CONTINUE) {
                 if (!_ambito.isInsideLoop()) {
                     cadena.cadena = `Error: se ha encontrado una sentencia CONTINUE fuera de un ciclo.\nLínea: ${instruccion.linea} Columna: ${instruccion.columna}\n`;
+                    cadena.errores.push({
+                        tipo: 'Semántico',
+                        error: cadena.cadena,
+                        linea: instruccion.linea,
+                        columna: instruccion.columna
+                    });
                     cadena.retorno = null;
                     brk = true;
                 }
                 else if (_instrucciones[_instrucciones.length - 1] !== instruccion) {
                     cadena.cadena = `Error: unreachable statement.\nLínea: ${_instrucciones[_instrucciones.indexOf(instruccion) + 1].linea} Columna: ${_instrucciones[_instrucciones.indexOf(instruccion) + 1].columna}\n`;
+                    cadena.errores.push({
+                        tipo: 'Semántico',
+                        error: cadena.cadena,
+                        linea: instruccion.linea,
+                        columna: instruccion.columna
+                    });
                     cadena.retorno = null;
                     brk = true;
                 }
@@ -203,7 +298,12 @@ function Bloque(_instrucciones, _ambito) {
                     cadena.retorno = "RETORNO VACIO";
             }
             else {
-                return { err: `Error. Instrucción no procesada.\nLínea: ${instruccion.linea} Columna: ${instruccion.columna}\n` };
+                cadena.errores.push({
+                    tipo: 'Semántico',
+                    error: "Error. Instrucción no procesada.",
+                    linea: instruccion.linea,
+                    columna: instruccion.columna
+                });
             }
         }
     });

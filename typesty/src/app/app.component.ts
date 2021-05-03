@@ -37,6 +37,7 @@ export class AppComponent {
   salida: string = '';
   fname: string = '';
   simbolos: any = [];
+  errores: any = [];
 
   newTab() {
     window.open("/", "_blank");
@@ -54,10 +55,17 @@ export class AppComponent {
           console.log('Data received!');
           this.salida = data.output;
           this.simbolos = data.arreglo_simbolos;
+          this.errores = data.arreglo_errores;
         },
         error => {
           console.log('There was an error :(', error);
-          this.salida = error.error.message;
+          if (error.error) {
+            if (error.error.message)
+              this.salida = error.error.message;
+            else
+              this.salida = error.error;
+          }
+
         }
       );
     } else {

@@ -6,32 +6,60 @@ const Funcion = require("../../controller/Instruccion/Funcion")
 const Exec = require("../../controller/Instruccion/Exec")
 
 function Global(_instrucciones, _ambito) {
-    var cadena = ""
+    var cadena = { cadena: "", errores: [] };
 
     // Verificando 1 Exec
     var countExec = 0;
     for (let i = 0; i < _instrucciones.length; i++) {
         if (_instrucciones[i].tipo === TIPO_INSTRUCCION.EXEC) {
             countExec++;
-            if (countExec > 1)
-                return `Error: No es posible ejecutar más de un EXEC.\nLínea: ${String(_instrucciones[i].linea)} Columna: ${String(_instrucciones[i].columna)}\n`
+            if (countExec > 1) {
+                cadena.errores.push({
+                    tipo: 'Semántico',
+                    error: "Error: No es posible ejecutar más de un EXEC.",
+                    linea: _instrucciones[i].linea,
+                    columna: _instrucciones[i].columna
+                });
+                return cadena;
+            }
+
         }
     }
-    if (countExec == 0)
-        return "Error: No se ha encontrado ninguna sentencia EXEC.\n"
+    if (countExec == 0) {
+        cadena.errores.push({
+            tipo: 'Semántico',
+            error: "Error: No se ha encontrado ninguna sentencia EXEC.",
+            linea: "-",
+            columna: "-"
+        });
+        return cadena;
+    }
+
 
     // Declarar métodos y funciones
     for (let i = 0; i < _instrucciones.length; i++) {
         if (_instrucciones[i].tipo === TIPO_INSTRUCCION.NUEVO_METODO) {
             var mensaje = Metodo(_instrucciones[i], _ambito)
             if (mensaje != null) {
-                cadena += mensaje + '\n'
+                cadena.cadena += mensaje + '\n'
+                cadena.errores.push({
+                    tipo: 'Semántico',
+                    error: mensaje,
+                    linea: "-",
+                    columna: "-"
+                });
             }
         }
         else if (_instrucciones[i].tipo === TIPO_INSTRUCCION.NUEVA_FUNCION) {
             var mensaje = Funcion(_instrucciones[i], _ambito)
             if (mensaje != null) {
-                cadena += mensaje + '\n'
+                cadena.cadena += mensaje + '\n'
+                cadena.errores.push({
+                    tipo: 'Semántico',
+                    error: mensaje,
+                    linea: "-",
+                    columna: "-"
+                });
             }
         }
     }
@@ -42,18 +70,32 @@ function Global(_instrucciones, _ambito) {
             var mensaje = Declaracion(_instrucciones[i], _ambito)
             if (mensaje) {
                 if (mensaje.cadena)
-                    cadena += mensaje.cadena
-                if (mensaje.err)
-                    cadena += mensaje.err
+                    cadena.cadena += mensaje.cadena
+                if (mensaje.err) {
+                    cadena.cadena += mensaje.err
+                    cadena.errores.push({
+                        tipo: 'Semántico',
+                        error: mensaje.err,
+                        linea: "-",
+                        columna: "-"
+                    });
+                }
             }
         }
         else if (_instrucciones[i].tipo === TIPO_INSTRUCCION.ASIGNACION) {
             var mensaje = Asignacion(_instrucciones[i], _ambito)
             if (mensaje) {
                 if (mensaje.cadena)
-                    cadena += mensaje.cadena
-                if (mensaje.err)
-                    cadena += mensaje.err
+                    cadena.cadena += mensaje.cadena
+                if (mensaje.err) {
+                    cadena.cadena += mensaje.err
+                    cadena.errores.push({
+                        tipo: 'Semántico',
+                        error: mensaje.err,
+                        linea: "-",
+                        columna: "-"
+                    });
+                }
             }
         }
     }
@@ -68,9 +110,24 @@ function Global(_instrucciones, _ambito) {
     }
     var mensaje = Exec(instruccion, _ambito)
     if (mensaje.cadena)
-        cadena += mensaje.cadena
-    if (mensaje.err)
-        cadena += mensaje.err
+        cadena.cadena += mensaje.cadena
+    if (mensaje.err) {
+        cadena.cadena += mensaje.err
+        cadena.errores.push({
+            tipo: 'Semántico',
+            error: mensaje.err,
+            linea: "-",
+            columna: "-"
+        });
+    }
+    if (mensaje.errores) {
+        for (let i = 0; i < mensaje.errores.length; i++) {
+            const err = mensaje.errores[i];
+            cadena.errores.push(err);
+        }
+    }
+
+    // console.log(cadena.errores, 677777)
     return cadena
 }
 

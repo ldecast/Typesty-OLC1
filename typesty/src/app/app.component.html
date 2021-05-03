@@ -81,20 +81,19 @@
             <th scope="col">#</th>
             <th scope="col">Tipo</th>
             <th scope="col">Error</th>
-            <th scope="col">Fila</th>
-            <th scope="col">Columna</th>
+            <th class="text-center" scope="col">Fila</th>
+            <th class="text-center" scope="col">Columna</th>
           </tr>
         </thead>
-        <!-- <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>x</td>
-            <td>string</td>
-            <td>4</td>
-            <td>5</td>
-            <td>funcion</td>
+        <tbody>
+          <tr *ngFor="let item of errores; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <td>{{item.tipo}}</td>
+            <td>{{item.error}}</td>
+            <td class="text-center">{{item.linea}}</td>
+            <td class="text-center">{{item.columna}}</td>
           </tr>
-        </tbody> -->
+        </tbody>
       </table>
     </div>
   </div>
