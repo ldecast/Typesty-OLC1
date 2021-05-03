@@ -4,7 +4,6 @@ const Declaracion = require("../../controller/Instruccion/Declaracion")
 const Metodo = require("../../controller/Instruccion/Metodo")
 const Funcion = require("../../controller/Instruccion/Funcion")
 const Exec = require("../../controller/Instruccion/Exec")
-const Operacion = require("../Operacion/Operacion")
 
 function Global(_instrucciones, _ambito) {
     var cadena = ""
@@ -72,9 +71,6 @@ function Global(_instrucciones, _ambito) {
         cadena += mensaje.cadena
     if (mensaje.err)
         cadena += mensaje.err
-    // if (mensaje.retorno)
-    //     cadena += mensaje.retorno.cadena
-    // console.log(mensaje, "SSSSSSSSSSSSSSSSSSSSSSS")
     return cadena
 }
 

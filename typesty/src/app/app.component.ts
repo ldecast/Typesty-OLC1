@@ -36,6 +36,7 @@ export class AppComponent {
   entrada: string = '';
   salida: string = '';
   fname: string = '';
+  simbolos: any = [];
 
   newTab() {
     window.open("/", "_blank");
@@ -46,24 +47,23 @@ export class AppComponent {
   }
 
   onSubmit() {
-    if (this.checkInput(this.entrada)) {
+    if (this.entrada != "") {
       const x = { "input": this.entrada }
       this.appService.compile(x).subscribe(
         data => {
-          console.log('Data received!', data);
+          console.log('Data received!');
           this.salida = data.output;
+          this.simbolos = data.arreglo_simbolos;
         },
         error => {
           console.log('There was an error :(', error);
-          if (error.error.message == "ERROR: ONLY ONE 'EXEC' IS PERMITED") {
-            alert("Error: se ha encontrado más de un EXEC en la entrada. Vuelva a intentarlo.");
-          }
-          else {
-            this.salida = error.error.message;
-          }
+          this.salida = error.error.message;
         }
       );
+    } else {
+      this.salida = "Entrada vacía. Intente de nuevo.";
     }
+
   }
 
   saveFile() {
@@ -89,7 +89,6 @@ export class AppComponent {
     let input = event.target;
     let reader = new FileReader();
     reader.onload = () => {
-      //'text' is the content of the file
       var text = reader.result;
       if (text) {
         this.entrada = text.toString();
@@ -98,19 +97,6 @@ export class AppComponent {
     reader.readAsText(input.files[0]);
     this.salida = '';
     console.log('File opened!')
-  }
-
-  checkInput(x: string) {
-    // x = x.replace(" ", "");
-    // var count = (x.match(/exec/g) || []).length;
-    // if (count > 1) {
-    //   alert("Se ha encontrado más de un comando EXEC en la entrada, si se encuentra dentro de algún comentario elimínelo también.");
-    //   return false;
-    // }
-    // else {
-    //   return true;
-    // }
-    return true;
   }
 
 }
