@@ -240,7 +240,6 @@ function Bloque(_instrucciones, _ambito) {
             }
             else if (instruccion.tipo === TIPO_INSTRUCCION.LLAMADA) {
                 const Exec = require("./Exec")
-                const Operacion = require("../../model/Operacion/Operacion");
                 var mensaje = Exec(instruccion, _ambito)
                 if (mensaje.cadena)
                     cadena.cadena += mensaje.cadena
@@ -303,7 +302,7 @@ function Bloque(_instrucciones, _ambito) {
                     var expresion = Operacion(instruccion.expresion, _ambito);
                     if (expresion.err) cadena.cadena += expresion.err;
                     if (expresion.cadena) cadena.cadena += expresion.cadena;
-                    cadena.retorno = expresion;
+                    cadena.retorno = expresion.retorno ? expresion.retorno : expresion;
                 }
                 else
                     cadena.retorno = "RETORNO VACIO";

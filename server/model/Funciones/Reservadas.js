@@ -4,7 +4,7 @@ const Operacion = require("../Operacion/Operacion")
 function casteo(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null }
     var expresion = Operacion(_instruccion.expresion, _ambito);
-    if (expresion.err) { cadena.err = op.err; return cadena }
+    if (expresion.err) { cadena.err = expresion.err; return cadena }
     if (expresion.cadena) cadena.cadena = expresion.cadena;
     if (expresion.retorno) expresion = expresion.retorno;
     switch (_instruccion.nuevoTipo) {
@@ -65,10 +65,10 @@ function casteo(_instruccion, _ambito) {
 function to_Lower(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null }
     var expresion = Operacion(_instruccion.expresion, _ambito);
-    if (expresion.err) { cadena.err = op.err; return cadena }
+    if (expresion.err) { cadena.err = expresion.err; return cadena }
     if (expresion.cadena) cadena.cadena = expresion.cadena;
     if (expresion.retorno) expresion = expresion.retorno;
-    if (expresion.tipo === TIPO_DATO.CADENA) {
+    if (expresion.tipo === TIPO_DATO.CADENA || expresion.tipo === TIPO_DATO.CARACTER) {
         expresion.valor = expresion.valor.toLowerCase();
         cadena.retorno = expresion;
         return cadena;
@@ -79,10 +79,10 @@ function to_Lower(_instruccion, _ambito) {
 function to_Upper(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null }
     var expresion = Operacion(_instruccion.expresion, _ambito);
-    if (expresion.err) { cadena.err = op.err; return cadena }
+    if (expresion.err) { cadena.err = expresion.err; return cadena }
     if (expresion.cadena) cadena.cadena = expresion.cadena;
     if (expresion.retorno) expresion = expresion.retorno;
-    if (expresion.tipo === TIPO_DATO.CADENA) {
+    if (expresion.tipo === TIPO_DATO.CADENA || expresion.tipo === TIPO_DATO.CARACTER) {
         expresion.valor = expresion.valor.toUpperCase();
         cadena.retorno = expresion;
         return cadena;
@@ -93,7 +93,7 @@ function to_Upper(_instruccion, _ambito) {
 function get_length(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null }
     var expresion = Operacion(_instruccion.expresion, _ambito);
-    if (expresion.err) { cadena.err = op.err; return cadena }
+    if (expresion.err) { cadena.err = expresion.err; return cadena }
     if (expresion.cadena) cadena.cadena = expresion.cadena;
     if (expresion.retorno) expresion = expresion.retorno;
     if (expresion.tipo === TIPO_DATO.VECTOR || expresion.tipo === TIPO_DATO.LISTA) {
@@ -113,7 +113,7 @@ function get_length(_instruccion, _ambito) {
 function truncate(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null }
     var expresion = Operacion(_instruccion.expresion, _ambito);
-    if (expresion.err) { cadena.err = op.err; return cadena }
+    if (expresion.err) { cadena.err = expresion.err; return cadena }
     if (expresion.cadena) cadena.cadena = expresion.cadena;
     if (expresion.retorno) expresion = expresion.retorno;
     if (expresion.tipo === TIPO_DATO.ENTERO || expresion.tipo === TIPO_DATO.DOBLE) {
@@ -126,7 +126,7 @@ function truncate(_instruccion, _ambito) {
 function round(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null }
     var expresion = Operacion(_instruccion.expresion, _ambito);
-    if (expresion.err) { cadena.err = op.err; return cadena }
+    if (expresion.err) { cadena.err = expresion.err; return cadena }
     if (expresion.cadena) cadena.cadena = expresion.cadena;
     if (expresion.retorno) expresion = expresion.retorno;
     if (expresion.tipo === TIPO_DATO.ENTERO || expresion.tipo === TIPO_DATO.DOBLE) {
@@ -139,31 +139,34 @@ function round(_instruccion, _ambito) {
 function typeOf(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null }
     var expresion = Operacion(_instruccion.expresion, _ambito);
-    if (expresion.err) { cadena.err = op.err; return cadena }
+    if (expresion.err) { cadena.err = expresion.err; return cadena }
     if (expresion.cadena) cadena.cadena = expresion.cadena;
     if (expresion.retorno) expresion = expresion.retorno;
-    var type = ''
-    switch (expresion.tipo) {
-        case TIPO_DATO.BOOLEANO: type = 'boolean'; break;
-        case TIPO_DATO.CADENA: type = 'string'; break;
-        case TIPO_DATO.CARACTER: type = 'char'; break;
-        case TIPO_DATO.DOBLE: type = 'double'; break;
-        case TIPO_DATO.ENTERO: type = 'int'; break;
-        case TIPO_DATO.LISTA: type = 'list'; break;
-        case TIPO_DATO.VECTOR: type = 'array'; break;
-        default: type = null; break;
-    }
+    var type = get_Type(expresion);
     cadena.retorno = { valor: type, tipo: TIPO_DATO.CADENA, linea: _instruccion.linea, columna: _instruccion.columna }
     return cadena;
+}
+
+function get_Type(expresion) {
+    switch (expresion.tipo) {
+        case TIPO_DATO.BOOLEANO: return 'boolean';
+        case TIPO_DATO.CADENA: return 'string';
+        case TIPO_DATO.CARACTER: return 'char';
+        case TIPO_DATO.DOBLE: return 'double';
+        case TIPO_DATO.ENTERO: return 'int';
+        case TIPO_DATO.LISTA: return 'list<' + get_Type(expresion.valor[0]) + '>';
+        case TIPO_DATO.VECTOR: return get_Type(expresion.valor[0]) + '[]';
+        default: return null;
+    }
 }
 
 function to_String(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null }
     var expresion = Operacion(_instruccion.expresion, _ambito);
-    if (expresion.err) { cadena.err = op.err; return cadena }
+    if (expresion.err) { cadena.err = expresion.err; return cadena }
     if (expresion.cadena) cadena.cadena = expresion.cadena;
     if (expresion.retorno) expresion = expresion.retorno;
-    if (expresion.tipo === TIPO_DATO.ENTERO || expresion.tipo === TIPO_DATO.DOBLE || expresion.tipo === TIPO_DATO.BOOLEANO || expresion.tipo === TIPO_DATO.CADENA) {
+    if (expresion.tipo === TIPO_DATO.ENTERO || expresion.tipo === TIPO_DATO.DOBLE || expresion.tipo === TIPO_DATO.BOOLEANO || expresion.tipo === TIPO_DATO.CADENA || expresion.tipo === TIPO_DATO.CARACTER) {
         cadena.retorno = { valor: String(expresion.valor), tipo: TIPO_DATO.CADENA, linea: _instruccion.linea, columna: _instruccion.columna }
         return cadena;
     }
@@ -173,7 +176,7 @@ function to_String(_instruccion, _ambito) {
 function to_CharList(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null }
     var expresion = Operacion(_instruccion.expresion, _ambito);
-    if (expresion.err) { cadena.err = op.err; return cadena }
+    if (expresion.err) { cadena.err = expresion.err; return cadena }
     if (expresion.cadena) cadena.cadena = expresion.cadena;
     if (expresion.retorno) expresion = expresion.retorno;
     if (expresion.tipo === TIPO_DATO.CADENA) {

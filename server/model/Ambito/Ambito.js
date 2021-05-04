@@ -115,66 +115,70 @@ class Ambito {
     }
 
     getArraySimbols() {
-        var simbolos = [];
-        for (var [clave, valor] of this.tablaSimbolos) {
-            var tipo = valor.tipo;
-            if (tipo === TIPO_DATO.VECTOR) tipo = "Vector: " + valor.valor[0].tipo;
-            if (tipo === TIPO_DATO.LISTA) tipo = "Lista: " + valor.valor[0].tipo;
-            var simb = {
-                id: valor.id,
-                objeto: 'Variable',
-                tipo: tipo,
-                entorno: 'global',
-                linea: valor.linea,
-                columna: valor.columna
-            }
-            if (!simbolos.some(e => e.id === simb.id)) {
-                simbolos.push(simb);
-            }
-        }
-        for (var [clave, valor] of this.tablaFunciones) {
-            if (valor.constructor.name === 'Metodo') {
-                simbolos.push({
+        try {
+            var simbolos = [];
+            for (var [clave, valor] of this.tablaSimbolos) {
+                var tipo = valor.tipo;
+                if (tipo === TIPO_DATO.VECTOR) tipo = "Vector: " + valor.valor[0].tipo;
+                if (tipo === TIPO_DATO.LISTA) tipo = "Lista: " + valor.valor[0].tipo;
+                var simb = {
                     id: valor.id,
-                    objeto: 'Método',
-                    tipo: 'VOID',
-                    entorno: 'global',
-                    linea: valor.linea,
-                    columna: valor.columna
-                });
-            }
-            else if (valor.constructor.name === 'Funcion') {
-                var tipo = valor.retorno;
-                if (tipo.vector) tipo = "Vector: " + tipo.vector;
-                if (tipo.lista) tipo = "Lista: " + tipo.lista;
-                simbolos.push({
-                    id: valor.id,
-                    objeto: 'Función',
+                    objeto: 'Variable',
                     tipo: tipo,
                     entorno: 'global',
                     linea: valor.linea,
                     columna: valor.columna
-                });
+                }
+                if (!simbolos.some(e => e.id === simb.id)) {
+                    simbolos.push(simb);
+                }
             }
-            if (valor.lista_parametros) {
-                for (let i = 0; i < valor.lista_parametros.length; i++) {
-                    const param = valor.lista_parametros[i];
-                    var tipo = param.tipo_dato;
+            for (var [clave, valor] of this.tablaFunciones) {
+                if (valor.constructor.name === 'Metodo') {
+                    simbolos.push({
+                        id: valor.id,
+                        objeto: 'Método',
+                        tipo: 'VOID',
+                        entorno: 'global',
+                        linea: valor.linea,
+                        columna: valor.columna
+                    });
+                }
+                else if (valor.constructor.name === 'Funcion') {
+                    var tipo = valor.retorno;
                     if (tipo.vector) tipo = "Vector: " + tipo.vector;
                     if (tipo.lista) tipo = "Lista: " + tipo.lista;
                     simbolos.push({
-                        id: param.id,
-                        objeto: 'Parámetro',
+                        id: valor.id,
+                        objeto: 'Función',
                         tipo: tipo,
-                        entorno: valor.id,
-                        linea: param.linea,
-                        columna: param.columna
+                        entorno: 'global',
+                        linea: valor.linea,
+                        columna: valor.columna
                     });
                 }
+                if (valor.lista_parametros) {
+                    for (let i = 0; i < valor.lista_parametros.length; i++) {
+                        const param = valor.lista_parametros[i];
+                        var tipo = param.tipo_dato;
+                        if (tipo.vector) tipo = "Vector: " + tipo.vector;
+                        if (tipo.lista) tipo = "Lista: " + tipo.lista;
+                        simbolos.push({
+                            id: param.id,
+                            objeto: 'Parámetro',
+                            tipo: tipo,
+                            entorno: valor.id,
+                            linea: param.linea,
+                            columna: param.columna
+                        });
+                    }
+                }
+                simbolos = this.getSimbolos(valor.instrucciones, simbolos, valor.id);
             }
-            simbolos = this.getSimbolos(valor.instrucciones, simbolos, valor.id);
+            return simbolos;
+        } catch (error) {
+            return simbolos;
         }
-        return simbolos;
     }
 
     getSimbolos(instrucciones, simbolos, clave) {
@@ -212,7 +216,9 @@ class Ambito {
                         const caso = instruccion.casosComparar[i];
                         simbolos = this.getSimbolos(caso.instrucciones, simbolos, clave + "->" + instruccion.tipo + "->CASO");
                     }
-                    simbolos = this.getSimbolos(instruccion.casoDefault.instrucciones, simbolos, clave + "->" + instruccion.tipo + "->DEFAULT");
+                    if (instruccion.casoDefault != null) {
+                        simbolos = this.getSimbolos(instruccion.casoDefault.instrucciones, simbolos, (clave + "->" + instruccion.tipo + "->DEFAULT").replace('->CASO', ''));
+                    }
                 }
             }
         }

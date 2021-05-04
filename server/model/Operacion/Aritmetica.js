@@ -34,15 +34,13 @@ function suma(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
-    if (opDer.retorno) {
-        cadena += opDer.cadena;
+    if (opDer.cadena) cadena = opDer.cadena;
+    if (opDer.retorno)
         opDer = opDer.retorno;
-    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.SUMA)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -116,15 +114,13 @@ function resta(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
-    if (opDer.retorno) {
-        cadena += opDer.cadena;
+    if (opDer.cadena) cadena = opDer.cadena;
+    if (opDer.retorno)
         opDer = opDer.retorno;
-    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.RESTA)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -188,15 +184,13 @@ function multiplicacion(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
-    if (opDer.retorno) {
-        cadena += opDer.cadena;
+    if (opDer.cadena) cadena = opDer.cadena;
+    if (opDer.retorno)
         opDer = opDer.retorno;
-    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.MULTIPLICACION)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -260,15 +254,13 @@ function division(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
-    if (opDer.retorno) {
-        cadena += opDer.cadena;
+    if (opDer.cadena) cadena = opDer.cadena;
+    if (opDer.retorno)
         opDer = opDer.retorno;
-    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.DIVISION)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -320,15 +312,13 @@ function potencia(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
-    if (opDer.retorno) {
-        cadena += opDer.cadena;
+    if (opDer.cadena) cadena = opDer.cadena;
+    if (opDer.retorno)
         opDer = opDer.retorno;
-    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.POTENCIA)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -392,15 +382,13 @@ function modulo(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
-    if (opDer.retorno) {
-        cadena += opDer.cadena;
+    if (opDer.cadena) cadena = opDer.cadena;
+    if (opDer.retorno)
         opDer = opDer.retorno;
-    }
     const tipoRes = TipoResultado(opIzq.tipo, opDer.tipo, TIPO_OPERACION.MODULO)
     var op1, op2, resultado;
     if (tipoRes != null) {
@@ -452,10 +440,9 @@ function negacion(_opIzq, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     const tipoRes = TipoResultado(opIzq.tipo, null, TIPO_OPERACION.NEGACION)
     var resultado;
     if (tipoRes != null) {

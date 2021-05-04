@@ -17,15 +17,13 @@ function or(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
-    if (opDer.retorno) {
-        cadena += opDer.cadena;
+    if (opDer.cadena) cadena = opDer.cadena;
+    if (opDer.retorno)
         opDer = opDer.retorno;
-    }
     if (opIzq.tipo === TIPO_DATO.BOOLEANO || opDer.tipo === TIPO_DATO.BOOLEANO) {
         var resultado = false;
         var op1, op2;
@@ -63,15 +61,13 @@ function and(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     var opDer = Operacion(_opDer, _ambito); if (opDer.err) return opDer;
-    if (opDer.retorno) {
-        cadena += opDer.cadena;
+    if (opDer.cadena) cadena = opDer.cadena;
+    if (opDer.retorno)
         opDer = opDer.retorno;
-    }
     if (opIzq.tipo === TIPO_DATO.BOOLEANO || opDer.tipo === TIPO_DATO.BOOLEANO) {
         var resultado = false;
         var op1, op2;
@@ -109,10 +105,9 @@ function not(_opIzq, _opDer, _ambito) {
     const Operacion = require("./Operacion")
     var cadena = "";
     var opIzq = Operacion(_opIzq, _ambito); if (opIzq.err) return opIzq;
-    if (opIzq.retorno) {
-        cadena += opIzq.cadena;
+    if (opIzq.cadena) cadena = opIzq.cadena;
+    if (opIzq.retorno)
         opIzq = opIzq.retorno;
-    }
     var resultado = false;
     if (opIzq.tipo === TIPO_DATO.BOOLEANO) {
         resultado = !opIzq.valor;

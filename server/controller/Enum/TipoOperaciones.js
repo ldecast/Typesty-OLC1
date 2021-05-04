@@ -15,6 +15,6 @@ const TIPO_OPERACION = {
     OR: 'OR',
     AND: 'AND',
     NOT: 'NOT',
-
+    MAX: 2000
 }
 module.exports = TIPO_OPERACION;

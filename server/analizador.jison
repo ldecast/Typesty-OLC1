@@ -382,6 +382,7 @@ FUNCIONESRESERVADAS: FTOLOWER {$$=$1}
 ;
 
 FPRINT: prprint pabre EXPRESION pcierra ptcoma {$$ = new INSTRUCCION.nuevoImprimir($3, this._$.first_line,this._$.first_column+1)}
+		| prprint pabre pcierra ptcoma {$$ = new INSTRUCCION.nuevoImprimir(INSTRUCCION.nuevoValor("", TIPO_VALOR.CADENA, this._$.first_line,this._$.first_column+1), this._$.first_line,this._$.first_column+1)}
 		| prprint error ptcoma { $$ = ""; errores.push({ tipo: "Sintáctico", error: "Llamada a función imprimir no válida.", linea: this._$.first_line, columna: this._$.first_column+1 }); }
 ;
 

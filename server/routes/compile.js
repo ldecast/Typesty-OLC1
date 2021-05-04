@@ -4,7 +4,7 @@ const Global = require("../model/Ambito/Global");
 
 module.exports = (parser, app) => {
     app.post('/compile', (req, res) => {
-        try {
+        // try {
             var input = req.body.input;
             var ast = parser.parse(input);
             var parse = ast.parse;
@@ -23,8 +23,8 @@ module.exports = (parser, app) => {
                 "output": cadena.cadena
             }
             res.status(200).send(output);
-        } catch (error) {
-            res.status(500).send(String(error));
-        }
+        // } catch (error) {
+        //     res.status(500).send(String(error));
+        // }
     });
 }
