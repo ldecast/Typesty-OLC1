@@ -4,7 +4,6 @@ const TIPO_OPERACION = require("../Enum/TipoOperaciones");
 const TIPO_VALOR = require("../Enum/TipoValores");
 
 class Graph {
-
     constructor(_root) {
         this.grafo = '';
         this.root = _root;
@@ -28,7 +27,6 @@ edge[color=\"#B22222\" penwidth=\"1.5\"];`
     }
 
     graph_Instruccion(_up, _instruccion) {
-        console.log(_instruccion,9999)
         if (_instruccion.tipo === TIPO_INSTRUCCION.PRINT) {
             var child = 'Node' + this.count;
             this.count++;
@@ -152,11 +150,6 @@ edge[color=\"#B22222\" penwidth=\"1.5\"];`
     }
 
     graph_Print(_up, _instruccion) {
-        // Nodo expresion
-        // var exp1 = 'Node' + this.count;
-        // this.count++;
-        // this.grafo += exp1 + '[label = \"EXPRESIÓN\"];\n';
-        // this.grafo += _up + '->' + exp1 + ';\n';
         this.graph_Operacion(_up, _instruccion.expresion);
     }
 
@@ -375,50 +368,9 @@ edge[color=\"#B22222\" penwidth=\"1.5\"];`
                 this.graph_Instruccion(exp2, inst);
             }
         }
-        // Nodo condición
-        console.log(_instruccion.instruccionesELSEIF)
         if (_instruccion.instruccionesELSEIF) {
-            this.graph_Instruccion(_instruccion.instruccionesELSEIF);
+            this.graph_Instruccion(_up, _instruccion.instruccionesELSEIF);
         }
-        // for (let i = 0; i < _instruccion.instruccionesELSEIF.length; i++) {
-        //     const inst = _instruccion.instruccionesELSEIF[i];
-        //     var exp3 = 'Node' + this.count;
-        //     this.count++;
-        //     this.grafo += exp3 + '[label = \"ELSE IF\"];\n';
-        //     this.grafo += _up + '->' + exp3 + ';\n';
-        //     var exp4 = 'Node' + this.count;
-        //     this.count++;
-        //     this.grafo += exp4 + '[label = \"CONDICION\"];\n';
-        //     this.grafo += exp3 + '->' + exp4 + ';\n';
-        //     this.graph_Operacion(exp4, inst.expresion);
-        //     // Nodo instrucciones
-        //     var exp5 = 'Node' + this.count;
-        //     this.count++;
-        //     this.grafo += exp5 + '[label = \"INSTRUCCIONES\"];\n';
-        //     this.grafo += exp4 + '->' + exp5 + ';\n';
-        //     if (inst.instruccionesIF != null) {
-        //         for (let i = 0; i < inst.instruccionesIF.length; i++) {
-        //             const instI = inst.instruccionesIF[i];
-        //             this.graph_Instruccion(exp5, instI);
-        //         }
-        //     }
-        //     if (inst.instruccionesELSE != null) {
-        //         // Nodo else
-        //         var exp6 = 'Node' + this.count;
-        //         this.count++;
-        //         this.grafo += exp6 + '[label = \"ELSE\"];\n';
-        //         this.grafo += _up + '->' + exp6 + ';\n';
-        //         // Nodo instrucciones
-        //         var exp7 = 'Node' + this.count;
-        //         this.count++;
-        //         this.grafo += exp7 + '[label = \"INSTRUCCIONES\"];\n';
-        //         this.grafo += exp6 + '->' + exp7 + ';\n';
-        //         for (let i = 0; i < inst.instruccionesELSE.length; i++) {
-        //             const instE = inst.instruccionesELSE[i];
-        //             this.graph_Instruccion(exp7, instE);
-        //         }
-        //     }
-        // }
     }
 
     graph_Switch(_up, _instruccion) {

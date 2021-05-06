@@ -200,7 +200,7 @@ class Ambito {
                     simbolos = this.getSimbolos(instruccion.instrucciones, simbolos, clave + "->" + instruccion.tipo);
                 }
                 if (instruccion.variable) {
-                    simbolos = this.getSimbolos(instruccion.variable, simbolos, clave + "->" + instruccion.tipo);
+                    simbolos = this.getSimbolos([instruccion.variable], simbolos, clave + "->" + instruccion.tipo);
                 }
                 if (instruccion.instruccionesIF) {
                     simbolos = this.getSimbolos(instruccion.instruccionesIF, simbolos, clave + "->" + instruccion.tipo);
@@ -209,7 +209,7 @@ class Ambito {
                     simbolos = this.getSimbolos(instruccion.instruccionesELSE, simbolos, clave + "->" + instruccion.tipo);
                 }
                 if (instruccion.instruccionesELSEIF) {
-                    simbolos = this.getSimbolos(instruccion.instruccionesELSEIF, simbolos, clave + "->" + instruccion.tipo);
+                    simbolos = this.getSimbolos([instruccion.instruccionesELSEIF], simbolos, clave);
                 }
                 if (instruccion.casosComparar) {
                     for (let i = 0; i < instruccion.casosComparar.length; i++) {

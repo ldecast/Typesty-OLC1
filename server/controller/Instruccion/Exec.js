@@ -41,7 +41,7 @@ function Exec(_instruccion, _ambito) {
             if (funcionEjecutar.retorno && retorno.retorno === "RETORNO VACIO") {
                 return { err: `Error: La función '${funcionEjecutar.id}' debe retornar un valor de tipo ${funcionEjecutar.retorno} y no VOID.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
             }
-            if (funcionEjecutar.retorno == null && retorno.retorno != null) {
+            if (funcionEjecutar.retorno === null && retorno.retorno != null) {
                 return { err: `Error: El método '${funcionEjecutar.id}' no puede retornar un valor de tipo ${retorno.retorno.tipo}.\nLínea: ${_instruccion.linea} Columna: ${_instruccion.columna}\n` }
             }
             if (funcionEjecutar.retorno) {

@@ -2,8 +2,6 @@ const procesarCadena = require("../../model/Operacion/procesarCadena")
 
 function imprimir(_instruccion, _ambito) {
     const cadena = procesarCadena(_instruccion.expresion, _ambito);
-    // console.log(cadena,88888888888)
-    // console.log(_instruccion.expresion,88888888888)
     return cadena;
 }
 

@@ -61,6 +61,8 @@ export class AppComponent {
         },
         error => {
           console.log('There was an error :(', error);
+          this.simbolos = [];
+          this.errores = [];
           if (error.error) {
             if (error.error.message)
               this.salida = error.error.message;
