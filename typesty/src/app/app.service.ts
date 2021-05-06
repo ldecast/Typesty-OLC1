@@ -14,4 +14,10 @@ export class AppService {
     return this.http.post<any>(this._url + '/compile', input);
   }
 
+  getAST(input: any) {
+    return this.http.post(this._url + '/AST_report', input, {
+      responseType: 'blob',
+    });
+  }
+
 }

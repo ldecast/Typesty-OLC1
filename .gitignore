@@ -50,3 +50,5 @@ Thumbs.db
 .browserslistrc
 typesty/.editorconfig
 typesty/src/assets/.gitkeep
+server/controller/AST/AST.dot
+server/controller/AST/AST.svg

@@ -255,13 +255,13 @@ IF: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra { $$ = new INSTRUCCIO
 ;
 
 IFELSE: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse labre INSTRUCCION lcierra { $$ = new INSTRUCCION.nuevoIfElse($3, $6, $10, this._$.first_line,this._$.first_column+1) }
-		| prif pabre EXPRESION pcierra labre lcierra prelse labre INSTRUCCION lcierra { $$ = new INSTRUCCION.nuevoIfElse($3, [], $10, this._$.first_line,this._$.first_column+1) }
+		| prif pabre EXPRESION pcierra labre lcierra prelse labre INSTRUCCION lcierra { $$ = new INSTRUCCION.nuevoIfElse($3, [], $9, this._$.first_line,this._$.first_column+1) }
 		| prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse labre lcierra { $$ = new INSTRUCCION.nuevoIfElse($3, $6, [], this._$.first_line,this._$.first_column+1) }
 		| prif pabre EXPRESION pcierra labre lcierra prelse labre lcierra { $$ = new INSTRUCCION.nuevoIfElse($3, [], [], this._$.first_line,this._$.first_column+1) }
 ;
 
 ELSEIF: prif pabre EXPRESION pcierra labre INSTRUCCION lcierra prelse CONTROLIF { $$ = new INSTRUCCION.nuevoElseIf($3, $6, $9, this._$.first_line,this._$.first_column+1); }
-		| prif pabre EXPRESION pcierra labre lcierra prelse CONTROLIF { $$ = new INSTRUCCION.nuevoElseIf($3, [], $9, this._$.first_line,this._$.first_column+1); }
+		| prif pabre EXPRESION pcierra labre lcierra prelse CONTROLIF { $$ = new INSTRUCCION.nuevoElseIf($3, [], $8, this._$.first_line,this._$.first_column+1); }
 ;
 
 SWITCH: prswitch pabre EXPRESION pcierra labre CASESLIST DEFAULT lcierra { $$ = new INSTRUCCION.nuevoSwitch($3, $6, $7, this._$.first_line, this._$.first_column+1); }
@@ -278,7 +278,7 @@ CASESLIST: CASESLIST prcase EXPRESION dospuntos INSTRUCCION { $1.push(new INSTRU
 ;
 
 DEFAULT: prdefault dospuntos INSTRUCCION { $$ = new INSTRUCCION.nuevoCaso(null, $3, this._$.first_line, this._$.first_column+1); }
-		| prdefault dospuntos [] { $$ = new INSTRUCCION.nuevoCaso(null, [], this._$.first_line, this._$.first_column+1); }
+		| prdefault dospuntos { $$ = new INSTRUCCION.nuevoCaso(null, [], this._$.first_line, this._$.first_column+1); }
 ;
 
 DEC_VAR: TIPO id igual EXPRESION ptcoma {$$ = INSTRUCCION.nuevaDeclaracion($2, $4, $1, this._$.first_line,this._$.first_column+1)}

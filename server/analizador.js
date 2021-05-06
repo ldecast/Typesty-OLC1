@@ -257,7 +257,7 @@ case 77:
  this.$ = new INSTRUCCION.nuevoIfElse($$[$0-8], $$[$0-5], $$[$0-1], this._$.first_line,this._$.first_column+1) 
 break;
 case 78:
- this.$ = new INSTRUCCION.nuevoIfElse($$[$0-7], [], $$[$0], this._$.first_line,this._$.first_column+1) 
+ this.$ = new INSTRUCCION.nuevoIfElse($$[$0-7], [], $$[$0-1], this._$.first_line,this._$.first_column+1) 
 break;
 case 79:
  this.$ = new INSTRUCCION.nuevoIfElse($$[$0-7], $$[$0-4], [], this._$.first_line,this._$.first_column+1) 
@@ -269,7 +269,7 @@ case 81:
  this.$ = new INSTRUCCION.nuevoElseIf($$[$0-6], $$[$0-3], $$[$0], this._$.first_line,this._$.first_column+1); 
 break;
 case 82:
- this.$ = new INSTRUCCION.nuevoElseIf($$[$0-5], [], $$[$01], this._$.first_line,this._$.first_column+1); 
+ this.$ = new INSTRUCCION.nuevoElseIf($$[$0-5], [], $$[$0], this._$.first_line,this._$.first_column+1); 
 break;
 case 83:
  this.$ = new INSTRUCCION.nuevoSwitch($$[$0-5], $$[$0-2], $$[$0-1], this._$.first_line, this._$.first_column+1); 

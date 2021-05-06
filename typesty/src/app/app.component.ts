@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { AppService } from './app.service';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-root',
@@ -65,13 +67,30 @@ export class AppComponent {
             else
               this.salida = error.error;
           }
-
         }
       );
-    } else {
+    } else
       this.salida = "Entrada vacía. Intente de nuevo.";
-    }
+  }
 
+  getAST() {
+    this.simbolos = [];
+    this.errores = [];
+    if (this.entrada != "") {
+      const x = { "input": this.entrada }
+      this.appService.getAST(x).subscribe(
+        data => {
+          saveAs(data, "AST");
+          this.salida = "AST has been generated!";
+          console.log('AST received!');
+        },
+        error => {
+          console.log('There was an error :(', error);
+          this.salida = "Ocurrió un error al analizar la entrada.\nNo se generó el AST."
+        }
+      );
+    } else
+      alert("Entrada vacía. No se puede generar el AST.");
   }
 
   saveFile() {
