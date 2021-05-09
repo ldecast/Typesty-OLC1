@@ -6,6 +6,15 @@ module.exports = (parser, app) => {
         try {
             var input = req.body.input;
             var ast = parser.parse(input);
+            if (ast.parse === null) {
+                var output = {
+                    arreglo_simbolos: [],
+                    arreglo_errores: ast.errores,
+                    output: "No se ha podido recuperar del error.\nIntente de nuevo."
+                }
+                res.status(500).send(output);
+                return;
+            }
             var parse = ast.parse;
             var errores = ast.errores;
             const global = new Ambito(null, "global");
@@ -16,15 +25,19 @@ module.exports = (parser, app) => {
                 errores.push(err);
             }
             var output = {
-                "ast": ast,
-                "arreglo_simbolos": simbolos,
-                "arreglo_errores": errores,
-                "output": cadena.cadena
+                arreglo_simbolos: simbolos,
+                arreglo_errores: errores,
+                output: cadena.cadena
             }
             res.status(200).send(output);
         } catch (error) {
             console.log(error);
-            res.status(500).send(String(error));
+            var output = {
+                arreglo_simbolos: [],
+                arreglo_errores: [],
+                output: "No se ha podido recuperar del error.\nIntente de nuevo."
+            }
+            res.status(500).send(output);
         }
     });
 }

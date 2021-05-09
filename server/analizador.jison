@@ -111,7 +111,6 @@
 /* operator associations and precedence */
 
 %left 'interrogacion'
-%left 'pabre'
 %left 'or'
 %left 'and'
 %right 'not'
@@ -121,12 +120,14 @@
 %left 'exponente'
 %left 'incremento','decremento'
 %left umenos
+%left 'pabre'
 
 %start ini
 
 %% /* language grammar */
 
 ini: ENTRADA EOF { retorno = { parse: $1, errores: errores }; errores = []; return retorno; }
+	| error EOF { retorno = { parse: null, errores: errores }; errores = []; return retorno; }
 ;
 
 ENTRADA: ENTRADA ENTCERO { if($2!=="") $1.push($2); $$=$1; }

@@ -64,10 +64,15 @@ export class AppComponent {
           this.simbolos = [];
           this.errores = [];
           if (error.error) {
-            if (error.error.message)
+            if (error.error.output)
+              this.salida = error.error.output;
+            else if (error.error.message)
               this.salida = error.error.message;
             else
               this.salida = error.error;
+          }
+          else {
+            this.salida = "Ocurrió un error desconocido.\nIngrese otra entrada.";
           }
         }
       );
