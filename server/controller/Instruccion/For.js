@@ -8,26 +8,27 @@ const Declaracion = require("./Declaracion");
 
 function cicloFor(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null, hasBreak: false, hasContinue: false, hasReturn: false }
-
+    var ambitoFor = new Ambito(_ambito, "declaracionFor");
+    
     if (_instruccion.variable.tipo === TIPO_INSTRUCCION.DECLARACION) {
-        var m = Declaracion(_instruccion.variable, _ambito)
+        var m = Declaracion(_instruccion.variable, ambitoFor)
         if (m.err) return { err: m.err };
         if (m.cadena) cadena.cadena = m.cadena;
     }
     else if (_instruccion.variable.tipo === TIPO_INSTRUCCION.ASIGNACION) {
-        var m = Asignacion(_instruccion.variable, _ambito)
+        var m = Asignacion(_instruccion.variable, ambitoFor)
         if (m.err) return { err: m.err };
         if (m.cadena) cadena.cadena = m.cadena;
     }
     var max = 0;
-    var operacion = Operacion(_instruccion.expresion, _ambito)
+    var operacion = Operacion(_instruccion.expresion, ambitoFor)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.cadena) cadena.cadena += operacion.cadena;
     if (operacion.retorno) operacion = operacion.retorno;
 
     if (operacion.tipo === TIPO_DATO.BOOLEANO) {
         while (operacion.valor && max < LIMIT) {
-            var nuevoAmbito = new Ambito(_ambito, "ciclo")
+            var nuevoAmbito = new Ambito(ambitoFor, "ciclo")
             const Bloque = require('./Bloque')
             var bloque = Bloque(_instruccion.instrucciones, nuevoAmbito);
             cadena.cadena += bloque.cadena;
@@ -39,7 +40,7 @@ function cicloFor(_instruccion, _ambito) {
                 var actualizacion = _instruccion.instrucciones[_instruccion.instrucciones.length - 1];
                 cadena.cadena += Bloque([actualizacion], nuevoAmbito).cadena;
             }
-            operacion = Operacion(_instruccion.expresion, _ambito)
+            operacion = Operacion(_instruccion.expresion, nuevoAmbito)
             if (operacion.err) return { err: operacion.err }
             if (operacion.cadena) cadena.cadena += operacion.cadena;
             if (operacion.retorno)

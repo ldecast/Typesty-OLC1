@@ -11,6 +11,7 @@ const Switch = require("./Switch");
 function Bloque(_instrucciones, _ambito) {
     var cadena = { cadena: "", retorno: null, hasBreak: false, hasContinue: false, hasReturn: false, errores: [] };
     var brk = false;
+    if (_instrucciones == null) return cadena;
     _instrucciones.forEach(instruccion => {
         if (!brk) {
             if (instruccion.tipo === TIPO_INSTRUCCION.PRINT) {

@@ -21,7 +21,7 @@ function cicloWhile(_instruccion, _ambito) {
             cadena.hasReturn = bloque.hasReturn;
             if (bloque.hasBreak || bloque.hasReturn) break;
             if (bloque.hasContinue) continue;
-            operacion = Operacion(_instruccion.expresion, _ambito)
+            operacion = Operacion(_instruccion.expresion, nuevoAmbito)
             if (operacion.err) return { err: operacion.err }
             if (operacion.retorno) operacion = operacion.retorno;
             if (operacion.cadena) cadena.cadena += operacion.cadena;

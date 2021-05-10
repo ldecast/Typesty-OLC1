@@ -61,6 +61,8 @@ function sentenciaIfElse(_instruccion, _ambito) {
 
 function sentenciaElseIf(_instruccion, _ambito) {
     var cadena = { cadena: "", retorno: null, err: null, hasBreak: false, hasContinue: false, hasReturn: false }
+    if (_instruccion.tipo === TIPO_INSTRUCCION.IF) return sentenciaIf(_instruccion, _ambito);
+    if (_instruccion.tipo === TIPO_INSTRUCCION.IF_ELSE) return sentenciaIfElse(_instruccion, _ambito);
     var operacion = Operacion(_instruccion.expresion, _ambito)
     if (operacion.err) { cadena.err = operacion.err; return cadena; }
     if (operacion.cadena) cadena.cadena = operacion.cadena;

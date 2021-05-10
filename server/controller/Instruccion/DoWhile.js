@@ -22,7 +22,7 @@ function cicloDoWhile(_instruccion, _ambito) {
             cadena.hasReturn = bloque.hasReturn;
             if (bloque.hasBreak || bloque.hasReturn) break;
             if (bloque.hasContinue) continue;
-            condicion = Operacion(_instruccion.expresion, _ambito)
+            condicion = Operacion(_instruccion.expresion, nuevoAmbito)
             if (condicion.err) return { err: condicion.err }
             if (condicion.retorno) condicion = condicion.retorno;
             if (condicion.cadena) cadena.cadena += condicion.cadena;

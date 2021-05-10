@@ -22,6 +22,14 @@ El software desarrollado cuenta con dos distintas ventanas de opciones para que 
 </div>
 En ella el usuario puede acceder a cada una de las funcionalidades de la aplicación y visualizar los reportes de símbolos y errores.
 
+<br>
+
+<hr>
+<div align="center" alt="Menu">
+  <img src="img/TablaSE.png" />
+</div>
+En ella el usuario puede acceder a los reportes que se generarán a partir luego de la compilación.
+
 <br><br>
 
 <hr>
@@ -80,7 +88,7 @@ Permite cargar en el editor un archivo .ty
 ### Guardar
 <hr>
 <div align="center" alt="Opciones">
-  <img src="img/Abrir.png" />
+  <img src="img/Guardar.png" />
 </div>
 Permite guardar en la computadora un archivo .ty
 <br><br>

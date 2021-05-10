@@ -35,7 +35,7 @@ module.exports = (parser, app) => {
             var output = {
                 arreglo_simbolos: [],
                 arreglo_errores: [],
-                output: "No se ha podido recuperar del error.\nIntente de nuevo."
+                output: String(error)
             }
             res.status(500).send(output);
         }
